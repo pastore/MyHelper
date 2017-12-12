@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  myhelper.api:
+    image: myhelper.api
+    build:
+      context: ./MyHelper.Api
+      dockerfile: Dockerfile
