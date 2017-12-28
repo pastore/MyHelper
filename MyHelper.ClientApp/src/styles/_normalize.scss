@@ -1,0 +1,57 @@
+@import '_variables.scss';
+hyml, body {
+    margin: 0;
+    padding: 0;
+}
+ul, ol {
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+}
+
+// fix error input form field
+md-form-field.ng-invalid {
+    .mat-input-placeholder {
+        color: $color-primary;
+
+        &.mat-form-field-float {
+            .mat-form-field-required-marker {
+                color: $color-primary;
+            }
+        }
+    }
+
+    .mat-input-underline {
+        border-top-width: 1px;
+        border-color: $color-primary;
+    }
+
+    .mat-input-ripple {
+        background-color: $color-primary;
+    }
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 2px;
+}
+
+.mat-form-field-underline {
+    bottom: 0;
+}
+
+// fix autofill password
+md-form-field {
+    .mat-input-element[type=password]:-webkit-autofill {
+        &+ .mat-input-placeholder-wrapper {
+            label:not(.md-no-float) {
+                transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
+            }
+        }
+    }
+}
+
+.mat-dialog-container {
+    padding: 0 !important;
+}

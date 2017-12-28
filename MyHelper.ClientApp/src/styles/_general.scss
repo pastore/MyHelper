@@ -1,0 +1,15 @@
+@import '_variables.scss';
+
+body {
+  background: $color-main-background;
+  color: $color-font-primary;
+  font-size: 14px;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.page_centered {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
