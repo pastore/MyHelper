@@ -9,6 +9,6 @@ namespace MyHelper.Api.Services.Account
     {
         Task<AOResult<AuthorizationTokenResponse>> LoginAsync(LoginRequest request);
 
-        Task<AOResult<AuthorizationTokenResponse>> RegisterAsync(RegisterRequest request);
+        Task<AOResult<AuthorizationTokenResponse>> RegisterAsync(RegistrationRequest request);
     }
 }

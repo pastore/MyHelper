@@ -48,7 +48,7 @@ namespace MyHelper.Api.Services.Account
             }, request);
         }
 
-        public async Task<AOResult<AuthorizationTokenResponse>> RegisterAsync(RegisterRequest request)
+        public async Task<AOResult<AuthorizationTokenResponse>> RegisterAsync(RegistrationRequest request)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -59,7 +59,8 @@ namespace MyHelper.Api.Services.Account
                 {
                     Username = request.Username,
                     Email = request.Email,
-                    Password = HashPasswordHelper.Hash(request.Password)
+                    Password = HashPasswordHelper.Hash(request.Password),
+                    UserRole = EUserRole.User
                 };
 
                 await _myHelperDbContext.AddAsync(appUser);

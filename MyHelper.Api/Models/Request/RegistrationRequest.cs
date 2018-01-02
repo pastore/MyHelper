@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Models.Request
 {
-    public class RegisterRequest
+    public class RegistrationRequest
     {
         [Required(ErrorMessage = "Name cannot be empty")]
         public string Username { get; set; }

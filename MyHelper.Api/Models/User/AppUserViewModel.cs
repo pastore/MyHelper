@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MyHelper.Api.Core;
 
 namespace MyHelper.Api.Models.User
 {
@@ -13,5 +14,10 @@ namespace MyHelper.Api.Models.User
 
         public string Email { get; set; }
 
+        public string Avatar { get; set; }
+
+        public EUserRole Role { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -10,9 +10,9 @@ namespace MyHelper.Api.Models.Response
         public bool IsSuccess { get; set; }
         public string ErrorId { get; set; }
         public string Message { get; set; }
-        public List<Tuple<string, string>> Errors { get; set; } //Tuple allow you to store value with the same key
+        public Dictionary<string, string> Errors { get; set; } //Tuple allow you to store value with the same key
 
-        public void SetResult(bool isSuccess, string errorId, string message, List<Tuple<string, string>> errors)
+        public void SetResult(bool isSuccess, string errorId, string message, Dictionary<string, string> errors)
         {
             IsSuccess = isSuccess;
             ErrorId = errorId;
@@ -30,7 +30,7 @@ namespace MyHelper.Api.Models.Response
             SetResult(false, null, null, null);
         }
 
-        public void SetError(string errorId, string message, List<Tuple<string, string>> errors)
+        public void SetError(string errorId, string message, Dictionary<string, string> errors)
         {
             SetResult(false, errorId, message, errors);
         }

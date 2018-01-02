@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Core
 {
-    public enum ERole
+    public enum EUserRole
     {
         Admin = 1,
         User = 2

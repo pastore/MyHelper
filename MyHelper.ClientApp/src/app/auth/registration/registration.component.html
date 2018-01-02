@@ -1,0 +1,64 @@
+<mat-card>
+  <header class="auth_header">
+    <img src="/assets/mh_logo.png" alt="my-helper-logo">
+    <div class="auth_label">Create an account</div>
+  </header>
+  <form novalidate #registrationForm="ngForm">
+      <div class="auth_row_input">
+        <mat-form-field>
+            <input matInput
+                    [(ngModel)]="model.username"
+                    name="username"
+                    #username="ngModel"
+                    placeholder="Username"
+                    required>
+        </mat-form-field>
+        <mat-hint *ngIf="registrationForm.submitted && (!username.pristine || !username.valid)">
+            <span [hidden]="!username.errors?.required">Username is required.</span>
+        </mat-hint>
+      </div>
+
+      <div class="auth_row_input">
+        <mat-form-field>
+          <input matInput
+                 type="email"
+                 name="email"
+                 [(ngModel)]="model.email"
+                 #email="ngModel"
+                 placeholder="Email"
+                 pattern="^[a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-.]+$"
+                 required>
+        </mat-form-field>
+        <mat-hint *ngIf="registrationForm.submitted && (!email.pristine || !email.valid)">
+            <span [hidden]="email.errors?.required || !email.errors?.pattern">
+                Invalid email address.
+            </span>
+            <span [hidden]="!email.errors?.required">Email is required.</span>
+        </mat-hint>
+      </div>
+
+      <div class="auth_row_input">
+        <mat-form-field>
+            <input matInput
+                    type="password"
+                    name="password"
+                    [(ngModel)]="model.password"
+                    #password="ngModel"
+                    placeholder="Password"
+                    required>
+        </mat-form-field>
+        <mat-hint *ngIf="registrationForm.submitted && (password.dirty || password.invalid)">
+            <span *ngIf="password.errors?.required">Password is required.</span>
+        </mat-hint>
+      </div>
+
+      <div class="auth_row_button">
+          <button (click)="registration(registrationForm)" class="mat-primary auth_row_button__submit" mat-raised-button>Create an account</button>
+      </div>
+
+      <div class="auth_row_tip">
+        <span>Already have an account?</span>
+        <a [routerLink]="['/login']" class="mat-accent" mat-button>Log in</a>
+      </div>
+  </form>
+</mat-card>

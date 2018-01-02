@@ -24,9 +24,9 @@ namespace MyHelper.Api.Controllers
             return AOResultToServerResponse(await _accountService.LoginAsync(request));
         }
 
-        [HttpPost("register")]
+        [HttpPost("registration")]
         [ProducesResponseType(typeof(ServerResponse<AuthorizationTokenResponse>), 200)]
-        public async Task<ServerResponse<AuthorizationTokenResponse>> RegisterAsync([FromBody]RegisterRequest request)
+        public async Task<ServerResponse<AuthorizationTokenResponse>> RegisterAsync([FromBody]RegistrationRequest request)
         {
             return AOResultToServerResponse(await _accountService.RegisterAsync(request));
         }

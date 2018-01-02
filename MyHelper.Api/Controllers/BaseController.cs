@@ -21,7 +21,7 @@ namespace MyHelper.Api.Controllers
                 Message = aoResult.Message,
                 ErrorId = aoResult.ErrorId,
                 Result = aoResult.Result,
-                Errors = aoResult.Errors?.Select(x => Tuple.Create(x.Key, x.Value)).ToList()
+                Errors = aoResult.Errors?.ToDictionary(x => x.Key, x => x.Value)
             };
         }
 
@@ -37,7 +37,7 @@ namespace MyHelper.Api.Controllers
                 IsSuccess = aoResult.IsSuccess,
                 Message = aoResult.Message,
                 ErrorId = aoResult.ErrorId,
-                Errors = aoResult.Errors?.Select(x => Tuple.Create(x.Key, x.Value)).ToList() 
+                Errors = aoResult.Errors?.ToDictionary(x => x.Key, x => x.Value)
             };
         }
     }

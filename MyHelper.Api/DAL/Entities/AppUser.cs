@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MyHelper.Api.Core;
 
 namespace MyHelper.Api.DAL.Entities
@@ -15,7 +16,9 @@ namespace MyHelper.Api.DAL.Entities
 
         public string Avatar { get; set; }
 
-        public ERole Role { get; set; }
+        public EUserRole UserRole { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
         // Reverse navigation
         public ICollection<Friend> SentFriendRequests { get; set; }

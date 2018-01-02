@@ -1,0 +1,46 @@
+<mat-card>
+  <header class="auth_header">
+    <img src="/assets/mh_logo.png" alt="my-helper-logo">
+    <div class="auth_label">Log in</div>
+  </header>
+  <form novalidate #loginForm="ngForm">
+      <div class="auth_row_input">
+        <mat-form-field>
+            <input matInput
+                    [(ngModel)]="model.username"
+                    name="username"
+                    #username="ngModel"
+                    placeholder="Username"
+                    required>
+        </mat-form-field>
+        <mat-hint *ngIf="loginForm.submitted && (!username.pristine || !username.valid)">
+            <span [hidden]="!username.errors?.required">Username is required.</span>
+        </mat-hint>
+      </div>
+
+      <div class="auth_row_input">
+        <mat-form-field>
+            <input matInput
+                    type="password"
+                    name="password"
+                    [(ngModel)]="model.password"
+                    #password="ngModel"
+                    placeholder="Password"
+                    required>
+        </mat-form-field>
+        <mat-hint *ngIf="loginForm.submitted && (password.dirty || password.invalid)">
+            <span *ngIf="password.errors?.required">Password is required.</span>
+        </mat-hint>
+      </div>
+
+      <div class="auth_row_button">
+          <button (click)="login(loginForm)" class="mat-primary auth_row_button__submit" mat-raised-button>Log in</button>
+      </div>
+
+      <div class="auth_row_tip">
+        <span>Don't have an account?</span>
+        <a [routerLink]="['/registration']" class="mat-accent" mat-button>Create an account</a>
+      </div>
+  </form>
+</mat-card>
+

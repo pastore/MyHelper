@@ -1,5 +1,5 @@
 @import '_variables.scss';
-hyml, body {
+html, body {
     margin: 0;
     padding: 0;
 }
@@ -12,15 +12,14 @@ a{
 }
 
 // fix error input form field
-md-form-field.ng-invalid {
+mat-form-field.ng-invalid {
     .mat-input-placeholder {
         color: $color-primary;
 
-        &.mat-form-field-float {
-            .mat-form-field-required-marker {
-                color: $color-primary;
-            }
+        .mat-form-field-required-marker {
+            color: $color-primary;
         }
+
     }
 
     .mat-input-underline {
@@ -42,7 +41,7 @@ md-form-field.ng-invalid {
 }
 
 // fix autofill password
-md-form-field {
+mat-form-field {
     .mat-input-element[type=password]:-webkit-autofill {
         &+ .mat-input-placeholder-wrapper {
             label:not(.md-no-float) {
