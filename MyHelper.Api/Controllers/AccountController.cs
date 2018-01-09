@@ -6,8 +6,9 @@ using MyHelper.Api.Services.Account;
 
 namespace MyHelper.Api.Controllers
 {
+    [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/account")]
+    [Route("api/v{ver:apiVersion}")]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;

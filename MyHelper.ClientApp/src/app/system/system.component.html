@@ -1,14 +1,14 @@
 <div>
-  <header></header>
+  <header>
+    <mh-system-header></mh-system-header>
+  </header>
   <section>
     <mat-sidenav-container>
         <mat-sidenav mode="over" align="start" opened>
-            Sidenav content
+            <mh-system-sidebar></mh-system-sidebar>
         </mat-sidenav>
         <mat-sidenav-content>
-
           <router-outlet></router-outlet>
-
         </mat-sidenav-content>
     </mat-sidenav-container>
   </section>

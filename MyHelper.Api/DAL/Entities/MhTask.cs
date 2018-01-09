@@ -27,7 +27,7 @@ namespace MyHelper.Api.DAL.Entities
 
         public bool IsRecurring { get; set; }
 
-        public int? ParentId { get; set; }
+        public long? ParentId { get; set; }
 
         [ForeignKey(nameof(ParentId))]
         public virtual MhTask Parent { get; set; }

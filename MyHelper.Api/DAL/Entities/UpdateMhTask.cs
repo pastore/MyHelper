@@ -13,7 +13,7 @@ namespace MyHelper.Api.DAL.Entities
 
         public string Description { get; set; }
 
-        public int MhTaskId { get; set; }
+        public long MhTaskId { get; set; }
 
         public MhTask MhTask { get; set; }
     }

@@ -38,6 +38,10 @@ namespace MyHelper.Api
             services.AddMvc();
             services.AddAutoMapper();
 
+            services.AddApiVersioning(
+                o => o.ReportApiVersions = true
+            );
+
             services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
 
             services.AddEntityFrameworkNpgsql()

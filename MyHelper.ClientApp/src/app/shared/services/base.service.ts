@@ -22,7 +22,7 @@ export class BaseService {
             method: verb, url: this._generateUrl(route), body: data, headers: headers
         }))
             .map((response: Response) => {
-                return handleResponse ? handleResponse(response.json()) : response.json();
+                return handleResponse ? handleResponse(response.json()) : response.json().result;
             })
             .catch((error: Response) => {
               return Observable.throw(error.json().message);

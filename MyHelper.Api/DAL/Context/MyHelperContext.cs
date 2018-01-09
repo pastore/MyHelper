@@ -71,6 +71,11 @@ namespace MyHelper.Api.DAL.Context
 
             modelBuilder.Entity<MhTaskTag>()
                 .HasKey(t => new { t.MhTaskId, t.TagId });
+
+            modelBuilder.Entity<MhTask>()
+                .HasOne(a => a.ScheduleMhTask)
+                .WithOne(b => b.MhTask)
+                .HasForeignKey<ScheduleMhTask>(b => b.MhTaskId);
         }
     }
 }

@@ -1,0 +1,26 @@
+<div>
+  <div>
+    <div>{{ card.data.name }}</div>
+    <div>
+      <button mat-button [matMenuTriggerFor]="menuRef">
+          Trigger
+      </button>
+
+      <mat-menu #menuRef="matMenu">
+          <button mat-menu-item (click)="">
+              edit
+          </button>
+          <button mat-menu-item (click)="">
+            delete
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <div>{{ card.data.description }}</div>
+  <div>
+    <div *ngFor="let tag of card.data.tags">
+      {{ tag }}
+    </div>
+  </div>
+</div>
+

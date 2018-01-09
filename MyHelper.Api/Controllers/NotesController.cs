@@ -9,7 +9,8 @@ using MyHelper.Api.Services.Note;
 namespace MyHelper.Api.Controllers
 {
     [Authorize]
-    [Route("api/notes")]
+    [ApiVersion("1.0")]
+    [Route("api/v{ver:apiVersion}/notes")]
     public class NotesController : BaseController
     {
         private readonly INoteService _noteService;

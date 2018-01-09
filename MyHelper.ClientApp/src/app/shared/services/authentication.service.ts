@@ -26,7 +26,7 @@ export class AuthenticationService extends BaseService {
     super(http);
   }
 
-  login(loginRequest: LoginRequest) {
+  login(loginRequest: LoginRequest): Observable<boolean> {
     return this.sendRequest(RequestMethod.Post, ApiRoute.Login, loginRequest, null, this._handleResponse);
   }
 
@@ -34,11 +34,11 @@ export class AuthenticationService extends BaseService {
       localStorage.removeItem('currentUser');
   }
 
-  createUser(registrationRequest: RegistrationRequest) {
+  createUser(registrationRequest: RegistrationRequest): Observable<boolean> {
     return this.sendRequest(RequestMethod.Post, ApiRoute.Registration, registrationRequest, null, this._handleResponse);
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
       return this.currentUser && this.currentUser.token && !this._jwtHelperService.isTokenExpired(this.currentUser.token);
   }
 

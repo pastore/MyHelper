@@ -9,7 +9,8 @@ using MyHelper.Api.Services.MhTask;
 namespace MyHelper.Api.Controllers
 {
     [Authorize]
-    [Route("api/mhtasks")]
+    [ApiVersion("1.0")]
+    [Route("api/v{ver:apiVersion}/tasks")]
     public class MhTasksController : BaseController
     {
         private readonly IMhTaskService _mhTaskService;

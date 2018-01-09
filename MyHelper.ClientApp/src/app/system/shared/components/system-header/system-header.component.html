@@ -1,0 +1,18 @@
+<mat-toolbar>
+  <button mat-icon-button (click)="onClick" color="primary">
+      <mat-icon class="mat-18">ligature</mat-icon>
+  </button>
+
+  <div class="branding"></div>
+
+  <button mat-button [matMenuTriggerFor]="menuRef">
+      Trigger
+  </button>
+
+  <mat-menu #menuRef="matMenu" x-position="below" y-position="below"
+            [overlapTrigger]="false">
+      <!-- <a mat-menu-item href="item" *ngFor="let item of items">
+          item
+      </a> -->
+  </mat-menu>
+</mat-toolbar>
