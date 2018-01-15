@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using MyHelper.Api.Core.Mappings;
+using MyHelper.Api.DAL;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.Models.Options;
 using MyHelper.Api.Services.Account;
@@ -34,14 +28,25 @@ namespace MyHelper.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-            services.AddMvc();
-            services.AddAutoMapper();
-
             services.AddApiVersioning(
                 o => o.ReportApiVersions = true
             );
 
+            services.AddMvcCore()
+                .AddApiExplorer()
+                .AddAuthorization()
+                .AddFormatterMappings()
+                .AddDataAnnotations()
+                .AddJsonFormatters()
+                .AddCors(builder =>
+                {
+                    builder.AddPolicy("AllowAll", policy =>
+                    {
+                        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    });
+                });
+            services.AddAutoMapper();
+            
             services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
 
             services.AddEntityFrameworkNpgsql()
@@ -60,6 +65,8 @@ namespace MyHelper.Api
                     options.TokenValidationParameters = tokenService.GetTokenValidationParameters();
                 });
 
+            services.AddScoped<DbSeeder>();
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new DataToResponseMapperProfile());
@@ -69,7 +76,7 @@ namespace MyHelper.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DbSeeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -77,8 +84,10 @@ namespace MyHelper.Api
             }
 
             app.UseAuthentication();
-
+            app.UseCors("AllowAll");
             app.UseMvc();
+
+            seeder.SeedDb();
         }
     }
 }

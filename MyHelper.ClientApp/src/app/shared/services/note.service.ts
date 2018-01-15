@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, RequestMethod } from '@angular/http';
 import { BaseService } from './base.service';
-import { RequestMethod } from '@angular/http/src/enums';
 import { ApiRoute } from '../app-settings/api-route';
 import { NoteResponse } from '../models/system/note-response.model';
 import { Observable } from 'rxjs/Observable';

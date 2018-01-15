@@ -10,7 +10,6 @@ import { WrapperFilterComponent } from './shared/components/wrapper-filter/wrapp
 import { InputFilterComponent } from './shared/components/filter-items/input-filter/input-filter.component';
 import { DatetimeFilterComponent } from './shared/components/filter-items/datetime-filter/datetime-filter.component';
 import { AutocompleteFilterComponent } from './shared/components/filter-items/autocomplete-filter/autocomplete-filter.component';
-import { BaseCardComponent } from './shared/components/base-card/base-card.component';
 import { NoteCardComponent } from './notes/shared/note-card/note-card.component';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { NoteCardComponent } from './notes/shared/note-card/note-card.component'
     InputFilterComponent,
     DatetimeFilterComponent,
     AutocompleteFilterComponent,
-    BaseCardComponent,
     NoteCardComponent
   ]
 })

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiRoute } from '../../../../shared/app-settings/api-route';
-import { SidebarLink } from '../../../../shared/models/system/sidebar-link';
+import { SidebarLink } from '../../../../shared/models/system/sidebar-link.model';
 
 @Component({
   selector: 'mh-system-sidebar',

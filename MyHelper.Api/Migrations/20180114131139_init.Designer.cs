@@ -12,7 +12,7 @@ using System;
 namespace MyHelper.Api.Migrations
 {
     [DbContext(typeof(MyHelperContext))]
-    [Migration("20180104223053_init")]
+    [Migration("20180114131139_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
