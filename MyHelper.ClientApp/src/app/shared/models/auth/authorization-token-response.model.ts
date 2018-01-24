@@ -1,4 +1,4 @@
-import { AppUserViewModel } from './app-user-viewmodel.model';
+import { AppUserViewModel } from '../user/app-user-view.model';
 
 export class AuthorizationTokenResponse {
   public token: string;

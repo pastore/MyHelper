@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams, RequestMethod } from '@angular/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { CurrentUser } from '../models/user/current-user.model';
+import { AppUserViewModel } from '../models/user/app-user-view.model';
 import { LoginRequest } from '../models/auth/login-request.model';
 import { Observable } from 'rxjs/Observable';
 import '../utilities/rxjs-operators';
@@ -14,12 +14,21 @@ import { IServerResponse } from '../models/base/server-response.model';
 @Injectable()
 export class AuthenticationService extends BaseService {
 
-  private _jwtConfig = { tokenGetter: () => this.currentUser && this.currentUser.token ? this.currentUser.token : null };
+  private _jwtConfig = { tokenGetter: () => this.token ? this.token : null };
   private _jwtHelperService: JwtHelperService = new JwtHelperService(this._jwtConfig);
 
-  get currentUser(): CurrentUser {
+  get currentUser(): AppUserViewModel {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     return currentUser;
+  }
+
+  set currentUser(currentUser: AppUserViewModel) {
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  }
+
+  get token(): string {
+    const token = JSON.parse(localStorage.getItem('token'));
+    return token;
   }
 
   constructor(private http: Http) {
@@ -27,7 +36,7 @@ export class AuthenticationService extends BaseService {
   }
 
   login(loginRequest: LoginRequest): Observable<boolean> {
-    return this.sendRequest(RequestMethod.Post, ApiRoute.Login, loginRequest, null, this._handleResponse);
+    return this.sendRequest(RequestMethod.Post, ApiRoute.Login, loginRequest, null, this._handleResponse.bind(this));
   }
 
   logout(): void {
@@ -35,33 +44,20 @@ export class AuthenticationService extends BaseService {
   }
 
   createUser(registrationRequest: RegistrationRequest): Observable<boolean> {
-    return this.sendRequest(RequestMethod.Post, ApiRoute.Registration, registrationRequest, null, this._handleResponse);
+    return this.sendRequest(RequestMethod.Post, ApiRoute.Registration, registrationRequest, null, this._handleResponse.bind(this));
   }
 
   isLoggedIn(): boolean {
-      return this.currentUser && this.currentUser.token && !this._jwtHelperService.isTokenExpired(this.currentUser.token);
+      return this.token && !this._jwtHelperService.isTokenExpired(this.token);
   }
 
   private _handleResponse(response: IServerResponse): boolean {
     if (response.isSuccess && response.result) {
-      const currentUser = this._mapToCurrentUser(response.result);
-
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      this.currentUser = response.result.appUserViewModel;
+      localStorage.setItem('token', JSON.stringify(response.result.token));
       return true;
     } else {
         return false;
     }
-  }
-
-  private _mapToCurrentUser(result: AuthorizationTokenResponse): CurrentUser {
-    return new CurrentUser(
-      result.appUserViewModel.id,
-      result.appUserViewModel.userName,
-      result.appUserViewModel.email,
-      result.appUserViewModel.role,
-      result.appUserViewModel.avatar,
-      result.appUserViewModel.createdDate,
-      result.token
-    );
   }
 }

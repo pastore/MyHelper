@@ -3,11 +3,13 @@
 
     </mat-sidenav>
     <mat-sidenav-content>
+      <div></div>
       <div>
         <mh-note-card
           *ngFor="let cardNote of notes"
           [card]="cardNote">
         </mh-note-card>
+          <mh-note-details></mh-note-details>
       </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

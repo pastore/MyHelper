@@ -18,6 +18,6 @@ namespace MyHelper.Api.Models.Response
 
         public int AppUserId { get; set; }
 
-        public ICollection<TagViewModel> Tags { get; } = new List<TagViewModel>();
+        public ICollection<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
     }
 }

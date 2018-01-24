@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.Models.Request;
@@ -30,7 +31,7 @@ namespace MyHelper.Api.Services.Account
             return await BaseInvokeAsync(async () =>
             {
                 var appUser = await _myHelperDbContext.AppUsers
-                    .FirstOrDefaultAsync(x => x.Email == request.Username);
+                    .FirstOrDefaultAsync(x => x.Username == request.Username);
 
                 if (appUser == null || !HashPasswordHelper.Verify(appUser.Password, request.Password))
                     return AOBuilder.SetError<AuthorizationTokenResponse>("Username or password is incorrect");
@@ -60,7 +61,8 @@ namespace MyHelper.Api.Services.Account
                     Username = request.Username,
                     Email = request.Email,
                     Password = HashPasswordHelper.Hash(request.Password),
-                    UserRole = EUserRole.User
+                    UserRole = EUserRole.User,
+                    CreatedDate = DateTime.Now
                 };
 
                 await _myHelperDbContext.AddAsync(appUser);

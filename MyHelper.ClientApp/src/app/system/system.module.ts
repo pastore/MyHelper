@@ -11,6 +11,7 @@ import { InputFilterComponent } from './shared/components/filter-items/input-fil
 import { DatetimeFilterComponent } from './shared/components/filter-items/datetime-filter/datetime-filter.component';
 import { AutocompleteFilterComponent } from './shared/components/filter-items/autocomplete-filter/autocomplete-filter.component';
 import { NoteCardComponent } from './notes/shared/note-card/note-card.component';
+import { NoteDetailsComponent } from './notes/shared/note-details/note-details.component';
 
 @NgModule({
   imports: [SharedModule, SystemRoutingModule],
@@ -23,7 +24,8 @@ import { NoteCardComponent } from './notes/shared/note-card/note-card.component'
     InputFilterComponent,
     DatetimeFilterComponent,
     AutocompleteFilterComponent,
-    NoteCardComponent
+    NoteCardComponent,
+    NoteDetailsComponent
   ]
 })
 export class SystemModule { }

@@ -13,8 +13,8 @@ namespace MyHelper.Api.DAL.Entities
         public string Name { get; set; }
 
         // Reverse navigation
-        public ICollection<MhTask> MhTasks { get; set; }
+        public ICollection<NoteTag> NoteTags { get; } = new List<NoteTag>();
+        public ICollection<MhTaskTag> MhTaskTags { get; } = new List<MhTaskTag>();
 
-        public ICollection<Note> Notes { get; set; }
     }
 }

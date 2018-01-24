@@ -5,4 +5,5 @@ export class ApiRoute {
   public static System = 'system';
   public static Tasks = 'tasks';
   public static Notes = 'notes';
+  public static Tags = 'tags';
 }

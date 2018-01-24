@@ -1,4 +1,4 @@
-import TagViewModel from './tag-viewmodel.model';
+import TagViewModel from './tag-view.model';
 
 export class NoteResponse {
   public id: number;

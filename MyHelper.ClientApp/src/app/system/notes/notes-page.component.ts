@@ -5,7 +5,7 @@ import { ICard } from '../../shared/models/base/i-card.model';
 import { CardType } from '../../shared/models/base/card-type';
 
 @Component({
-  selector: 'mh-notes',
+  selector: 'mh-notes-page',
   templateUrl: './notes-page.component.html',
   styleUrls: ['./notes-page.component.scss']
 })

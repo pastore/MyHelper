@@ -1,26 +1,26 @@
-<div>
-  <div>
-    <div>{{ card.data.name }}</div>
-    <div>
-      <button mat-button [matMenuTriggerFor]="menuRef">
-          Trigger
+<mat-card>
+  <div fxLayout="row" fxLayoutAlign=" center">
+    <div class="note_card_name">{{ card.data.name }}</div>
+    <div class="note_card_buttons">
+      <button mat-icon-button [matMenuTriggerFor]="menuRef">
+        <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">more_vert</mat-icon>
       </button>
 
       <mat-menu #menuRef="matMenu">
           <button mat-menu-item>
-              edit
+              Edit
           </button>
           <button mat-menu-item>
-            delete
+            Delete
         </button>
       </mat-menu>
     </div>
   </div>
-  <div>{{ card.data.description }}</div>
   <div>
-    <div *ngFor="let tag of card.data.tags">
-      {{ tag }}
-    </div>
+    <mat-chip-list>
+        <mat-chip class="mat-accent" selected="true" *ngFor="let tag of card.data.tags">
+            {{ tag.name }}
+        </mat-chip>
+    </mat-chip-list>
   </div>
-</div>
-
+</mat-card>

@@ -1,0 +1,38 @@
+<mat-card>
+  <div>
+    <mat-form-field>
+        <input matInput
+                type="text"
+                required
+                placeholder="Name">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field>
+        <textarea matInput required
+                  placeholder="Description"></textarea>
+    </mat-form-field>
+  </div>
+  <div>
+      <mat-form-field class="demo-chip-list">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable"
+                     [removable]="removable" (remove)="remove(fruit)">
+              {{fruit.name}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Tags"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event)"
+                   [mdAutocomplete]="auto" />
+          </mat-chip-list>
+        </mat-form-field>
+        <md-autocomplete #auto="mdAutocomplete">
+            <md-option *ngFor="let tag of chosenTags | async" [value]="tag.name" (onSelectionChange)="selecteTag(tag)">
+                <span>{{ tag.name }}</span> |
+            </md-option>
+        </md-autocomplete>
+  </div>
+</mat-card>

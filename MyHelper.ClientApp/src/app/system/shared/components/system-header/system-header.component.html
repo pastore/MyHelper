@@ -1,18 +1,19 @@
 <mat-toolbar>
-  <button mat-icon-button (click)="onClick" color="primary">
-      <mat-icon class="mat-18">ligature</mat-icon>
-  </button>
-
-  <div class="branding"></div>
-
-  <button mat-button [matMenuTriggerFor]="menuRef">
-      Trigger
-  </button>
-
-  <mat-menu #menuRef="matMenu" x-position="below" y-position="below"
-            [overlapTrigger]="false">
-      <!-- <a mat-menu-item href="item" *ngFor="let item of items">
-          item
-      </a> -->
-  </mat-menu>
+  <div class="system_body" fxLayout="row" fxLayoutAlign=" center">
+    <img src="/assets/mh_small_logo.png">
+    <button mat-button [matMenuTriggerFor]="menuRef" class="user_button">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <img src="/assets/profile.jpg" alt="">
+          <span class="username">{{ user.username }}</span>
+          <mat-icon class="mi-16 mat-icon material-icons">keyboard_arrow_down</mat-icon>
+        </div>
+    </button>
+    <mat-menu #menuRef="matMenu" x-position="below" y-position="below"
+              [overlapTrigger]="false">
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon class="mat-icon material-icons">exit_to_app</mat-icon>
+          <span>Log out</span>
+        </button>
+    </mat-menu>
+  </div>
 </mat-toolbar>
