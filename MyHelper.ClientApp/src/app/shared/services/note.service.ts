@@ -3,8 +3,9 @@ import { Http, RequestMethod, Headers } from '@angular/http';
 import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
 import { ApiRoute } from '../app-settings/api-route';
-import { NoteResponse } from '../models/system/note-response.model';
+import { NoteResponse } from '../models/notes/note-response.model';
 import { Observable } from 'rxjs/Observable';
+import { NoteRequest } from '../models/notes/note-request.model';
 
 @Injectable()
 export class NoteService extends BaseService {
@@ -21,5 +22,9 @@ export class NoteService extends BaseService {
 
   getNotes(): Observable<NoteResponse[]> {
     return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, this.headers);
+  }
+
+  addNote(note: NoteRequest): Observable<boolean> {
+    return this.sendRequest<boolean>(RequestMethod.Post, ApiRoute.Notes, note, this.headers);
   }
 }

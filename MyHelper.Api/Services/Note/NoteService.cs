@@ -55,7 +55,6 @@ namespace MyHelper.Api.Services.Note
                 await _myHelperDbContext.Notes.AddAsync(note);
                 await _myHelperDbContext.SaveChangesAsync();
 
-
                 if (noteRequest.TagIds.Any())
                 {
                     var noteTags = noteRequest.TagIds.Select(x => new NoteTag
@@ -76,8 +75,7 @@ namespace MyHelper.Api.Services.Note
         {
             return await BaseInvokeAsync(async () =>
             {
-                DAL.Entities.Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); ;
-
+                DAL.Entities.Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
 
                 if (note == null)
                     return AOBuilder.SetError(Constants.Errors.NoteNotExists);

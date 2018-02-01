@@ -11,7 +11,8 @@ import {
   MatSidenavModule,
   MatCheckboxModule,
   MatListModule,
-  MatChipsModule
+  MatChipsModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 @NgModule({
@@ -26,7 +27,8 @@ import {
     MatSidenavModule,
     MatCheckboxModule,
     MatListModule,
-    MatChipsModule
+    MatChipsModule,
+    MatAutocompleteModule
   ],
   exports: [
     MatInputModule,
@@ -39,7 +41,8 @@ import {
     MatSidenavModule,
     MatCheckboxModule,
     MatListModule,
-    MatChipsModule
+    MatChipsModule,
+    MatAutocompleteModule
   ]
 })
 export class MhMaterialModule {}

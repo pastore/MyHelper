@@ -3,6 +3,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { AuthGuard } from '../services/authentication.guard';
 import { NoteService } from '../services/note.service';
+import { TagService } from '../services/tag.service';
 
 @NgModule({})
 export class CoreModule {
@@ -12,7 +13,8 @@ export class CoreModule {
             providers: [
                 AuthenticationService,
                 AuthGuard,
-                NoteService
+                NoteService,
+                TagService
             ]
         };
     }

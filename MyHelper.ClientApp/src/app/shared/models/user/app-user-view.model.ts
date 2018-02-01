@@ -1,4 +1,4 @@
-import { UserRole } from '../user/user-role';
+import { UserRole } from '../../utilities/enums';
 
 export class AppUserViewModel {
   public id: number;

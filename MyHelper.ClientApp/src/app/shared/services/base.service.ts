@@ -21,7 +21,8 @@ export class BaseService extends RouteApiVersionService {
     }))
       .map((response: Response) => {
           const body = response.json();
-          return handleResponse ? handleResponse(body) : body.isSuccess ? body.result : Observable.throw(body.message);
+          return handleResponse ? handleResponse(body) : body.isSuccess
+                                ? (body.result ? body.result : body.isSuccess) : Observable.throw(body.message);
       })
       .catch((error: Response) => {
         return Observable.throw(error.json().message);

@@ -12,6 +12,7 @@ using MyHelper.Api.Models.Options;
 using MyHelper.Api.Services.Account;
 using MyHelper.Api.Services.MhTask;
 using MyHelper.Api.Services.Note;
+using MyHelper.Api.Services.Tag;
 using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api
@@ -56,6 +57,7 @@ namespace MyHelper.Api
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IMhTaskService, MhTaskService>();
             services.AddScoped<INoteService, NoteService>();
+            services.AddScoped<ITagService, TagService>();
 
             var sp = services.BuildServiceProvider();
             var tokenService = sp.GetService<ITokenService>();

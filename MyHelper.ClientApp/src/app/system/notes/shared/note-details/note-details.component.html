@@ -1,38 +1,59 @@
 <mat-card>
-  <div>
-    <mat-form-field>
-        <input matInput
-                type="text"
-                required
-                placeholder="Name">
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
-        <textarea matInput required
-                  placeholder="Description"></textarea>
-    </mat-form-field>
-  </div>
-  <div>
-      <mat-form-field class="demo-chip-list">
+  <form #detailedNoteForm="ngForm">
+    <div>
+      <mat-form-field>
+          <input matInput
+                  [(ngModel)]="card.name"
+                  name="name"
+                  #name="ngModel"
+                  required
+                  placeholder="Name">
+      </mat-form-field>
+      <mat-hint *ngIf="detailedNoteForm.submitted && (!name.pristine || !name.valid)">
+          <span [hidden]="!name.errors?.required">Name is required.</span>
+      </mat-hint>
+    </div>
+    <div>
+      <mat-form-field>
+          <textarea matInput
+                    [(ngModel)]="card.description"
+                    name="description"
+                    #description="ngModel"
+                    required
+                    placeholder="Description">
+          </textarea>
+      </mat-form-field>
+      <mat-hint *ngIf="detailedNoteForm.submitted && (!description.pristine || !description.valid)">
+          <span [hidden]="!description.errors?.required">Description is required.</span>
+      </mat-hint>
+    </div>
+    <div>
+        <mat-form-field class="demo-chip-list">
           <mat-chip-list #chipList>
-            <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable"
-                     [removable]="removable" (remove)="remove(fruit)">
-              {{fruit.name}}
+            <mat-chip *ngFor="let tag of card.tags" [selectable]="selectable"
+                      [removable]="removable" (remove)="removeTag(tag)">
+              {{tag.name}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
             <input placeholder="Tags"
-                   [matChipInputFor]="chipList"
-                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                   [matChipInputAddOnBlur]="addOnBlur"
-                   (matChipInputTokenEnd)="add($event)"
-                   [mdAutocomplete]="auto" />
+                    [matChipInputFor]="chipList"
+                    (matChipInputTokenEnd)="addTag($event)"
+                    [matAutocomplete]="auto"
+                    [formControl]="tagCtrl" />
           </mat-chip-list>
         </mat-form-field>
-        <md-autocomplete #auto="mdAutocomplete">
-            <md-option *ngFor="let tag of chosenTags | async" [value]="tag.name" (onSelectionChange)="selecteTag(tag)">
-                <span>{{ tag.name }}</span> |
-            </md-option>
-        </md-autocomplete>
-  </div>
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let tag of reactiveTags | async" [value]="tag.name" (onSelectionChange)="selectTag(tag)">
+                <span>{{ tag.name }}</span>
+            </mat-option>
+        </mat-autocomplete>
+        <mat-hint *ngIf="detailedNoteForm.submitted && card.tags.length === 0">
+            <span>Tags is required.</span>
+        </mat-hint>
+    </div>
+    <div>
+      <button mat-raised-button (click)="onCancel()">Cancel</button>
+      <button class="mat-primary" mat-raised-button (click)="onSaveNote(detailedNoteForm)">Save</button>
+    </div>
+  </form>
 </mat-card>

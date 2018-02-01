@@ -1,0 +1,22 @@
+:host {
+  width:100%;
+}
+.note_sidenav{
+  width: 200px;
+  background: whitesmoke;
+}
+.note_sidenav_wrapper{
+  padding: 16px;
+  box-sizing: border-box;
+}
+.note_content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: #fff;
+}
+.add_note{
+  text-transform: uppercase;
+  width: 100%;
+}

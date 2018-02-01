@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NoteResponse } from '../../shared/models/system/note-response.model';
+import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
 import { ICard } from '../../shared/models/base/i-card.model';
-import { CardType } from '../../shared/models/base/card-type';
+import { CardType } from '../../shared/utilities/enums';
 
 @Component({
   selector: 'mh-notes-page',
@@ -12,6 +12,8 @@ import { CardType } from '../../shared/models/base/card-type';
 export class NotesPageComponent implements OnInit {
 
   notes: ICard<NoteResponse>[];
+  detailedNote: NoteResponse;
+  isNoteListVisible = true;
 
   constructor(private noteService: NoteService) { }
 
@@ -22,5 +24,19 @@ export class NotesPageComponent implements OnInit {
         return { data : x, cardType : CardType.Note } as ICard<NoteResponse>;
       });
     });
+  }
+
+  addNote() {
+    this.detailedNote = new NoteResponse();
+    this.isNoteListVisible = false;
+  }
+
+  updateNote(note: NoteResponse) {
+    this.isNoteListVisible = false;
+    this.detailedNote = note;
+  }
+
+  closeDetailedNoteView(value: boolean) {
+    this.isNoteListVisible = value;
   }
 }

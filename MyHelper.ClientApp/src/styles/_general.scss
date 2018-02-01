@@ -1,4 +1,8 @@
 @import '_variables.scss';
+body,html {
+  height: 100%;
+  overflow: hidden;
+}
 
 body {
   background: $color-main-background;
@@ -14,13 +18,31 @@ body {
   align-items: center;
 }
 
+.system_conatainer{
+  height: 100%;
+}
+
 .system_body{
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
+  height: 100%;
+
+  .mat-sidenav-container {
+    display: flex;
+    flex: 1;
+  }
+
+  .mat-sidenav-content{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    height: 100vh;
+  }
 }
 
-.system_sidenav{
+.system_sidenav, .note_sidenav{
   background: transparent;
 }
 

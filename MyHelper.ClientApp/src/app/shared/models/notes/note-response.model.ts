@@ -1,4 +1,4 @@
-import TagViewModel from './tag-view.model';
+import TagViewModel from '../tags/tag-view.model';
 
 export class NoteResponse {
   public id: number;
@@ -11,5 +11,5 @@ export class NoteResponse {
 
   public appUserId: number;
 
-  public tags: TagViewModel[];
+  public tags: TagViewModel[] = [];
 }

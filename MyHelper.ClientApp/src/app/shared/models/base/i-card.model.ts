@@ -1,4 +1,4 @@
-import { CardType } from './card-type';
+import { CardType } from '../../utilities/enums';
 
 export interface ICard<T> {
   data: T;

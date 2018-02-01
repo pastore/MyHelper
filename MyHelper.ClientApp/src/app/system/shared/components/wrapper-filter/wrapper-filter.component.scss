@@ -1,0 +1,28 @@
+:host /deep/  {
+  .mat-input-infix{
+    width: auto;
+  }
+
+  .mat-chip{
+    display: inline-flex !important;
+  }
+  .mat-form-field{
+    width: 100%;
+  }
+}
+
+.filter_wrapper{
+  padding-top: 16px;
+}
+
+.filter_title{
+ text-transform: uppercase;
+ margin-bottom: 16px;
+}
+
+.filter_row {
+  margin-bottom: 16px;
+  &:last-child{
+    margin-bottom: 0;
+  }
+}
