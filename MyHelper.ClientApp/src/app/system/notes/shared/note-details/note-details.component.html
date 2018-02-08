@@ -1,9 +1,9 @@
 <mat-card>
   <form #detailedNoteForm="ngForm">
-    <div>
+    <div class="note_details_row">
       <mat-form-field>
           <input matInput
-                  [(ngModel)]="card.name"
+                  [(ngModel)]="detailedNote.name"
                   name="name"
                   #name="ngModel"
                   required
@@ -13,12 +13,13 @@
           <span [hidden]="!name.errors?.required">Name is required.</span>
       </mat-hint>
     </div>
-    <div>
+    <div class="note_details_row">
       <mat-form-field>
           <textarea matInput
-                    [(ngModel)]="card.description"
+                    [(ngModel)]="detailedNote.description"
                     name="description"
                     #description="ngModel"
+                    matTextareaAutosize
                     required
                     placeholder="Description">
           </textarea>
@@ -27,19 +28,19 @@
           <span [hidden]="!description.errors?.required">Description is required.</span>
       </mat-hint>
     </div>
-    <div>
-        <mat-form-field class="demo-chip-list">
-          <mat-chip-list #chipList>
-            <mat-chip *ngFor="let tag of card.tags" [selectable]="selectable"
+    <div class="note_details_row">
+        <mat-form-field>
+          <mat-chip-list #chipList required>
+            <mat-chip *ngFor="let tag of detailedNote.tags" [selectable]="selectable"
                       [removable]="removable" (remove)="removeTag(tag)">
               {{tag.name}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
             <input placeholder="Tags"
-                    [matChipInputFor]="chipList"
-                    (matChipInputTokenEnd)="addTag($event)"
-                    [matAutocomplete]="auto"
-                    [formControl]="tagCtrl" />
+                   [matChipInputFor]="chipList"
+                   (matChipInputTokenEnd)="addTag($event)"
+                   [matAutocomplete]="auto"
+                   [formControl]="tagCtrl"/>
           </mat-chip-list>
         </mat-form-field>
         <mat-autocomplete #auto="matAutocomplete">
@@ -47,11 +48,11 @@
                 <span>{{ tag.name }}</span>
             </mat-option>
         </mat-autocomplete>
-        <mat-hint *ngIf="detailedNoteForm.submitted && card.tags.length === 0">
-            <span>Tags is required.</span>
-        </mat-hint>
+        <mat-hint *ngIf="detailedNoteForm.submitted && !tagCtrl.valid">
+          <span>Tags is required.</span>
+      </mat-hint>
     </div>
-    <div>
+    <div class="note_details_row">
       <button mat-raised-button (click)="onCancel()">Cancel</button>
       <button class="mat-primary" mat-raised-button (click)="onSaveNote(detailedNoteForm)">Save</button>
     </div>

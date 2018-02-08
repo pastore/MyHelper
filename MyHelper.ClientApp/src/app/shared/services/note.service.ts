@@ -6,6 +6,7 @@ import { ApiRoute } from '../app-settings/api-route';
 import { NoteResponse } from '../models/notes/note-response.model';
 import { Observable } from 'rxjs/Observable';
 import { NoteRequest } from '../models/notes/note-request.model';
+import { NoteFilterRequest } from '../models/notes/note-filter-request';
 
 @Injectable()
 export class NoteService extends BaseService {
@@ -20,11 +21,21 @@ export class NoteService extends BaseService {
     this.headers.append('Authorization', 'Bearer ' + token);
   }
 
-  getNotes(): Observable<NoteResponse[]> {
-    return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, this.headers);
+   getNotes(noteFilterRequest?: NoteFilterRequest): Observable<NoteResponse[]> {
+    const searchParams = this.generateSearchParams(noteFilterRequest);
+
+    return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, this.headers, searchParams);
   }
 
   addNote(note: NoteRequest): Observable<boolean> {
     return this.sendRequest<boolean>(RequestMethod.Post, ApiRoute.Notes, note, this.headers);
+  }
+
+  updateNote(note: NoteRequest): Observable<boolean> {
+    return this.sendRequest<boolean>(RequestMethod.Put, ApiRoute.Notes, note, this.headers);
+  }
+
+  deleteNote(id: number): Observable<boolean> {
+    return this.sendRequest<boolean>(RequestMethod.Delete, ApiRoute.Notes + '/' + id, null, this.headers);
   }
 }

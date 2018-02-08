@@ -1,0 +1,13 @@
+<div class="dialog_delete_wrapper">
+  <div class="dialog_delete_title">
+    Are you sure to delete note ?
+  </div>
+  <div class="dialog_delete_content">
+    {{ data.name }}
+  </div>
+  <div class="dialog_buttons">
+    <button class="dialog_delete_button_cancel" type="button" mat-raised-button mat-dialog-close>Cancel</button>
+    <button class="mat-primary" mat-raised-button type="button" (click)="closeDialog()">Delete</button>
+  </div>
+</div>
+

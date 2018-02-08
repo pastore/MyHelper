@@ -7,11 +7,11 @@ import TagViewModel from '../../../../../shared/models/tags/tag-view.model';
 import { AuthenticationService } from '../../../../../shared/services/authentication.service';
 
 @Component({
-  selector: 'mh-autocomplete-filter',
-  templateUrl: './autocomplete-filter.component.html',
-  styleUrls: ['./autocomplete-filter.component.scss']
+  selector: 'mh-tags-filter',
+  templateUrl: './tags-filter.component.html',
+  styleUrls: ['./tags-filter.component.scss']
 })
-export class AutocompleteFilterComponent implements OnInit {
+export class TagsFilterComponent implements OnInit {
 
   removable = true;
   tags: TagViewModel[];
@@ -19,6 +19,7 @@ export class AutocompleteFilterComponent implements OnInit {
   selectedTags: TagViewModel[] = [];
   filteredTags: TagViewModel[];
   tagCtrl: FormControl;
+  @Input() placeHolder: string;
   @Output() updateFilter = new EventEmitter<number[]>();
 
   constructor(

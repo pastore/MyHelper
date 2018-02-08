@@ -12,7 +12,9 @@ namespace MyHelper.Api.Models.Request
 
         public DateTime? ToDate { get; set; }
 
-        public IEnumerable<long> TagIds { get; } = new List<long>();
+        public string Search { get; set; }
+
+        public IEnumerable<long> TagIds { get; set; } = new List<long>();
 
         public int? Limit { get; set; }
 

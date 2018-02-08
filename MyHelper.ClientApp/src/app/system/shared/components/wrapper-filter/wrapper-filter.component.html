@@ -2,9 +2,11 @@
   <div class="filter_title">
     Filters
   </div>
-  <div class="filter_list">
-    <div class="filter_row">
-      <mh-autocomplete-filter></mh-autocomplete-filter>
-    </div>
+  <div class="filter_list" *ngFor="let filter of filterItems">
+    <ng-container [ngSwitch]="filter.type">
+      <div class="filter_row" *ngSwitchCase="filterType.TagsFilter">
+        <mh-tags-filter [placeHolder]="filter.placeHolder" (updateFilter)="updateTagsFilter($event)"></mh-tags-filter>
+      </div>
+    </ng-container>
   </div>
 </div>

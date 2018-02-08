@@ -8,6 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import TagViewModel from '../../../../shared/models/tags/tag-view.model';
+import { MatChipInputEvent } from '@angular/material';
+import { TagRequest } from '../../../../shared/models/tags/tag-request-model';
+import { Validators } from '@angular/forms';
+import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 
 @Component({
   selector: 'mh-note-details',
@@ -16,11 +20,13 @@ import TagViewModel from '../../../../shared/models/tags/tag-view.model';
 })
 export class NoteDetailsComponent implements OnInit {
 
+  removable = true;
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;
   filteredTags: TagViewModel[];
   tagCtrl: FormControl;
-  @Input() card: NoteResponse;
+  @Input() cardNote: NoteResponse;
+  detailedNote: NoteResponse;
   @Output() closeDetailedNote = new EventEmitter<boolean>();
 
   constructor(
@@ -29,10 +35,12 @@ export class NoteDetailsComponent implements OnInit {
     private _authService: AuthenticationService ) { }
 
   ngOnInit() {
-    this.tagCtrl = new FormControl();
+    this.detailedNote = {... this.cardNote};
+    this.detailedNote.tags = this.cardNote.tags.slice();
+    this.tagCtrl = new FormControl(this.detailedNote.tags, [], asyncRequiredTagsValidator.bind(this));
     this._tagService.tags.subscribe(tags => {
       this.tags = tags;
-      this._filterdTags();
+      this._filteredTags();
       this._subscribeChangeTags();
     });
   }
@@ -44,39 +52,60 @@ export class NoteDetailsComponent implements OnInit {
   onSaveNote(detailedNoteForm: FormGroup) {
     if (detailedNoteForm.valid) {
       const noteRequest = new NoteRequest();
-      noteRequest.name = this.card.name;
-      noteRequest.description = this.card.description;
+      noteRequest.id = this.detailedNote.id;
+      noteRequest.name = this.detailedNote.name;
+      noteRequest.description = this.detailedNote.description;
       noteRequest.appUserId = this._authService.currentUser.id;
-      noteRequest.tagIds = this.card.tags.map(x => x.id);
+      noteRequest.tagIds = this.detailedNote.tags.map(x => x.id);
 
-      this._noteService
-        .addNote(noteRequest)
+      const method = noteRequest.id ? 'updateNote' : 'addNote';
+
+      this._noteService[method](noteRequest)
         .subscribe(x => {
           this.closeDetailedNote.emit(true);
         });
     }
   }
-  addTag(tag: TagViewModel) {
-    const sub = this._tagService.createTag(tag)
-    .subscribe(tags => {
-      this.tags = tags;
-      this.card.tags.push(tag);
+  addTag(event: MatChipInputEvent) {
+    const input = event.input;
+    const value = event.value;
+    const tagName: string = (value || '').trim();
 
-      this._filterdTags();
-      this._subscribeChangeTags();
-      sub.unsubscribe();
-    });
-  }
+    if (tagName !== '' && !this.detailedNote.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())) {
+      const sub = this._tagService.createTag(new TagRequest(tagName))
+      .subscribe(tags => {
+        this.tags = tags;
 
-  removeTag(tag: TagViewModel) {
-    const index: number = this.card.tags.indexOf(tag);
-    if (index !== -1) {
-      this.card.tags.splice(index, 1);
+        const tag = this.tags.find(x => x.name === tagName);
+        if (tag) {
+          this.detailedNote.tags.push(tag);
+        }
+
+        this._filteredTags();
+        this._subscribeChangeTags();
+
+        if (input) {
+          input.value = '';
+        }
+
+        sub.unsubscribe();
+      });
     }
   }
 
+  removeTag(tag: TagViewModel) {
+    const index: number = this.detailedNote.tags.indexOf(tag);
+    if (index !== -1) {
+      this.detailedNote.tags.splice(index, 1);
+    }
+
+    this._filteredTags();
+    this.tagCtrl.reset();
+    this._subscribeChangeTags();
+  }
+
   selectTag(tag) {
-    this.card.tags.push(tag);
+    this.detailedNote.tags.push(tag);
     const index: number = this.filteredTags.indexOf(tag);
     if (index !== -1) {
       this.filteredTags.splice(index, 1);
@@ -86,9 +115,9 @@ export class NoteDetailsComponent implements OnInit {
     this._subscribeChangeTags();
   }
 
-  private _filterdTags() {
+  private _filteredTags() {
     this.filteredTags = this.tags.filter((tag) => {
-        return !this.card.tags.some((tagModel) => {
+        return !this.detailedNote.tags.some((tagModel) => {
           return tag.id === tagModel.id;
       });
     });

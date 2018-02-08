@@ -8,13 +8,17 @@ import { SystemSidebarComponent } from './shared/components/system-sidebar/syste
 import { SystemHeaderComponent } from './shared/components/system-header/system-header.component';
 import { WrapperFilterComponent } from './shared/components/wrapper-filter/wrapper-filter.component';
 import { DatetimeFilterComponent } from './shared/components/filter-items/datetime-filter/datetime-filter.component';
-import { AutocompleteFilterComponent } from './shared/components/filter-items/autocomplete-filter/autocomplete-filter.component';
+import { TagsFilterComponent } from './shared/components/filter-items/tags-filter/tags-filter.component';
 import { NoteCardComponent } from './notes/shared/note-card/note-card.component';
 import { NoteDetailsComponent } from './notes/shared/note-details/note-details.component';
 import { SearchFilterComponent } from './shared/components/filter-items/search-filter/search-filter.component';
+import { NoteDeleteModalComponent } from './notes/shared/note-delete-modal/note-delete-modal.component';
 
 @NgModule({
-  imports: [SharedModule, SystemRoutingModule],
+  imports: [
+    SharedModule,
+    SystemRoutingModule
+  ],
   declarations: [
     SystemComponent,
     SystemSidebarComponent,
@@ -22,10 +26,12 @@ import { SearchFilterComponent } from './shared/components/filter-items/search-f
     NotesPageComponent,
     WrapperFilterComponent,
     DatetimeFilterComponent,
-    AutocompleteFilterComponent,
+    TagsFilterComponent,
     NoteCardComponent,
     NoteDetailsComponent,
-    SearchFilterComponent
-  ]
+    SearchFilterComponent,
+    NoteDeleteModalComponent
+  ],
+  entryComponents: [NoteDeleteModalComponent]
 })
 export class SystemModule { }

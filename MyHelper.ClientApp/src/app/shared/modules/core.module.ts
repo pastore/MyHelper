@@ -5,16 +5,20 @@ import { AuthGuard } from '../services/authentication.guard';
 import { NoteService } from '../services/note.service';
 import { TagService } from '../services/tag.service';
 
-@NgModule({})
+import { RequiredTagsDirective } from '../directives/require-tags.directive';
+
+@NgModule({
+  declarations: [RequiredTagsDirective]
+})
 export class CoreModule {
     static forRoot(): ModuleWithProviders {
         return {
             ngModule: CoreModule,
             providers: [
-                AuthenticationService,
-                AuthGuard,
-                NoteService,
-                TagService
+              AuthenticationService,
+              AuthGuard,
+              NoteService,
+              TagService
             ]
         };
     }

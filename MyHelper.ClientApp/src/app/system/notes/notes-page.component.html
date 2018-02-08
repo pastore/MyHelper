@@ -2,20 +2,24 @@
     <mat-sidenav class="note_sidenav" mode="side"  opened>
       <div class="note_sidenav_wrapper">
         <button class="mat-primary add_note" mat-raised-button (click)="addNote()">Add note</button>
-        <mh-wrapper-filter></mh-wrapper-filter>
+        <mh-wrapper-filter [filterItems]="filterItems" (wrapFilter)="triggerChangeWrapFilter($event)"></mh-wrapper-filter>
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
-      <mh-search-filter></mh-search-filter>
+      <mh-search-filter (searchInput)="triggerChangeSearch($event)"></mh-search-filter>
       <div class="note_content">
         <div *ngIf="isNoteListVisible">
           <mh-note-card
             *ngFor="let cardNote of notes"
             [card]="cardNote"
-            (updateNote)="updateNote($event)">
+            (updateNote)="updateNote($event)"
+            (deleteNote)="deleteNote($event)">
           </mh-note-card>
         </div>
-        <mh-note-details *ngIf="!isNoteListVisible" [card]="detailedNote" (closeDetailedNote)="closeDetailedNoteView($event)"></mh-note-details>
+        <mh-note-details *ngIf="!isNoteListVisible"
+          [cardNote]="detailedNote"
+          (closeDetailedNote)="closeDetailedNoteView($event)">
+        </mh-note-details>
       </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

@@ -22,7 +22,7 @@ namespace MyHelper.Api.Services.Note
             {
                 var query = _myHelperDbContext.Notes.Include(x => x.NoteTags).ThenInclude(e => e.Tag).AsQueryable();
 
-                FilterNotes(query, noteFilterRequest);
+                query = FilterNotes(query, noteFilterRequest);
 
                 return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<DAL.Entities.Note, NoteResponse>(x)).ToList());
             });
@@ -50,17 +50,20 @@ namespace MyHelper.Api.Services.Note
                     Name = noteRequest.Name,
                     Description = noteRequest.Description,
                     UpdateDate = DateTime.Now,
+                    AppUserId = noteRequest.AppUserId
                 };
 
-                await _myHelperDbContext.Notes.AddAsync(note);
+                _myHelperDbContext.Notes.Add(note);
                 await _myHelperDbContext.SaveChangesAsync();
 
                 if (noteRequest.TagIds.Any())
                 {
-                    var noteTags = noteRequest.TagIds.Select(x => new NoteTag
+                    var noteTags = noteRequest.TagIds
+                    .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                    .Select(x => new NoteTag
                     {
-                        NoteId = note.Id,
-                        TagId = x
+                        Note = note,
+                        Tag = x
                     });
 
                     await _myHelperDbContext.NoteTags.AddRangeAsync(noteTags);
@@ -88,11 +91,14 @@ namespace MyHelper.Api.Services.Note
                 await _myHelperDbContext.SaveChangesAsync();
 
                 var noteTags = await _myHelperDbContext.NoteTags.Where(x => x.NoteId == note.Id).ToListAsync();
-                _myHelperDbContext.NoteTags.RemoveRange(noteTags.Where(x => !noteRequest.TagIds.Contains(x.Tag.Id)));
+                _myHelperDbContext.NoteTags.RemoveRange(noteTags.Where(x => !noteRequest.TagIds.Contains(x.TagId)));
 
-                await _myHelperDbContext.NoteTags.AddRangeAsync(noteRequest.TagIds
-                    .Where(x => !noteTags.Contains(new NoteTag { TagId = x, NoteId = note.Id }))
-                    .Select(x => new NoteTag { TagId = x, NoteId = note.Id }));
+                await _myHelperDbContext.NoteTags.AddRangeAsync(
+                    noteRequest.TagIds
+                    .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                    .Where(x => !noteTags.Select(y => y.TagId).Contains(x.Id))
+                    .Select(x => new NoteTag { Tag = x, Note = note })
+                    );
                 await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();
@@ -117,7 +123,7 @@ namespace MyHelper.Api.Services.Note
 
         #region -- Private methods --
 
-        private void FilterNotes(IQueryable<DAL.Entities.Note> query, NoteFilterRequest noteFIlterRequest)
+        private IQueryable<DAL.Entities.Note> FilterNotes(IQueryable<DAL.Entities.Note> query, NoteFilterRequest noteFIlterRequest)
         {
             if (noteFIlterRequest.FromDate.HasValue)
             {
@@ -129,10 +135,17 @@ namespace MyHelper.Api.Services.Note
                 query = query.Where(x => x.CreateDate <= noteFIlterRequest.ToDate.Value);
             }
 
+            if (!string.IsNullOrWhiteSpace(noteFIlterRequest.Search))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(noteFIlterRequest.Search.ToLower()));
+            }
+
             if (noteFIlterRequest.TagIds.Any())
             {
-                query = query.Where(x => x.NoteTags.Any(mhtag => noteFIlterRequest.TagIds.Any(t => t == mhtag.Tag.Id)));
+                query = query.Where(x => x.NoteTags.Any(tag => noteFIlterRequest.TagIds.Any(t => t == tag.Tag.Id)));
             }
+
+            return query;
         }
 
         #endregion

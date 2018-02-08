@@ -1,12 +1,11 @@
-<mat-form-field class="demo-chip-list">
+<mat-form-field>
   <mat-chip-list class="mat-chip-list-stacked" #filterChipList aria-orientation="vertical">
     <mat-chip *ngFor="let tag of selectedTags" [removable]="removable" (remove)="removeTag(tag)">
       {{tag.name}}
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>
-    <input placeholder="Tags"
+    <input placeholder="{{placeHolder}}"
             [matChipInputFor]="filterChipList"
-            (matChipInputTokenEnd)="addTag($event)"
             [matAutocomplete]="auto"
             [formControl]="tagCtrl" />
   </mat-chip-list>

@@ -36,7 +36,7 @@ export class AuthenticationService extends BaseService {
   }
 
   login(loginRequest: LoginRequest): Observable<boolean> {
-    return this.sendRequest(RequestMethod.Post, ApiRoute.Login, loginRequest, null, this._handleResponse.bind(this));
+    return this.sendRequest(RequestMethod.Post, ApiRoute.Login, loginRequest, null, null, this._handleResponse.bind(this));
   }
 
   logout(): void {
@@ -44,7 +44,7 @@ export class AuthenticationService extends BaseService {
   }
 
   createUser(registrationRequest: RegistrationRequest): Observable<boolean> {
-    return this.sendRequest(RequestMethod.Post, ApiRoute.Registration, registrationRequest, null, this._handleResponse.bind(this));
+    return this.sendRequest(RequestMethod.Post, ApiRoute.Registration, registrationRequest, null, null, this._handleResponse.bind(this));
   }
 
   isLoggedIn(): boolean {

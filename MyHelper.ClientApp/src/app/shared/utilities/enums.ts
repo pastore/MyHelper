@@ -8,3 +8,8 @@ export enum CardType {
   Note = 2,
   Friend = 3
 }
+
+export enum FilterType {
+  TagsFilter = 1,
+  DateTimeFilter = 2
+}

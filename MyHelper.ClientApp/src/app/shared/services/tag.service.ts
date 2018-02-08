@@ -5,6 +5,7 @@ import { Http, Response } from '@angular/http';
 import { ApiRoute } from '../app-settings/api-route';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication.service';
+import { TagRequest } from '../models/tags/tag-request-model';
 
 @Injectable()
 export class TagService extends DataAPIService<TagViewModel> {
@@ -21,8 +22,8 @@ export class TagService extends DataAPIService<TagViewModel> {
     super(http, authService);
   }
 
-  createTag(tag: TagViewModel) {
-    return this.post(tag);
+  createTag(tagRequest: TagRequest) {
+    return this.post(tagRequest);
   }
 
   protected handleData(res: Response): TagViewModel[] {
