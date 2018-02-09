@@ -89,7 +89,7 @@ namespace MyHelper.Api
             app.UseCors("AllowAll");
             app.UseMvc();
 
-            seeder.SeedDb();
+            //seeder.SeedDb();
         }
     }
 }
