@@ -51,7 +51,7 @@ namespace MyHelper.Api
             services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
 
             services.AddEntityFrameworkNpgsql()
-                .AddDbContext<MyHelperContext>(options => options.UseNpgsql(Configuration["Data:Postgresql:ConnectionString"]));
+                .AddDbContext<MyHelperContext>(options => options.UseNpgsql(Configuration["ConnectionStrings:Postgresql"]));
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountService, AccountService>();
