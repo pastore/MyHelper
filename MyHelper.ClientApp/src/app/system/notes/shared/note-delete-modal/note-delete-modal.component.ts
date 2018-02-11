@@ -9,7 +9,7 @@ import { NoteResponse } from '../../../../shared/models/notes/note-response.mode
 })
 export class NoteDeleteModalComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: NoteResponse,
+    @Inject(MAT_DIALOG_DATA) public data: NoteResponse,
     private dialogRef: MatDialogRef<NoteDeleteModalComponent>
   ) { }
 
