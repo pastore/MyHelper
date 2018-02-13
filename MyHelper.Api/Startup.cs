@@ -86,14 +86,6 @@ namespace MyHelper.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            if (env.IsProduction())
-            {
-                app.UseForwardedHeaders(new ForwardedHeadersOptions
-                {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                });
-            }
-
             app.UseAuthentication();
             app.UseCors("AllowAll");
             app.UseMvc();
