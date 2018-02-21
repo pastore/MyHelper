@@ -1,0 +1,72 @@
+.nw-button.nw-button-mdi{
+  &:before{
+    font-family: 'Material Icons';
+    font-size: 16px;
+  }
+
+  &.list-ul{
+    &:before{
+      content: '\e241';
+    }
+  }
+
+  &.list-ol{
+    &:before{
+      content: '\e242';
+    }
+  }
+
+  &.bold {
+    &:before{
+      content: '\e238';
+    }
+  }
+
+  &.italic{
+    &:before{
+      content: '\e23f';
+    }
+  }
+
+  &.link{
+    &:before{
+      content: '\e250';
+    }
+  }
+
+  &.nw-button--source{
+    &:before{
+      content: '\e150';
+    }
+  }
+}
+
+.nw-editor__res{
+  padding: 8px;
+
+  ul,ol{
+    padding-left: 25px;
+
+    + div{
+      ul,ol{
+        padding-left: 35px;
+      }
+    }
+  }
+}
+
+.nw-editor__placeholder{
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.rich_editor_wrapper{
+  ul,ol {
+    padding-left: 25px;
+
+    + div{
+      ul,ol{
+        padding-left: 35px;
+      }
+    }
+  }
+}

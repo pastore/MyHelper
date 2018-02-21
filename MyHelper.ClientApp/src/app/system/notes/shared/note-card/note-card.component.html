@@ -20,8 +20,7 @@
       </mat-menu>
     </div>
   </div>
-  <div *ngIf="isExpandCard" class="note_card_description">
-      {{ card.data.description }}
+  <div *ngIf="isExpandCard" class="note_card_description rich_editor_wrapper" [innerHTML]="card.data.description">
     </div>
   <div>
     <mat-chip-list>

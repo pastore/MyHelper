@@ -14,7 +14,10 @@
       </mat-hint>
     </div>
     <div class="note_details_row">
-      <mat-form-field>
+      <ngx-wig [(ngModel)]="detailedNote.description" name="description" required #description="ngModel"
+               [placeholder]="'Enter description here'">
+      </ngx-wig>
+      <!-- <mat-form-field>
           <textarea matInput
                     [(ngModel)]="detailedNote.description"
                     name="description"
@@ -23,7 +26,7 @@
                     required
                     placeholder="Description">
           </textarea>
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-hint *ngIf="detailedNoteForm.submitted && (!description.pristine || !description.valid)">
           <span [hidden]="!description.errors?.required">Description is required.</span>
       </mat-hint>

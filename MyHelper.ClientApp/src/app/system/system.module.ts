@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SystemRoutingModule } from './system-routing.module';
 import { SharedModule } from '../shared/modules/shared.module';
+import {NgxWigModule} from 'ngx-wig';
 
 import { SystemComponent } from './system.component';
 import { NotesPageComponent } from './notes/notes-page.component';
@@ -17,7 +18,8 @@ import { NoteDeleteModalComponent } from './notes/shared/note-delete-modal/note-
 @NgModule({
   imports: [
     SharedModule,
-    SystemRoutingModule
+    SystemRoutingModule,
+    NgxWigModule
   ],
   declarations: [
     SystemComponent,
