@@ -2,7 +2,7 @@
 
 body,html {
   height: 100%;
-  overflow: hidden;
+  overflow-y: hidden;
 }
 
 body {
@@ -19,9 +19,45 @@ body {
   align-items: center;
 }
 
+.hide{
+  display: none !important;
+}
+
 // material icons
 .mi-16{
   font-size: 16px!important;
   width: 16px!important;
   height: 16px!important;
+}
+
+@media (max-width: 959px){
+  .mat-toolbar-row, .mat-toolbar-single-row{
+    padding: 0 !important;
+  }
+
+  .system_sidenav{
+    background: white !important;
+  }
+
+  .system_sidenav_wrapepr{
+    margin-right: 0 !important;
+    background: none !important;
+  }
+
+  .mat-list-item{
+    color: $color-primary !important;
+    .mat-line{
+      outline: none;
+    }
+  }
+
+  .myhelper_logo{
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 599px){
+  .user_button {
+      height: 56px !important;
+  }
 }

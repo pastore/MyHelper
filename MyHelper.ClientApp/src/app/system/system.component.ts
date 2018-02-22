@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'mh-system',
@@ -6,8 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./system.component.scss']
 })
 
-export class SystemComponent implements OnInit {
-  constructor() { }
+export class SystemComponent {
+  screenWidth: number;
 
-  ngOnInit() { }
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  constructor() {
+    this.screenWidth = window.innerWidth;
+  }
 }

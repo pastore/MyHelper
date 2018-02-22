@@ -1,9 +1,9 @@
 <div class="system_conatainer">
-  <mh-system-header></mh-system-header>
+  <mh-system-header [screenWidth]="screenWidth" (toggleSidenav)="start.toggle()"></mh-system-header>
 
   <div class="system_body">
     <mat-sidenav-container>
-        <mat-sidenav class="system_sidenav" mode="side" align="start" opened>
+        <mat-sidenav class="system_sidenav" #start [opened]="screenWidth >= 960" [mode]="(screenWidth >= 960) ? 'side' : 'over'">
             <mh-system-sidebar></mh-system-sidebar>
         </mat-sidenav>
         <mat-sidenav-content>

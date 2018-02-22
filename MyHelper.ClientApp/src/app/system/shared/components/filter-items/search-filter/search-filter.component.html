@@ -1,4 +1,9 @@
-<div class="search" fxlayout="row" fxLayoutAlign="start center">
-    <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">search</mat-icon>
-    <input placeholder="Search note" (keyup.enter)="handleSearchInput($event)">
+<div class="search_wrapper" fxLayout="row" fxLayoutAlign="start center">
+  <button class="toggle_button" mat-icon-button (click)="toggleFilterSidenav.emit()" [ngClass]="{'hide': screenWidth >= 780}">
+      <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">menu</mat-icon>
+   </button>
+  <div class="search" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">search</mat-icon>
+      <input placeholder="Search note" (keyup.enter)="handleSearchInput($event)">
+  </div>
 </div>

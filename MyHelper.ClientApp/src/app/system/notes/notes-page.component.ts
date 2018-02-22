@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
 import { ICard } from '../../shared/models/base/i-card.model';
 import { CardType, FilterType } from '../../shared/utilities/enums';
 import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'mh-notes-page',
@@ -18,8 +19,15 @@ export class NotesPageComponent implements OnInit {
   noteFilterRequest: NoteFilterRequest;
   detailedNote: NoteResponse;
   isNoteListVisible = true;
+  screenWidth: number;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.screenWidth = window.innerWidth;
+  }
 
-  constructor(private noteService: NoteService) { }
+  constructor(private noteService: NoteService) {
+    this.screenWidth = window.innerWidth;
+  }
 
   ngOnInit() {
     this.filterItems = [new FilterItem(FilterType.TagsFilter, 'Tags')];
@@ -28,9 +36,11 @@ export class NotesPageComponent implements OnInit {
     this._getNotes();
   }
 
-  addNote() {
+  addNote(start: MatSidenav) {
     this.detailedNote = new NoteResponse();
     this.isNoteListVisible = false;
+
+    this._toggleSideNav(start);
   }
 
   updateNote(note: NoteResponse) {
@@ -52,7 +62,9 @@ export class NotesPageComponent implements OnInit {
     this.isNoteListVisible = value;
   }
 
-  triggerChangeWrapFilter(wrapFilter) {
+  triggerChangeWrapFilter(wrapFilter, start) {
+    this._toggleSideNav(start);
+
     Object.keys(wrapFilter)
     .forEach(key => {
       this.noteFilterRequest[key] = wrapFilter[key];
@@ -72,5 +84,11 @@ export class NotesPageComponent implements OnInit {
         return { data : x, cardType : CardType.Note } as ICard<NoteResponse>;
       });
     });
+  }
+
+  private _toggleSideNav(start: MatSidenav) {
+    if (start) {
+      start.toggle();
+    }
   }
 }
