@@ -8,7 +8,9 @@ import { TagService } from '../services/tag.service';
 import { RequiredTagsDirective } from '../directives/require-tags.directive';
 
 @NgModule({
-  declarations: [RequiredTagsDirective]
+  declarations: [
+    RequiredTagsDirective
+  ]
 })
 export class CoreModule {
     static forRoot(): ModuleWithProviders {
