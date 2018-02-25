@@ -20,6 +20,7 @@ export class NotesPageComponent implements OnInit {
   detailedNote: NoteResponse;
   isNoteListVisible = true;
   screenWidth: number;
+  tooltip = 'Close edit view!';
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.screenWidth = window.innerWidth;
@@ -57,9 +58,9 @@ export class NotesPageComponent implements OnInit {
       });
   }
 
-  closeDetailedNoteView(value: boolean) {
+  closeDetailedNoteView() {
     this._getNotes();
-    this.isNoteListVisible = value;
+    this.isNoteListVisible = true;
   }
 
   triggerChangeWrapFilter(wrapFilter, start) {

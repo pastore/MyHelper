@@ -1,4 +1,4 @@
-<mat-form-field>
+<mat-form-field [matTooltip]="disabled ? tooltip : ''">
   <mat-chip-list class="mat-chip-list-stacked" #filterChipList aria-orientation="vertical">
     <mat-chip *ngFor="let tag of selectedTags" [removable]="removable" (remove)="removeTag(tag)">
       {{tag.name}}
@@ -7,7 +7,9 @@
     <input placeholder="{{placeHolder}}"
             [matChipInputFor]="filterChipList"
             [matAutocomplete]="auto"
-            [formControl]="tagCtrl" />
+            [formControl]="tagCtrl"
+            [ngClass]="{'pointer-events-none': disabled}"
+            [attr.disabled]="disabled ? 'true': null "/>
   </mat-chip-list>
 </mat-form-field>
 <mat-autocomplete #auto="matAutocomplete">

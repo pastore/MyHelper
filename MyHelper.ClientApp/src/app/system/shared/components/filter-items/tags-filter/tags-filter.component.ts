@@ -12,7 +12,6 @@ import { AuthenticationService } from '../../../../../shared/services/authentica
   styleUrls: ['./tags-filter.component.scss']
 })
 export class TagsFilterComponent implements OnInit {
-
   removable = true;
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;
@@ -20,6 +19,8 @@ export class TagsFilterComponent implements OnInit {
   filteredTags: TagViewModel[];
   tagCtrl: FormControl;
   @Input() placeHolder: string;
+  @Input() disabled: boolean;
+  @Input() tooltip: string;
   @Output() updateFilter = new EventEmitter<number[]>();
 
   constructor(

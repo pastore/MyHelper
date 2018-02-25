@@ -54,7 +54,6 @@ namespace MyHelper.Api.Services.Note
                 };
 
                 _myHelperDbContext.Notes.Add(note);
-                await _myHelperDbContext.SaveChangesAsync();
 
                 if (noteRequest.TagIds.Any())
                 {
@@ -67,8 +66,9 @@ namespace MyHelper.Api.Services.Note
                     });
 
                     await _myHelperDbContext.NoteTags.AddRangeAsync(noteTags);
-                    await _myHelperDbContext.SaveChangesAsync();
                 }
+
+                await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();
             }, noteRequest);
@@ -88,7 +88,6 @@ namespace MyHelper.Api.Services.Note
                 note.UpdateDate = DateTime.Now;
 
                 _myHelperDbContext.Notes.Update(note);
-                await _myHelperDbContext.SaveChangesAsync();
 
                 var noteTags = await _myHelperDbContext.NoteTags.Where(x => x.NoteId == note.Id).ToListAsync();
                 _myHelperDbContext.NoteTags.RemoveRange(noteTags.Where(x => !noteRequest.TagIds.Contains(x.TagId)));
@@ -99,6 +98,7 @@ namespace MyHelper.Api.Services.Note
                     .Where(x => !noteTags.Select(y => y.TagId).Contains(x.Id))
                     .Select(x => new NoteTag { Tag = x, Note = note })
                     );
+
                 await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();

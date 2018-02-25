@@ -1,9 +1,12 @@
+
+.search_wrapper {
+  margin-bottom: 10px;
+}
 .search {
   width: 100%;
   height: 56px;
   line-height: 56px;
   padding: 16px;
-  margin-bottom: 10px;
   background: #fff;
   flex: 1;
   box-sizing: border-box;
@@ -23,15 +26,11 @@
     height: 48px;
     line-height: 48px;
     padding: 14px;
-    margin-bottom: 0;
 
     input {
       height: 48px;
       padding-left: 10px;
     }
-  }
-  .search_wrapper{
-    margin-bottom: 10px;
   }
 
   .toggle_button{

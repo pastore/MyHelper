@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.WindowsAzure.Storage.RetryPolicies;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Helpers;
 using MyHelper.Api.DAL.Context;

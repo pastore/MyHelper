@@ -25,9 +25,9 @@ export class NoteDetailsComponent implements OnInit {
   reactiveTags: Observable<TagViewModel[]>;
   filteredTags: TagViewModel[];
   tagCtrl: FormControl;
-  @Input() cardNote: NoteResponse;
   detailedNote: NoteResponse;
-  @Output() closeDetailedNote = new EventEmitter<boolean>();
+  @Input() cardNote: NoteResponse;
+  @Output() closeDetailedNote = new EventEmitter();
 
   constructor(
     private _noteService: NoteService,
@@ -46,11 +46,11 @@ export class NoteDetailsComponent implements OnInit {
   }
 
   onCancel() {
-    this.closeDetailedNote.emit(true);
+    this.closeDetailedNote.emit();
   }
 
   onSaveNote(detailedNoteForm: FormGroup) {
-    if (detailedNoteForm.valid) {
+    if (detailedNoteForm.valid && this.tagCtrl.valid) {
       const noteRequest = new NoteRequest();
       noteRequest.id = this.detailedNote.id;
       noteRequest.name = this.detailedNote.name;
@@ -62,7 +62,7 @@ export class NoteDetailsComponent implements OnInit {
 
       this._noteService[method](noteRequest)
         .subscribe(x => {
-          this.closeDetailedNote.emit(true);
+          this.closeDetailedNote.emit();
         });
     }
   }

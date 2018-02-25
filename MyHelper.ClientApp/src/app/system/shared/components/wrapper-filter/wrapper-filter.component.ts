@@ -8,10 +8,12 @@ import { FilterType } from '../../../../shared/utilities/enums';
   styleUrls: ['./wrapper-filter.component.scss']
 })
 export class WrapperFilterComponent implements OnInit {
-  @Input() filterItems: FilterItem[];
-  @Output() wrapFilter = new EventEmitter();
   filterType = FilterType;
   filterRequest: any;
+  @Input() filterItems: FilterItem[];
+  @Output() wrapFilter = new EventEmitter();
+  @Input() disabled: boolean;
+  @Input() tooltip: string;
 
   constructor() { }
 

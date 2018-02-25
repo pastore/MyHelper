@@ -13,6 +13,7 @@
 
             // MhTask
             public const string TaskNotExists = "Task doesn't exists";
+            public const string TaskReShedule = "Re-shedule task can not be updated";
 
             // Note
             public const string NoteNotExists = "Note doesn't exists";
@@ -20,6 +21,7 @@
 
         public static class Updates
         {
+            public const string CreateMhTask = "Create task";
             public const string UpdateEntireMhTask = "Update entire task";
             public const string UpdateStatusMhTask = "Update status task";
             public const string DeleteMhTask = "Delete task";

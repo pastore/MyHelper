@@ -14,7 +14,8 @@ import {
   MatChipsModule,
   MatAutocompleteModule,
   MatProgressSpinnerModule,
-  MatDialogModule
+  MatDialogModule,
+  MatTooltipModule
 } from '@angular/material';
 
 @NgModule({
@@ -32,7 +33,8 @@ import {
     MatChipsModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltipModule
   ],
   exports: [
     MatInputModule,
@@ -48,7 +50,8 @@ import {
     MatChipsModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTooltipModule
   ]
 })
 export class MhMaterialModule {}

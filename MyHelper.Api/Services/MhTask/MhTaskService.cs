@@ -53,9 +53,10 @@ namespace MyHelper.Api.Services.MhTask
                 {
                     Name = mhTaskRequest.Name,
                     Description = mhTaskRequest.Description,
-                    StartDate = mhTaskRequest.StartDate,
+                    StartDate = mhTaskRequest.StartDate >= DateTime.Now ? mhTaskRequest.StartDate : DateTime.Now,
                     IsRecurring = mhTaskRequest.IsRecurring,
-                    MhTaskVisibleType = mhTaskRequest.MhTaskVisibleType
+                    MhTaskVisibleType = mhTaskRequest.MhTaskVisibleType,
+                    AppUserId = mhTaskRequest.AppUserId
                 };
 
                 if (parentMhTask != null)
@@ -64,32 +65,33 @@ namespace MyHelper.Api.Services.MhTask
                 }
 
                 await _myHelperDbContext.MhTasks.AddAsync(mhTask);
-                await _myHelperDbContext.SaveChangesAsync();
 
                 if (mhTaskRequest.IsRecurring)
                 {
                     var scheduleMhTask = new ScheduleMhTask
                     {
                         MhTask = mhTask,
-                        MaxCount = mhTaskRequest.ScheduleMhTask.MaxCount,
-                        ScheduleMhTaskType = mhTaskRequest.ScheduleMhTask.ScheduleMhTaskType
+                        MaxCount = mhTaskRequest.ScheduleMhTaskRequest.MaxCount ?? 0,
+                        ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskRequest.ScheduleMhTaskType
                     };
 
                     await _myHelperDbContext.ScheduleMhTasks.AddAsync(scheduleMhTask);
-                    await _myHelperDbContext.SaveChangesAsync();
                 }
 
                 if (mhTaskRequest.TagIds.Any())
                 {
-                    var mhTaskTags = mhTaskRequest.TagIds.Select(x =>  new MhTaskTag
-                    {
-                        MhTaskId = mhTask.Id,
-                        TagId = x
-                    });
+                    var mhTaskTags = mhTaskRequest.TagIds
+                        .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                        .Select(x => new MhTaskTag
+                        {
+                            MhTask = mhTask,
+                            Tag = x
+                        });
 
                     await _myHelperDbContext.MhTaskTags.AddRangeAsync(mhTaskTags);
-                    await _myHelperDbContext.SaveChangesAsync();
                 }
+
+                await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();
             }, mhTaskRequest);   
@@ -114,33 +116,34 @@ namespace MyHelper.Api.Services.MhTask
                 if (mhTask == null)
                     return AOBuilder.SetError(Constants.Errors.TaskNotExists);
 
+                if (mhTask.MhTaskState == EMhTaskState.ReSchedule)
+                    return AOBuilder.SetError(Constants.Errors.TaskReShedule);
+
                 mhTask.Name = mhTaskRequest.Name;
                 mhTask.Description = mhTaskRequest.Description;
+                mhTask.StartDate = mhTaskRequest.StartDate >= DateTime.Now ? mhTaskRequest.StartDate : DateTime.Now;
                 mhTask.IsRecurring = mhTaskRequest.IsRecurring;
                 mhTask.MhTaskVisibleType = mhTaskRequest.MhTaskVisibleType;
 
                 if (mhTaskRequest.IsRecurring)
                 {
-                    mhTask.ScheduleMhTask.MaxCount = mhTaskRequest.ScheduleMhTask.MaxCount;
-                    mhTask.ScheduleMhTask.ScheduleMhTaskType = mhTaskRequest.ScheduleMhTask.ScheduleMhTaskType;
-                }
-
-                if (mhTaskRequest.StartDate >= DateTime.Now && mhTask.StartDate != mhTaskRequest.StartDate)
-                {
-                    mhTask.MhTaskState = EMhTaskState.ReSchedule;
-                    await CreateMhTaskAsync(mhTaskRequest, mhTask);
+                    mhTask.ScheduleMhTask.MaxCount = mhTaskRequest.ScheduleMhTaskRequest.MaxCount ?? 0;
+                    mhTask.ScheduleMhTask.ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskRequest.ScheduleMhTaskType;
                 }
 
                 _myHelperDbContext.MhTasks.Update(mhTask);
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateEntireMhTask);
-                await _myHelperDbContext.SaveChangesAsync();
 
                 var mhTaskTags = await _myHelperDbContext.MhTaskTags.Where(x => x.MhTaskId == mhTask.Id).ToListAsync();
                 _myHelperDbContext.MhTaskTags.RemoveRange(mhTaskTags.Where(x => !mhTaskRequest.TagIds.Contains(x.Tag.Id)));
 
-                await _myHelperDbContext.MhTaskTags.AddRangeAsync(mhTaskRequest.TagIds
-                    .Where(x => !mhTaskTags.Contains(new MhTaskTag {TagId = x, MhTaskId = mhTask.Id}))
-                    .Select(x => new MhTaskTag{ MhTaskId = mhTask.Id, TagId = x}));
+                await _myHelperDbContext.MhTaskTags.AddRangeAsync(
+                    mhTaskRequest.TagIds
+                        .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                        .Where(x => !mhTaskTags.Select(y => y.TagId).Contains(x.Id))
+                        .Select(x => new MhTaskTag { Tag = x, MhTask = mhTask })
+                );
+
                 await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();
@@ -158,8 +161,14 @@ namespace MyHelper.Api.Services.MhTask
 
                 mhTask.MhTaskStatus = (EMhTaskStatus) status;
 
+                if ((EMhTaskStatus)status == EMhTaskStatus.Done)
+                {
+                    mhTask.FinishDate = DateTime.Now;
+                }
+
                 _myHelperDbContext.MhTasks.Update(mhTask);
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateStatusMhTask);
+
                 await _myHelperDbContext.SaveChangesAsync();
                 
                 return AOBuilder.SetSuccess();

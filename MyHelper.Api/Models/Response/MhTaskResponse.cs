@@ -32,6 +32,6 @@ namespace MyHelper.Api.Models.Response
 
         public ScheduleMhTask ScheduleMhTask { get; set; }
 
-        public ICollection<TagViewModel> Tags { get; } 
+        public ICollection<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
     }
 }

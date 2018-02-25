@@ -5,7 +5,12 @@
   <div class="filter_list" *ngFor="let filter of filterItems">
     <ng-container [ngSwitch]="filter.type">
       <div class="filter_row" *ngSwitchCase="filterType.TagsFilter">
-        <mh-tags-filter [placeHolder]="filter.placeHolder" (updateFilter)="updateTagsFilter($event)"></mh-tags-filter>
+        <mh-tags-filter
+          [placeHolder]="filter.placeHolder"
+          (updateFilter)="updateTagsFilter($event)"
+          [disabled] = "disabled"
+          [tooltip] = "tooltip">
+        </mh-tags-filter>
       </div>
     </ng-container>
   </div>
