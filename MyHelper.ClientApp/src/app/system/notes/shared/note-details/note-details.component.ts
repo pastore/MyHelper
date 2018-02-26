@@ -12,6 +12,7 @@ import { MatChipInputEvent } from '@angular/material';
 import { TagRequest } from '../../../../shared/models/tags/tag-request-model';
 import { Validators } from '@angular/forms';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
+import { DetailsEventType } from '../../../../shared/utilities/enums';
 
 @Component({
   selector: 'mh-note-details',
@@ -27,7 +28,7 @@ export class NoteDetailsComponent implements OnInit {
   tagCtrl: FormControl;
   detailedNote: NoteResponse;
   @Input() cardNote: NoteResponse;
-  @Output() closeDetailedNote = new EventEmitter();
+  @Output() closeDetailedNote = new EventEmitter<DetailsEventType>();
 
   constructor(
     private _noteService: NoteService,
@@ -46,7 +47,7 @@ export class NoteDetailsComponent implements OnInit {
   }
 
   onCancel() {
-    this.closeDetailedNote.emit();
+    this.closeDetailedNote.emit(DetailsEventType.Cancel);
   }
 
   onSaveNote(detailedNoteForm: FormGroup) {
@@ -62,7 +63,7 @@ export class NoteDetailsComponent implements OnInit {
 
       this._noteService[method](noteRequest)
         .subscribe(x => {
-          this.closeDetailedNote.emit();
+          this.closeDetailedNote.emit(DetailsEventType.Save);
         });
     }
   }

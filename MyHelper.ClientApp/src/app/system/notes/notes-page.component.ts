@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
 import { ICard } from '../../shared/models/base/i-card.model';
-import { CardType, FilterType } from '../../shared/utilities/enums';
+import { CardType, FilterType, DetailsEventType } from '../../shared/utilities/enums';
 import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request';
 import { MatSidenav } from '@angular/material';
@@ -58,8 +58,11 @@ export class NotesPageComponent implements OnInit {
       });
   }
 
-  closeDetailedNoteView() {
-    this._getNotes();
+  closeDetailedNoteView(detailsEventType: DetailsEventType) {
+    if (detailsEventType === DetailsEventType.Save) {
+      this._getNotes();
+    }
+
     this.isNoteListVisible = true;
   }
 

@@ -29,7 +29,7 @@
         </div>
         <mh-note-details *ngIf="!isNoteListVisible"
           [cardNote]="detailedNote"
-          (closeDetailedNote)="closeDetailedNoteView()">
+          (closeDetailedNote)="closeDetailedNoteView($event)">
         </mh-note-details>
       </div>
     </mat-sidenav-content>

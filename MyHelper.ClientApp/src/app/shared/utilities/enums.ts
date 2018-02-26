@@ -13,3 +13,8 @@ export enum FilterType {
   TagsFilter = 1,
   DateTimeFilter = 2
 }
+
+export enum DetailsEventType {
+  Save = 1,
+  Cancel = 2
+}
