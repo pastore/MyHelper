@@ -1,27 +1,27 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-
-import { AuthenticationService } from '../services/authentication.service';
-import { AuthGuard } from '../services/authentication.guard';
-import { NoteService } from '../services/note.service';
-import { TagService } from '../services/tag.service';
-
-import { RequiredTagsDirective } from '../directives/require-tags.directive';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MhMaterialModule } from './mh-material.module';
 
 @NgModule({
-  declarations: [
-    RequiredTagsDirective
-  ]
+   imports: [
+    CommonModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule,
+    MhMaterialModule
+   ],
+    exports: [
+      CommonModule,
+      BrowserAnimationsModule,
+      FormsModule,
+      ReactiveFormsModule,
+      FlexLayoutModule,
+      MhMaterialModule
+    ]
 })
-export class CoreModule {
-    static forRoot(): ModuleWithProviders {
-        return {
-            ngModule: CoreModule,
-            providers: [
-              AuthenticationService,
-              AuthGuard,
-              NoteService,
-              TagService
-            ]
-        };
-    }
-}
+
+export class CoreModule { }

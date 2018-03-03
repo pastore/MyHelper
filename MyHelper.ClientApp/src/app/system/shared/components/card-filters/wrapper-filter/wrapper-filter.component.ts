@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FilterItem } from '../../../../shared/models/base/filter-item.model';
-import { FilterType } from '../../../../shared/utilities/enums';
+import { FilterType } from '../../../../../shared/utilities/enums';
+import { FilterItem } from '../../../../../shared/models/base/filter-item.model';
 
 @Component({
   selector: 'mh-wrapper-filter',
