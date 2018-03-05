@@ -18,3 +18,13 @@ export enum DetailsEventType {
   Save = 1,
   Cancel = 2
 }
+
+export enum RequestMethod {
+  Get = 'GET',
+  Post = 'POST',
+  Put = 'PUT',
+  Delete = 'DELETE',
+  Options = 'OPTIONS',
+  Head = 'HEAD',
+  Patch = 'PATCH'
+}

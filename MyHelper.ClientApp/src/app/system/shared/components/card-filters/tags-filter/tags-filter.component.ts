@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { FormControl } from '@angular/forms';
 import { TagService } from '../../../../../shared/services/tag.service';
 import { AuthenticationService } from '../../../../../shared/services/authentication.service';
-import TagViewModel from '../../../../../shared/models/tags/tag-view.model';
+import { TagViewModel } from '../../../../../shared/models/tags/tag-view.model';
 
 @Component({
   selector: 'mh-tags-filter',

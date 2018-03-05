@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestMethod, Headers } from '@angular/http';
+import {
+  HttpClient,
+  HttpHeaders
+} from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
 import { ApiRoute } from '../app-settings/api-route';
@@ -7,23 +10,21 @@ import { NoteResponse } from '../models/notes/note-response.model';
 import { Observable } from 'rxjs/Observable';
 import { NoteRequest } from '../models/notes/note-request.model';
 import { NoteFilterRequest } from '../models/notes/note-filter-request';
+import { RequestMethod } from '../utilities/enums';
 
 @Injectable()
 export class NoteService extends BaseService {
 
-  private headers: Headers;
+  private headers: HttpHeaders;
 
-  constructor(private http: Http, private authService: AuthenticationService) {
-    super(http);
-
+  constructor(protected httpClient: HttpClient, private authService: AuthenticationService) {
+    super(httpClient);
     const token = this.authService.currentUser ? this.authService.token : '';
-    this.headers = new Headers();
-    this.headers.append('Authorization', 'Bearer ' + token);
+    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 
    getNotes(noteFilterRequest?: NoteFilterRequest): Observable<NoteResponse[]> {
     const searchParams = this.generateSearchParams(noteFilterRequest);
-
     return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, this.headers, searchParams);
   }
 

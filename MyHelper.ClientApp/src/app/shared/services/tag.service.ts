@@ -1,33 +1,38 @@
 import { Injectable } from '@angular/core';
-import TagViewModel from '../models/tags/tag-view.model';
+import { TagViewModel } from '../models/tags/tag-view.model';
 import { DataAPIService } from './data-api.service';
-import { Http, Response } from '@angular/http';
+import {
+  HttpClient,
+  HttpResponse
+} from '@angular/common/http';
 import { ApiRoute } from '../app-settings/api-route';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication.service';
 import { TagRequest } from '../models/tags/tag-request-model';
+import { IServerResponse } from '../models/base/server-response.model';
 
 @Injectable()
 export class TagService extends DataAPIService<TagViewModel> {
-  protected get apiUrl(): string {
-    return ApiRoute.Tags;
-  }
 
   get tags(): Observable<TagViewModel[]> {
     return this.data;
   }
 
-  constructor(protected http: Http,
+  protected get apiUrl(): string {
+    return ApiRoute.Tags;
+  }
+
+  constructor(protected httpClient: HttpClient,
     protected authService: AuthenticationService) {
-    super(http, authService);
+    super(httpClient, authService);
   }
 
   createTag(tagRequest: TagRequest) {
     return this.post(tagRequest);
   }
 
-  protected handleData(res: Response): TagViewModel[] {
-    const body = res.json();
+  protected handleData(response: IServerResponse): TagViewModel[] {
+    const body = response;
 
     let tags: TagViewModel[];
     if (body.isSuccess) {

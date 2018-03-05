@@ -7,7 +7,7 @@ import '../../../../shared/utilities/rxjs-operators';
 import { Observable } from 'rxjs/Observable';
 import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
-import TagViewModel from '../../../../shared/models/tags/tag-view.model';
+import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
 import { MatChipInputEvent } from '@angular/material';
 import { TagRequest } from '../../../../shared/models/tags/tag-request-model';
 import { Validators } from '@angular/forms';

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams, RequestMethod } from '@angular/http';
+import {
+  HttpClient,
+} from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AppUserViewModel } from '../models/user/app-user-view.model';
 import { LoginRequest } from '../models/auth/login-request.model';
@@ -10,6 +12,7 @@ import { RegistrationRequest } from '../models/auth/registration-request.model';
 import { AuthorizationTokenResponse } from '../models/auth/authorization-token-response.model';
 import { BaseService } from './base.service';
 import { IServerResponse } from '../models/base/server-response.model';
+import { RequestMethod } from '../utilities/enums';
 
 @Injectable()
 export class AuthenticationService extends BaseService {
@@ -31,8 +34,8 @@ export class AuthenticationService extends BaseService {
     return token;
   }
 
-  constructor(private http: Http) {
-    super(http);
+  constructor(protected httpClient: HttpClient) {
+    super(httpClient);
   }
 
   login(loginRequest: LoginRequest): Observable<boolean> {
