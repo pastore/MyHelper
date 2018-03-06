@@ -60,7 +60,7 @@ export class AuthenticationService extends BaseService {
       localStorage.setItem('token', JSON.stringify(response.result.token));
       return true;
     } else {
-        return false;
+      return false;
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'mh-mh-task-page',
+  selector: 'mh-task-page',
   templateUrl: './mh-task-page.component.html',
   styleUrls: ['./mh-task-page.component.scss']
 })
