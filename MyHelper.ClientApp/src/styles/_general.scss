@@ -65,3 +65,13 @@ body {
       height: 56px !important;
   }
 }
+
+@media only screen and (orientation: landscape) and (max-width: 959px) {
+  body,html {
+      overflow-y: scroll;
+  }
+
+  .page_centered {
+    height: auto;
+  }
+}
