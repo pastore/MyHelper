@@ -8,7 +8,7 @@ In future plan to make social network from one.
 
 **Live demo**
 ----------------
-*Coming soon...*
+[myhelper.com](http://159.89.101.202)
 
 **Quick start**
 ----------------
