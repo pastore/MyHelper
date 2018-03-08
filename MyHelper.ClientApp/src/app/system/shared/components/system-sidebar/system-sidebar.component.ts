@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiRoute } from '../../../../shared/app-settings/api-route';
+import { ApiRoute } from '../../../../shared/utilities/api-route';
 import { SidebarLink } from '../../../../shared/models/base/sidebar-link.model';
 import '../../../../shared/utilities/string-helper';
+import { Icons } from '../../../../shared/utilities/enums';
 
 @Component({
   selector: 'mh-system-sidebar',
@@ -19,7 +20,9 @@ export class SystemSidebarComponent implements OnInit {
   }
 
   private _initSidebarLinks() {
-    const notes = new SidebarLink(ApiRoute.Notes);
-    this.sidebarLinks.push(... [notes]);
+    const notes = new SidebarLink(ApiRoute.Notes, Icons.Note);
+    const tasks = new SidebarLink(ApiRoute.Tasks, Icons.Schedule);
+
+    this.sidebarLinks.push(... [notes, tasks]);
   }
 }

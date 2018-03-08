@@ -28,3 +28,8 @@ export enum RequestMethod {
   Head = 'HEAD',
   Patch = 'PATCH'
 }
+
+export enum Icons {
+  Note = 'note',
+  Schedule = 'schedule'
+}

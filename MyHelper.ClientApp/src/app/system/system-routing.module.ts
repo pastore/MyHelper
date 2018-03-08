@@ -4,11 +4,13 @@ import { AuthGuard } from '../shared/services/authentication.guard';
 
 import { SystemComponent } from './system.component';
 import { NotesPageComponent } from './notes/notes-page.component';
+import { MhTaskPageComponent } from './mh-tasks/mh-task-page.component';
 
 const routes: Routes = [
   { path: '', component: SystemComponent, canActivate: [AuthGuard],
       children: [
-        {path: 'notes', component: NotesPageComponent}
+        {path: 'notes', component: NotesPageComponent},
+        {path: 'tasks', component: MhTaskPageComponent}
       ]
   }
 ];

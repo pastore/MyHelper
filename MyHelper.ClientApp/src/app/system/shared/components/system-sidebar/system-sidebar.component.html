@@ -1,7 +1,13 @@
 <div class="system_sidenav_wrapepr">
   <mat-nav-list dense>
-      <mat-list-item *ngFor="let link of sidebarLinks">
-          <a mat-line [routerLink]="['/' + link.name]" >{{ link.name.capitalize() }}</a>
+      <mat-list-item
+        *ngFor="let link of sidebarLinks"
+        class="system_sidenav_item"
+        [routerLinkActive]="['active']">
+          <a class="system_sidenav_link" mat-line [routerLink]="['/' + link.name]" >
+            <i class="material-icons system_sidenav_link__icon">{{ link.icon }}</i>
+            {{ link.name.capitalize() }}
+          </a>
       </mat-list-item>
   </mat-nav-list>
 </div>

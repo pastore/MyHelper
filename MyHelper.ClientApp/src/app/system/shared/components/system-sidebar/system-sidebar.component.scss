@@ -6,6 +6,18 @@
   margin-right: 10px;
 }
 
-.mat-list-item{
+.system_sidenav_item{
   color: #fff;
+  &.active{
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.system_sidenav_link{
+  display: flex !important;
+  align-items: center;
+}
+
+.system_sidenav_link__icon{
+  margin-right: 10px;
 }

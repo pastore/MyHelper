@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { AppUserViewModel } from '../../../../shared/models/user/app-user-view.model';
 import { Router } from '@angular/router';
-import { ApiRoute } from '../../../../shared/app-settings/api-route';
+import { ApiRoute } from '../../../../shared/utilities/api-route';
 
 @Component({
   selector: 'mh-system-header',

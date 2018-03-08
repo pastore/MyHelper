@@ -5,7 +5,7 @@ import {
   HttpClient,
   HttpResponse
 } from '@angular/common/http';
-import { ApiRoute } from '../app-settings/api-route';
+import { ApiRoute } from '../utilities/api-route';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication.service';
 import { TagRequest } from '../models/tags/tag-request-model';

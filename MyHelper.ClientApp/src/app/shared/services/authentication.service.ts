@@ -7,7 +7,7 @@ import { AppUserViewModel } from '../models/user/app-user-view.model';
 import { LoginRequest } from '../models/auth/login-request.model';
 import { Observable } from 'rxjs/Observable';
 import '../utilities/rxjs-operators';
-import { ApiRoute } from '../app-settings/api-route';
+import { ApiRoute } from '../utilities/api-route';
 import { RegistrationRequest } from '../models/auth/registration-request.model';
 import { AuthorizationTokenResponse } from '../models/auth/authorization-token-response.model';
 import { BaseService } from './base.service';

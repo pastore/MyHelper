@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
-import { ApiRoute } from '../app-settings/api-route';
+import { ApiRoute } from '../utilities/api-route';
 import { NoteResponse } from '../models/notes/note-response.model';
 import { Observable } from 'rxjs/Observable';
 import { NoteRequest } from '../models/notes/note-request.model';
