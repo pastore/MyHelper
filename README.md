@@ -10,6 +10,15 @@ In future plan to make social network from one.
 ----------------
 [myhelper.com](http://159.89.101.202)
 
+**Technologies**
+----------------
+1. ASP.NET Core 2
+2. Angular 5
+3. Postgres 10
+4. Nginx
+5. Linux
+6. Entty Framework Core
+
 **Quick start**
 ----------------
 **ASP.NET Core**
@@ -24,7 +33,7 @@ In future plan to make social network from one.
     - dotnet ef database update
 7. In cmd type => dotnet run 
 
-**Angular 2**
+**Angular 5**
 
 1. Make sure that you in **MyHelper.ClientApp** folder
 2. Open cmd and type => npm install
