@@ -5,7 +5,7 @@ import { CardFilterModule } from '../shared/modules/card-filter.module';
 
 import { NotesPageComponent } from './notes-page.component';
 import { NoteCardComponent } from './shared/note-card/note-card.component';
-import { NoteDetailsComponent } from './shared/note-details/note-details.component';
+import { NoteEditCardComponent } from './shared/note-edit-card/note-edit-card.component';
 import { NoteDeleteModalComponent } from './shared/note-delete-modal/note-delete-modal.component';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { NoteDeleteModalComponent } from './shared/note-delete-modal/note-delete
   declarations: [
     NotesPageComponent,
     NoteCardComponent,
-    NoteDetailsComponent,
+    NoteEditCardComponent,
     NoteDeleteModalComponent
   ],
   entryComponents: [NoteDeleteModalComponent]

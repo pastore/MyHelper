@@ -5,7 +5,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MhMaterialModule } from './mh-material.module';
 
+import { LoaderComponent } from '../loader/loader.component';
+
 @NgModule({
+    declarations: [
+    LoaderComponent
+  ],
    imports: [
     CommonModule,
     BrowserAnimationsModule,
@@ -20,7 +25,8 @@ import { MhMaterialModule } from './mh-material.module';
       FormsModule,
       ReactiveFormsModule,
       FlexLayoutModule,
-      MhMaterialModule
+      MhMaterialModule,
+      LoaderComponent
     ]
 })
 

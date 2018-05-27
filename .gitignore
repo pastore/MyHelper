@@ -11,6 +11,7 @@
 *.userprefs
 
 ssh/
+ssl/
 
 # Build results
 [Dd]ebug/

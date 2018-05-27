@@ -1,98 +1,63 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
+import { LoaderService } from '../../shared/loader/loader.service';
 import { ICard } from '../../shared/models/base/i-card.model';
-import { CardType, FilterType, DetailsEventType } from '../../shared/utilities/enums';
+import { CardType, FilterType } from '../../shared/utilities/enums';
 import { FilterItem } from '../../shared/models/base/filter-item.model';
-import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request';
-import { MatSidenav } from '@angular/material';
+import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request.model';
+import { CardsPageComponent } from '../shared/components/cards-page/cards-page.component';
+import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 
 @Component({
   selector: 'mh-notes-page',
-  templateUrl: './notes-page.component.html',
-  styleUrls: ['./notes-page.component.scss']
+  templateUrl: './notes-page.component.html'
 })
-export class NotesPageComponent implements OnInit {
+export class NotesPageComponent
+  extends CardsPageComponent<NoteResponse, NoteFilterRequest>
+  implements OnInit {
 
-  notes: ICard<NoteResponse>[];
-  filterItems: FilterItem[];
-  noteFilterRequest: NoteFilterRequest;
-  detailedNote: NoteResponse;
-  isNoteListVisible = true;
-  screenWidth: number;
-  tooltip = 'Close edit view!';
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.screenWidth = window.innerWidth;
-  }
-
-  constructor(private noteService: NoteService) {
-    this.screenWidth = window.innerWidth;
+  constructor(
+    private noteService: NoteService,
+    private _loaderService: LoaderService,
+    private _cdr: ChangeDetectorRef
+  ) {
+    super();
+    this.searchPlaceholder = 'Search notes';
   }
 
   ngOnInit() {
-    this.filterItems = [new FilterItem(FilterType.TagsFilter, 'Tags')];
-    this.noteFilterRequest = new NoteFilterRequest();
-
-    this._getNotes();
-  }
-
-  addNote(start: MatSidenav) {
-    this.detailedNote = new NoteResponse();
-    this.isNoteListVisible = false;
-
-    this._toggleSideNav(start);
-  }
-
-  updateNote(note: NoteResponse) {
-    this.isNoteListVisible = false;
-    this.detailedNote = note;
+    super.ngOnInit();
+    this._loaderService.loaderState
+      .subscribe((state: ILoaderState) => {
+        this.isLoading = state.isShow;
+      });
   }
 
   deleteNote(id: number) {
     this.noteService.deleteNote(id)
       .subscribe((result: boolean) => {
         if (result) {
-          this._getNotes();
+          this.getCards();
         }
       });
   }
 
-  closeDetailedNoteView(detailsEventType: DetailsEventType) {
-    if (detailsEventType === DetailsEventType.Save) {
-      this._getNotes();
-    }
-
-    this.isNoteListVisible = true;
-  }
-
-  triggerChangeWrapFilter(wrapFilter, start) {
-    this._toggleSideNav(start);
-
-    Object.keys(wrapFilter)
-    .forEach(key => {
-      this.noteFilterRequest[key] = wrapFilter[key];
-    });
-    this._getNotes();
-  }
-
-  triggerChangeSearch(search) {
-    this.noteFilterRequest.search = search;
-    this._getNotes();
-  }
-
-  private _getNotes() {
-    this.noteService.getNotes(this.noteFilterRequest)
+  protected getCards() {
+    this.noteService.getNotes(this.cardsFilterModel)
     .subscribe((noteResponseList: NoteResponse[]) => {
-      this.notes = noteResponseList.map((x) => {
+      this.cards = noteResponseList.map((x) => {
         return { data : x, cardType : CardType.Note } as ICard<NoteResponse>;
       });
+      this.setTooltip();
     });
   }
 
-  private _toggleSideNav(start: MatSidenav) {
-    if (start) {
-      start.toggle();
-    }
+  protected setFilterItems() {
+    this.filterItems = [new FilterItem(FilterType.TagsFilter, 'Tags')];
+  }
+
+  protected detectChanges() {
+    this._cdr.detectChanges();
   }
 }

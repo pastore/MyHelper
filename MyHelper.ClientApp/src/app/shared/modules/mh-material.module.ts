@@ -15,7 +15,12 @@ import {
   MatAutocompleteModule,
   MatProgressSpinnerModule,
   MatDialogModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSlideToggleModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatSelectModule,
+  MatProgressBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -34,7 +39,12 @@ import {
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatProgressBarModule
   ],
   exports: [
     MatInputModule,
@@ -51,7 +61,12 @@ import {
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatProgressBarModule
   ]
 })
 export class MhMaterialModule {}

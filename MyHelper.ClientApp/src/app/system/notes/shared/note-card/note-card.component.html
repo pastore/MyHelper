@@ -1,26 +1,26 @@
-<mat-card>
+<mat-card class="card">
   <div fxLayout="row" fxLayoutAlign=" center">
-    <div class="note_card_name">{{ card.data.name }}</div>
+    <div class="card_name">{{ card.data.name }}</div>
 
-    <div class="note_card_buttons">
+    <div class="card_buttons">
       <button mat-icon-button [matMenuTriggerFor]="menuRef">
         <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">more_vert</mat-icon>
       </button>
 
       <mat-menu #menuRef="matMenu">
-          <button mat-menu-item (click)="showDescription()">
-            {{ expandTitle }}
-          </button>
-          <button mat-menu-item (click)="update()">
-            Edit
-          </button>
-          <button mat-menu-item (click)="openDialog()">
-            Delete
+        <button mat-menu-item (click)="showDescription()">
+          {{ expandTitle }}
+        </button>
+        <button mat-menu-item (click)="editCard()">
+          Edit
+        </button>
+        <button mat-menu-item (click)="openDialog()">
+          Delete
         </button>
       </mat-menu>
     </div>
   </div>
-  <div *ngIf="isExpandCard" class="note_card_description rich_editor_wrapper" [innerHTML]="card.data.description">
+  <div *ngIf="isExpandCard" class="card_description rich_editor_wrapper" [innerHTML]="card.data.description">
     </div>
   <div>
     <mat-chip-list>

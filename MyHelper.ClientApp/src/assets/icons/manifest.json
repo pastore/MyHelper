@@ -1,0 +1,21 @@
+{
+   "name": "My helper",
+   "short_name": "Mh",
+   "start_url": "./",
+   "theme_color": "#993366",
+   "background_color": "#03A9F4",
+   "display": "standalone",
+   "description": "Application that help people",
+   "icons": [
+      {
+        "src": "/assets/icons/android-chrome-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/assets/icons/android-chrome-256x256.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      }
+   ]
+}

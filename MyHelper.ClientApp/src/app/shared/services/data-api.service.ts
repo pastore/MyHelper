@@ -5,17 +5,21 @@ import {
  } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { RouteApiVersionService } from './route-api-version.service';
 import '../utilities/rxjs-operators';
 import { AuthenticationService } from './authentication.service';
 import { IServerResponse } from '../models/base/server-response.model';
+import { environment } from '../../../environments/environment';
 
-export abstract class DataAPIService<T> extends RouteApiVersionService {
+export abstract class DataAPIService<T> {
+
   protected abstract get apiUrl(): string;
   private cache: ReplaySubject<T[]>;
-  protected isPristine = true;
+  private isPristine = true;
   private cacheIsDirty: boolean;
   private headers: HttpHeaders;
+  private _domain = environment.domain;
+  private _routePrefix = 'api';
+  private defaultApiVersion = 'v1';
 
   protected get data(): Observable<T[]> {
     if (this.isPristine || this.cacheIsDirty) {
@@ -25,16 +29,17 @@ export abstract class DataAPIService<T> extends RouteApiVersionService {
     return this.cache.asObservable();
   }
 
-  constructor(protected httpClient: HttpClient,
-    protected authService: AuthenticationService) {
-    super();
+  constructor(
+      protected httpClient: HttpClient,
+      protected authService: AuthenticationService,
+    ) {
     this.cache = new ReplaySubject<T[]>(1);
     const token = this.authService.currentUser ? this.authService.token : '';
     this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
    }
 
   protected get(): Observable<T[]> {
-    this.httpClient.get(this.generateUrl(this.apiUrl), {
+    this.httpClient.get(this._generateUrl(this.apiUrl), {
       headers: this.headers
     })
     .map(this.handleData.bind(this))
@@ -50,7 +55,7 @@ export abstract class DataAPIService<T> extends RouteApiVersionService {
   protected post(data: any): Observable<T[]> {
     this.cacheIsDirty = true;
     return this.httpClient.post(
-      this.generateUrl(this.apiUrl),
+      this._generateUrl(this.apiUrl),
       data,
       { headers: this.headers })
     .share()
@@ -60,5 +65,9 @@ export abstract class DataAPIService<T> extends RouteApiVersionService {
   }
 
   protected abstract handleData(res: IServerResponse): T[];
+
+  private _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
+    return this._domain + '/' + this._routePrefix + '/' + apiVersion + '/' + route;
+  }
 }
 

@@ -4,8 +4,7 @@ import { NoteResponse } from '../../../../shared/models/notes/note-response.mode
 
 @Component({
   selector: 'mh-note-delete-modal',
-  templateUrl: './note-delete-modal.component.html',
-  styleUrls: ['./note-delete-modal.component.scss']
+  templateUrl: './note-delete-modal.component.html'
 })
 export class NoteDeleteModalComponent {
   constructor(

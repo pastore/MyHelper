@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { SystemRoutingModule } from './system-routing.module';
 import { CoreModule } from '../shared/modules/core.module';
 import { NotesModule } from './notes/notes.module';
-import { MhTasksModule } from './mh-tasks/mh-tasks.module';
+import { TasksModule } from './tasks/tasks.module';
 
 import { SystemComponent } from './system.component';
 import { SystemSidebarComponent } from './shared/components/system-sidebar/system-sidebar.component';
@@ -13,7 +13,7 @@ import { SystemHeaderComponent } from './shared/components/system-header/system-
     SystemRoutingModule,
     CoreModule,
     NotesModule,
-    MhTasksModule
+    TasksModule
   ],
   declarations: [
     SystemComponent,

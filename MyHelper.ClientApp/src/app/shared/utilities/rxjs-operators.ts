@@ -5,3 +5,5 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/skipWhile';
 import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/delay';

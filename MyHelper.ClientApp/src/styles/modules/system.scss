@@ -12,6 +12,10 @@
     @include boxed();
   }
 
+  .system_sidenav{
+    background: transparent;
+  }
+
   .system_body{
     @include boxed();
     overflow: hidden;
@@ -26,8 +30,6 @@
     }
   }
 
-  .system_sidenav{
-    background: transparent;
-  }
+  @import './../pages/cards-page.scss';
 }
 

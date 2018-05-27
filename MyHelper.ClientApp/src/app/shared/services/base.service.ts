@@ -10,14 +10,17 @@ import { Observable } from 'rxjs/Observable';
 import { IServerResponse } from '../models/base/server-response.model';
 import '../utilities/rxjs-operators';
 import { RequestMethod } from '../utilities/enums';
-import { RouteApiVersionService } from './route-api-version.service';
 import { HttpParamsOptions } from '@angular/common/http/src/params';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
-export class BaseService extends RouteApiVersionService {
-  constructor(protected httpClient: HttpClient) {
-    super();
-   }
+export class BaseService {
+
+  private _domain = environment.domain;
+  private _routePrefix = 'api';
+  private defaultApiVersion = 'v1';
+
+  constructor(protected httpClient: HttpClient) {}
 
   protected sendRequest<T>(
     method: RequestMethod,
@@ -29,7 +32,7 @@ export class BaseService extends RouteApiVersionService {
   ): Observable<T> {
     return this.httpClient.request<IServerResponse>(
       method,
-      this.generateUrl(route),
+      this._generateUrl(route),
       { body: data, headers: headers, params: params }
     )
     .map((response: IServerResponse) => {
@@ -38,6 +41,7 @@ export class BaseService extends RouteApiVersionService {
         ? handleResponse(body) : body.isSuccess
         ? (body.result ? body.result : body.isSuccess) : Observable.throw(body.message);
     })
+    .delay(500)
     .catch((error: HttpErrorResponse) => {
       return Observable.throw(error.message);
     });
@@ -56,5 +60,9 @@ export class BaseService extends RouteApiVersionService {
     }
 
     return any ? new HttpParams({fromObject: filter as any }) : null;
+  }
+
+  private _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
+    return this._domain + '/' + this._routePrefix + '/' + apiVersion + '/' + route;
   }
 }

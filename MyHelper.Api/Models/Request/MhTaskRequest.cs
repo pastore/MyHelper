@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Attributes;
-using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Models.Tag;
+using MyHelper.Api.Models.MhTask;
 
 namespace MyHelper.Api.Models.Request
 {
@@ -25,9 +22,11 @@ namespace MyHelper.Api.Models.Request
 
         public EMhTaskVisibleType MhTaskVisibleType { get; set; }
 
+        public EMhTaskStatus MhTaskStatus { get; set; }
+
         public bool IsRecurring { get; set; } 
 
-        public ScheduleMhTaskRequest ScheduleMhTaskRequest { get; set; }
+        public ScheduleMhTaskViewModel ScheduleMhTaskViewModel { get; set; }
 
         [Required]
         public int AppUserId { get; set; }

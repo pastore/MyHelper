@@ -26,7 +26,7 @@ namespace MyHelper.Api.Services.MhTask
                 .ThenInclude(e => e.Tag)
                 .Where(x => x.MhTaskState != EMhTaskState.Delete).AsQueryable();
 
-                FilterMhTasks(query, mhTaskFIlterRequest);
+                query = FilterMhTasks(query, mhTaskFIlterRequest);
 
                 return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<DAL.Entities.MhTask, MhTaskResponse>(x)).ToList()); 
             });
@@ -71,8 +71,8 @@ namespace MyHelper.Api.Services.MhTask
                     var scheduleMhTask = new ScheduleMhTask
                     {
                         MhTask = mhTask,
-                        MaxCount = mhTaskRequest.ScheduleMhTaskRequest.MaxCount ?? 0,
-                        ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskRequest.ScheduleMhTaskType
+                        MaxCount = mhTaskRequest.ScheduleMhTaskViewModel.MaxCount ?? 0,
+                        ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskViewModel.ScheduleMhTaskType
                     };
 
                     await _myHelperDbContext.ScheduleMhTasks.AddAsync(scheduleMhTask);
@@ -91,6 +91,7 @@ namespace MyHelper.Api.Services.MhTask
                     await _myHelperDbContext.MhTaskTags.AddRangeAsync(mhTaskTags);
                 }
 
+                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.CreateMhTask);
                 await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();
@@ -127,13 +128,12 @@ namespace MyHelper.Api.Services.MhTask
 
                 if (mhTaskRequest.IsRecurring)
                 {
-                    mhTask.ScheduleMhTask.MaxCount = mhTaskRequest.ScheduleMhTaskRequest.MaxCount ?? 0;
-                    mhTask.ScheduleMhTask.ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskRequest.ScheduleMhTaskType;
+                    mhTask.ScheduleMhTask.MaxCount = mhTaskRequest.ScheduleMhTaskViewModel.MaxCount ?? 0;
+                    mhTask.ScheduleMhTask.ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskViewModel.ScheduleMhTaskType;
                 }
 
                 _myHelperDbContext.MhTasks.Update(mhTask);
-                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateEntireMhTask);
-
+                
                 var mhTaskTags = await _myHelperDbContext.MhTaskTags.Where(x => x.MhTaskId == mhTask.Id).ToListAsync();
                 _myHelperDbContext.MhTaskTags.RemoveRange(mhTaskTags.Where(x => !mhTaskRequest.TagIds.Contains(x.Tag.Id)));
 
@@ -144,6 +144,7 @@ namespace MyHelper.Api.Services.MhTask
                         .Select(x => new MhTaskTag { Tag = x, MhTask = mhTask })
                 );
 
+                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateEntireMhTask);
                 await _myHelperDbContext.SaveChangesAsync();
 
                 return AOBuilder.SetSuccess();
@@ -160,11 +161,7 @@ namespace MyHelper.Api.Services.MhTask
                     return AOBuilder.SetError(Constants.Errors.TaskNotExists);
 
                 mhTask.MhTaskStatus = (EMhTaskStatus) status;
-
-                if ((EMhTaskStatus)status == EMhTaskStatus.Done)
-                {
-                    mhTask.FinishDate = DateTime.Now;
-                }
+                mhTask.FinishDate = (EMhTaskStatus)status == EMhTaskStatus.Done ? DateTime.Now : (DateTime?) null;
 
                 _myHelperDbContext.MhTasks.Update(mhTask);
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateStatusMhTask);
@@ -196,7 +193,7 @@ namespace MyHelper.Api.Services.MhTask
 
         #region -- Private methods --
 
-        private void FilterMhTasks(IQueryable<DAL.Entities.MhTask> query, MhTaskFilterRequest mhTaskFIlterRequest)
+        private IQueryable<DAL.Entities.MhTask> FilterMhTasks(IQueryable<DAL.Entities.MhTask> query, MhTaskFilterRequest mhTaskFIlterRequest)
         {
             if (mhTaskFIlterRequest.FromDate.HasValue)
             {
@@ -217,6 +214,8 @@ namespace MyHelper.Api.Services.MhTask
             {
                 query = query.Where(x => x.MhTaskTags.Any(mhtag => mhTaskFIlterRequest.TagIds.Any(t => t == mhtag.Tag.Id)));
             }
+
+            return query;
         }
 
         private async Task AddToUpdateMhTask(MyHelperContext myHelperDbContext, DAL.Entities.MhTask mhTask, string description)

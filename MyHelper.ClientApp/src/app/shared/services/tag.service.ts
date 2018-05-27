@@ -8,7 +8,7 @@ import {
 import { ApiRoute } from '../utilities/api-route';
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication.service';
-import { TagRequest } from '../models/tags/tag-request-model';
+import { TagRequest } from '../models/tags/tag-request.model';
 import { IServerResponse } from '../models/base/server-response.model';
 
 @Injectable()
@@ -22,8 +22,10 @@ export class TagService extends DataAPIService<TagViewModel> {
     return ApiRoute.Tags;
   }
 
-  constructor(protected httpClient: HttpClient,
-    protected authService: AuthenticationService) {
+  constructor(
+      protected httpClient: HttpClient,
+      protected authService: AuthenticationService
+    ) {
     super(httpClient, authService);
   }
 

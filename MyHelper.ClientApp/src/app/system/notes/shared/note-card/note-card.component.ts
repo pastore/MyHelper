@@ -6,14 +6,13 @@ import { NoteDeleteModalComponent } from '../note-delete-modal/note-delete-modal
 
 @Component({
   selector: 'mh-note-card',
-  templateUrl: './note-card.component.html',
-  styleUrls: ['./note-card.component.scss']
+  templateUrl: './note-card.component.html'
 })
 export class NoteCardComponent implements OnInit {
   isExpandCard = false;
   expandTitle = 'Expand';
   @Input() card: ICard<NoteResponse>;
-  @Output() updateNote = new EventEmitter<NoteResponse>();
+  @Output() openEditCard = new EventEmitter<NoteResponse>();
   @Output() deleteNote = new EventEmitter<number>();
 
   constructor(public dialog: MatDialog) { }
@@ -21,8 +20,8 @@ export class NoteCardComponent implements OnInit {
   ngOnInit() {
   }
 
-  update() {
-    this.updateNote.emit(this.card.data);
+  editCard() {
+    this.openEditCard.emit(this.card.data);
   }
 
   openDialog() {

@@ -1,0 +1,47 @@
+<mat-sidenav-container>
+  <mat-sidenav class="cards_page_sidenav" #start [opened]="screenWidth >= 780" [mode]="(screenWidth >= 780) ? 'side' : 'over'">
+    <div class="cards_page_sidenav_wrapper">
+      <button class="mat-primary cards_page_create_button" mat-raised-button
+        (click)="openEditCard((screenWidth >= 780) ? null : start, null)">Add task</button>
+      <mh-wrapper-filter
+        [filterItems]="filterItems"
+        [disabled] = "!isCardsVisible || cards.length === 0"
+        [tooltip] = "tooltip"
+        (updateWrapFilter)="triggerChangeWrapFilter($event, (screenWidth >= 780) ? null : start)">
+      </mh-wrapper-filter>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mh-loader></mh-loader>
+    <mh-search-filter
+      (searchInput)="triggerChangeSearch($event)"
+      [screenWidth]="screenWidth"
+      [disabled] = "!isCardsVisible || cards.length === 0"
+      [tooltip] = "tooltip"
+      [placeholder]="searchPlaceholder"
+      (toggleFilterSidenav)="start.toggle()">
+    </mh-search-filter>
+    <div class="cards_page_content">
+      <div *ngIf="isCardsVisible">
+        <ng-container *ngIf="!isLoading">
+            <ng-container *ngIf="cards.length > 0; else nocards">
+                <mh-task-card
+                  *ngFor="let card of cards"
+                  [card]="card"
+                  (openEditCard)="openEditCard(null, $event)"
+                  (emitUpdateTaskStatus)="updateTaskStatus($event)">
+                </mh-task-card>
+              </ng-container>
+        </ng-container>
+      </div>
+      <mh-task-edit-card *ngIf="!isCardsVisible"
+        [originalEditCardModel]="editCardModel"
+        (closeEditCard)="closeEditCard($event)">
+      </mh-task-edit-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<ng-template #nocards>
+  <div class="no_cards">There are no tasks!</div>
+</ng-template>
