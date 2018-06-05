@@ -12,7 +12,7 @@ a{
 }
 
 // fix error input form field
-mat-form-field.ng-invalid {
+mat-form-field.mat-form-field-invalid {
     .mat-input-placeholder {
         color: $color-primary;
 
@@ -30,12 +30,6 @@ mat-form-field.ng-invalid {
     .mat-input-ripple {
         background-color: $color-primary;
     }
-}
-
-mat-form-field.mat-form-field-type-mat-chip-list {
-  .mat-form-field-empty {
-    color: $color-primary;
-  }
 }
 
 .mat-form-field-wrapper {

@@ -1,12 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using MyHelper.Api.Models.Response;
+using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api.Controllers
 {
     public abstract class BaseController: Controller
     {
+        /// <summary>
+        /// Gets the account identifier.
+        /// </summary>
+        /// <value>The account identifier.</value>
+        protected long AccountId
+        {
+            get
+            {
+                //find claim for account Id
+                Claim accountClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+
+                //parse
+                if (accountClaim == null || !long.TryParse(accountClaim.Value, out long accountId))
+                    return 0;
+
+                return accountId;
+            }
+        }
+
         /// <summary>
         /// AOResult to server response.
         /// </summary>

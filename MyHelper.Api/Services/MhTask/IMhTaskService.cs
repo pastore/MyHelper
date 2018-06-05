@@ -7,9 +7,9 @@ namespace MyHelper.Api.Services.MhTask
 {
     public interface IMhTaskService
     {
-        Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(MhTaskFilterRequest mhTaskFilterRequest);
+        Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(long accountId, MhTaskFilterRequest mhTaskFilterRequest);
 
-        Task<AOResult<MhTaskResponse>> GetMhTaskAsync(long id);
+        Task<AOResult<MhTaskResponse>> GetMhTaskAsync(long accountId, long id);
 
         Task<AOResult> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, DAL.Entities.MhTask parentMhTask = null);
 

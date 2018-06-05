@@ -28,12 +28,16 @@ export class TaskService extends BaseService {
     this.headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
   }
 
-  getTasks(mhTaskFilterRequest?: MhTaskFilterRequest): Observable<MhTaskResponse[]> {
+  getTasks(mhTaskFilterRequest?: MhTaskFilterRequest, isLoader = true): Observable<MhTaskResponse[]> {
     const searchParams = this.generateSearchParams(mhTaskFilterRequest);
-    this._loaderService.show();
+    if (isLoader) {
+      this._loaderService.show();
+    }
     return this.sendRequest<MhTaskResponse[]>(RequestMethod.Get, ApiRoute.Tasks, null, this.headers, searchParams)
     .finally(() => {
-      this._loaderService.hide();
+      if (isLoader) {
+        this._loaderService.hide();
+      }
     });
   }
 

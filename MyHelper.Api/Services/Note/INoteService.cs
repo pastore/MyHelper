@@ -9,9 +9,9 @@ namespace MyHelper.Api.Services.Note
 {
     public interface INoteService
     {
-        Task<AOResult<List<NoteResponse>>> GetNotesAsync(NoteFilterRequest noteFilterRequest);
+        Task<AOResult<List<NoteResponse>>> GetNotesAsync(long accountId, NoteFilterRequest noteFilterRequest);
 
-        Task<AOResult<NoteResponse>> GetNoteAsync(long id);
+        Task<AOResult<NoteResponse>> GetNoteAsync(long accountId, long id);
 
         Task<AOResult> CreateNoteAsync(NoteRequest noteRequest);
 

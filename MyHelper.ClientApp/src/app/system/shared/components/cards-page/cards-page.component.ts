@@ -1,11 +1,11 @@
-import { OnInit, HostListener, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { OnInit, HostListener, AfterViewInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { ICard } from '../../../../shared/models/base/i-card.model';
 import { CardType, EditCardEventType } from '../../../../shared/utilities/enums';
 import { FilterItem } from '../../../../shared/models/base/filter-item.model';
+import { Observable } from 'rxjs/Observable';
 
 export abstract class CardsPageComponent<T_Card, T_Filter> implements OnInit, AfterViewInit, AfterViewChecked {
-
   cards: ICard<T_Card>[] = [];
   filterItems: FilterItem[];
   cardsFilterModel: T_Filter;
@@ -15,6 +15,7 @@ export abstract class CardsPageComponent<T_Card, T_Filter> implements OnInit, Af
   tooltip: string;
   searchPlaceholder: string;
   isLoading = false;
+  @ViewChild('cardList', { read: ElementRef }) public cardList: ElementRef;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -30,6 +31,14 @@ export abstract class CardsPageComponent<T_Card, T_Filter> implements OnInit, Af
 
   ngAfterViewInit(): void {
     this.getCards();
+    Observable.fromEvent(this.cardList.nativeElement, 'scroll')
+    .debounceTime(50)
+      .subscribe((result: Event) => {
+        const nativeCardList = result.srcElement;
+        if ((nativeCardList.scrollHeight - nativeCardList.scrollTop) <= nativeCardList.clientHeight) {
+          this.handleScroll();
+        }
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -76,12 +85,11 @@ export abstract class CardsPageComponent<T_Card, T_Filter> implements OnInit, Af
   protected setTooltip() {
     if (!this.isCardsVisible) {
       this.tooltip = 'Close edit card.';
-    } else if (this.cards.length === 0) {
-      this.tooltip = 'There are no cards.';
     }
   }
 
   protected abstract getCards();
   protected abstract setFilterItems();
+  protected abstract handleScroll();
   protected abstract detectChanges();
 }

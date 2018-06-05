@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
 import { LoaderService } from '../../shared/loader/loader.service';
@@ -8,6 +8,7 @@ import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request.model';
 import { CardsPageComponent } from '../shared/components/cards-page/cards-page.component';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'mh-notes-page',
@@ -18,24 +19,25 @@ export class NotesPageComponent
   implements OnInit {
 
   constructor(
-    private noteService: NoteService,
+    private _noteService: NoteService,
     private _loaderService: LoaderService,
     private _cdr: ChangeDetectorRef
   ) {
     super();
-    this.searchPlaceholder = 'Search notes';
   }
 
   ngOnInit() {
     super.ngOnInit();
+    this.searchPlaceholder = 'Search notes';
     this._loaderService.loaderState
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
+    this.cardsFilterModel.limit = 20;
   }
 
   deleteNote(id: number) {
-    this.noteService.deleteNote(id)
+    this._noteService.deleteNote(id)
       .subscribe((result: boolean) => {
         if (result) {
           this.getCards();
@@ -44,17 +46,30 @@ export class NotesPageComponent
   }
 
   protected getCards() {
-    this.noteService.getNotes(this.cardsFilterModel)
-    .subscribe((noteResponseList: NoteResponse[]) => {
-      this.cards = noteResponseList.map((x) => {
+    this._noteService.getNotes(this.cardsFilterModel)
+    .subscribe((notes: NoteResponse[]) => {
+      this.cards = notes.map((x) => {
         return { data : x, cardType : CardType.Note } as ICard<NoteResponse>;
       });
-      this.setTooltip();
     });
   }
 
   protected setFilterItems() {
     this.filterItems = [new FilterItem(FilterType.TagsFilter, 'Tags')];
+  }
+
+  protected handleScroll() {
+    const offset = Math.floor(this.cards.length / this.cardsFilterModel.limit);
+    this.cardsFilterModel.offset = offset * this.cardsFilterModel.limit;
+
+    this._noteService.getNotes(this.cardsFilterModel, false)
+    .subscribe((notes: NoteResponse[]) => {
+      if (notes.length > 0 && (this.cards.length % this.cardsFilterModel.limit) === 0) {
+        this.cards = this.cards.concat(notes.map((x) => {
+          return { data : x, cardType : CardType.Note } as ICard<NoteResponse>;
+        }));
+      }
+    });
   }
 
   protected detectChanges() {

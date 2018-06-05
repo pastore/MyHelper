@@ -11,7 +11,7 @@ namespace MyHelper.Api.Controllers
     [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{ver:apiVersion}/tasks")]
-    public class MhTasksController : BaseController
+    public class MhTasksController : BaseController 
     {
         private readonly IMhTaskService _mhTaskService;
 
@@ -24,14 +24,14 @@ namespace MyHelper.Api.Controllers
         [ProducesResponseType(typeof(ServerResponse<List<MhTaskResponse>>), 200)]
         public async Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(MhTaskFilterRequest mhTaskFilterRequest)
         {
-            return AOResultToServerResponse( await _mhTaskService.GetMhTasksAsync(mhTaskFilterRequest));
+            return AOResultToServerResponse( await _mhTaskService.GetMhTasksAsync(AccountId, mhTaskFilterRequest));
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ServerResponse<MhTaskResponse>), 200)]
         public async Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(long id)
         {
-            return AOResultToServerResponse(await _mhTaskService.GetMhTaskAsync(id));
+            return AOResultToServerResponse(await _mhTaskService.GetMhTaskAsync(AccountId, id));
         }
 
         [HttpPost]

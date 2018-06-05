@@ -16,23 +16,37 @@ namespace MyHelper.Api.Services.Note
     {
         public NoteService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<AOResult<List<NoteResponse>>> GetNotesAsync(NoteFilterRequest noteFilterRequest)
+        public async Task<AOResult<List<NoteResponse>>> GetNotesAsync(long accountId, NoteFilterRequest noteFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.Notes.Include(x => x.NoteTags).ThenInclude(e => e.Tag).AsQueryable();
+                var query = _myHelperDbContext.Notes
+                    .Include(x => x.NoteTags)
+                    .ThenInclude(e => e.Tag)
+                    .Where(x => x.AppUserId == accountId)
+                    .AsQueryable();
 
                 query = FilterNotes(query, noteFilterRequest);
+
+
+                if (noteFilterRequest.Offset.HasValue)
+                {
+                    query = query.Skip(noteFilterRequest.Offset.Value);
+                }
+                if (noteFilterRequest.Limit.HasValue)
+                {
+                    query = query.Take(noteFilterRequest.Limit.Value);
+                }
 
                 return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<DAL.Entities.Note, NoteResponse>(x)).ToList());
             });
         }
 
-        public async Task<AOResult<NoteResponse>> GetNoteAsync(long id)
+        public async Task<AOResult<NoteResponse>> GetNoteAsync(long accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id);
+                var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id  && x.AppUserId == accountId);
 
                 if (note == null)
                     return AOBuilder.SetError<NoteResponse>(Constants.Errors.TaskNotExists);

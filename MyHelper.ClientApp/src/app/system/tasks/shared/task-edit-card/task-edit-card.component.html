@@ -3,35 +3,41 @@
     <div class="card_details_row">
       <mat-form-field>
           <input matInput
-                 [(ngModel)]="editCardModel.name"
-                 name="name"
-                 #name="ngModel"
-                 required
-                 placeholder="Name">
+            [(ngModel)]="editCardModel.name"
+            name="name"
+            #name="ngModel"
+            required
+            placeholder="Name"
+          />
       </mat-form-field>
       <mat-hint *ngIf="editCardForm.submitted && (!name.pristine || !name.valid)">
-          <span [hidden]="!name.errors?.required">Name is required.</span>
+        <span [hidden]="!name.errors?.required">Name is required.</span>
       </mat-hint>
     </div>
     <div class="card_details_row">
       <mat-form-field>
         <input matInput
-               [(ngModel)]="editCardModel.startDate"
-               name="startDate"
-               #startDate="ngModel"
-               [matDatepicker]="picker"
-               required
-               placeholder="Start Date">
+          [(ngModel)]="editCardModel.startDate"
+          name="startDate"
+          #startDate="ngModel"
+          [matDatepicker]="picker"
+          required
+          placeholder="Start Date"
+        />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
       <mat-hint *ngIf="editCardForm.submitted && (!startDate.pristine || !startDate.valid)">
         <span [hidden]="!startDate.errors?.required">Start Date is required.</span>
-    </mat-hint>
+      </mat-hint>
     </div>
     <div class="card_details_row">
-      <ngx-wig [(ngModel)]="editCardModel.description" name="description" required #description="ngModel"
-               [placeholder]="'Enter description here'">
+      <ngx-wig
+        [(ngModel)]="editCardModel.description"
+        name="description"
+        mhNoWhiteSpace
+        #description="ngModel"
+        [placeholder]="'Enter description here'">
       </ngx-wig>
       <mat-hint *ngIf="editCardForm.submitted && (!description.pristine || !description.valid)">
           <span [hidden]="!description.errors?.required">Description is required.</span>
@@ -40,22 +46,26 @@
     <div class="card_details_row">
         <mat-form-field>
           <mat-chip-list #chipList required>
-            <mat-chip *ngFor="let tag of editCardModel.tags" [selectable]="selectable"
-                      [removable]="removable" (remove)="removeTag(tag)">
+            <mat-chip
+              *ngFor="let tag of editCardModel.tags"
+              [selectable]="selectable"
+              [removable]="removable"
+              (remove)="removeTag(tag)">
               {{tag.name}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
             <input placeholder="Tags"
-                   [matChipInputFor]="chipList"
-                   (matChipInputTokenEnd)="addTag($event)"
-                   [matAutocomplete]="auto"
-                   [formControl]="tagCtrl"/>
+              [matChipInputFor]="chipList"
+              (matChipInputTokenEnd)="addTag($event)"
+              [matAutocomplete]="auto"
+              [formControl]="tagCtrl"
+            />
           </mat-chip-list>
         </mat-form-field>
         <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let tag of reactiveTags | async" [value]="tag.name" (onSelectionChange)="selectTag(tag)">
-                <span>{{ tag.name }}</span>
-            </mat-option>
+          <mat-option *ngFor="let tag of reactiveTags | async" [value]="tag.name" (onSelectionChange)="selectTag(tag)">
+            <span>{{ tag.name }}</span>
+          </mat-option>
         </mat-autocomplete>
         <mat-hint *ngIf="editCardForm.submitted && !tagCtrl.valid">
           <span>Tags is required.</span>
@@ -63,9 +73,10 @@
     </div>
     <div class="card_details_row">
       <mat-form-field>
-        <mat-select placeholder="Visible type"
-                    [(ngModel)]="editCardModel.mhTaskVisibleType"
-                    name="mhTaskVisibleType">
+        <mat-select
+          placeholder="Visible type"
+          [(ngModel)]="editCardModel.mhTaskVisibleType"
+          name="mhTaskVisibleType">
           <mat-option *ngFor="let type of mhTaskVisibleTypes" [value]="type.id">
             {{ type.name }}
           </mat-option>
@@ -74,16 +85,17 @@
     </div>
     <div class="card_details_row">
       <mat-checkbox
-          [(ngModel)]="editCardModel.isRecurring"
-          name="isRecurring">
-          Is Recurring
+        [(ngModel)]="editCardModel.isRecurring"
+        name="isRecurring">
+        Is Recurring
       </mat-checkbox>
     </div>
     <div class="card_details_row card_details_row--schedule" *ngIf="editCardModel.isRecurring">
       <mat-form-field>
-        <mat-select placeholder="Schedule type"
-                    [(ngModel)]="editCardModel.scheduleMhTask.scheduleMhTaskType"
-                    name="scheduleMhTask.scheduleMhTaskType">
+        <mat-select
+          placeholder="Schedule type"
+          [(ngModel)]="editCardModel.scheduleMhTask.scheduleMhTaskType"
+          name="scheduleMhTask.scheduleMhTaskType">
           <mat-option *ngFor="let type of scheduleMhTaskTypes" [value]="type.id">
             {{ type.name }}
           </mat-option>
@@ -91,11 +103,11 @@
       </mat-form-field>
       <mat-form-field>
         <input matInput
-               [(ngModel)]="editCardModel.scheduleMhTask.maxCount"
-               name="scheduleMhTask.maxCount"
-               type="number"
-               min="0"
-               placeholder="Max Count">
+          [(ngModel)]="editCardModel.scheduleMhTask.maxCount"
+          name="scheduleMhTask.maxCount"
+          type="number"
+          min="0"
+          placeholder="Max Count">
       </mat-form-field>
     </div>
     <div class="card_details_row">

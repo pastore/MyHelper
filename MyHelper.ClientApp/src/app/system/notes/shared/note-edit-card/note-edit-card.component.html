@@ -14,11 +14,15 @@
       </mat-hint>
     </div>
     <div class="card_details_row">
-      <ngx-wig [(ngModel)]="editCardModel.description" name="description" required #description="ngModel"
-               [placeholder]="'Enter description here'">
+      <ngx-wig
+        [(ngModel)]="editCardModel.description"
+        name="description"
+        mhNoWhiteSpace
+        #description="ngModel"
+        [placeholder]="'Enter description here'">
       </ngx-wig>
       <mat-hint *ngIf="editCardForm.submitted && (!description.pristine || !description.valid)">
-          <span [hidden]="!description.errors?.required">Description is required.</span>
+          <span [hidden]="!description.errors?.whitespace">Description is required.</span>
       </mat-hint>
     </div>
     <div class="card_details_row">

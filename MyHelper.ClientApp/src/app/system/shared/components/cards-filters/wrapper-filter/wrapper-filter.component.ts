@@ -11,18 +11,24 @@ export class WrapperFilterComponent implements OnInit {
   filterType = FilterType;
   filterRequest: any;
   @Input() filterItems: FilterItem[];
-  @Output() updateWrapFilter = new EventEmitter();
   @Input() disabled: boolean;
-  @Input() tooltip: string;
+  @Output() updateWrapFilter = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
     this.filterRequest = Object.assign({});
-   }
+  }
 
-   updateTagsFilter(tagIds: number[]) {
-    this.filterRequest['tagIds'] = tagIds.length > 0 ? tagIds : null;
+  handleUpdateFilter(eventItem, filterItem: FilterItem) {
+    switch (filterItem.type) {
+      case FilterType.TagsFilter:
+        this.filterRequest['tagIds'] = eventItem.length > 0 ? eventItem : null;
+        break;
+      case FilterType.TagsFilter:
+        this.filterRequest[filterItem.placeholder + 'Date'] = eventItem.value.toISOString();
+        break;
+    }
     this.updateWrapFilter.emit(this.filterRequest);
   }
 }

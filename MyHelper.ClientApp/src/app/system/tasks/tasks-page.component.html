@@ -4,9 +4,10 @@
       <button class="mat-primary cards_page_create_button" mat-raised-button
         (click)="openEditCard((screenWidth >= 780) ? null : start, null)">Add task</button>
       <mh-wrapper-filter
+        [matTooltip]="!isCardsVisible ? tooltip : ''"
+        [ngClass]="{'pointer-events-none': !isCardsVisible}"
+        [disabled] = "!isCardsVisible"
         [filterItems]="filterItems"
-        [disabled] = "!isCardsVisible || cards.length === 0"
-        [tooltip] = "tooltip"
         (updateWrapFilter)="triggerChangeWrapFilter($event, (screenWidth >= 780) ? null : start)">
       </mh-wrapper-filter>
     </div>
@@ -16,12 +17,12 @@
     <mh-search-filter
       (searchInput)="triggerChangeSearch($event)"
       [screenWidth]="screenWidth"
-      [disabled] = "!isCardsVisible || cards.length === 0"
+      [disabled] = "!isCardsVisible"
       [tooltip] = "tooltip"
       [placeholder]="searchPlaceholder"
       (toggleFilterSidenav)="start.toggle()">
     </mh-search-filter>
-    <div class="cards_page_content">
+    <div class="cards_page_content" #cardList>
       <div *ngIf="isCardsVisible">
         <ng-container *ngIf="!isLoading">
             <ng-container *ngIf="cards.length > 0; else nocards">

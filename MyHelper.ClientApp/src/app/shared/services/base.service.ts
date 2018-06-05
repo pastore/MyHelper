@@ -41,7 +41,6 @@ export class BaseService {
         ? handleResponse(body) : body.isSuccess
         ? (body.result ? body.result : body.isSuccess) : Observable.throw(body.message);
     })
-    .delay(500)
     .catch((error: HttpErrorResponse) => {
       return Observable.throw(error.message);
     });

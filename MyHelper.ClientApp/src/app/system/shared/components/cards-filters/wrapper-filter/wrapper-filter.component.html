@@ -2,15 +2,20 @@
   <div class="filter_title">
     Filters
   </div>
-  <div class="filter_list" *ngFor="let filter of filterItems">
+  <div class="filter_row" *ngFor="let filter of filterItems">
     <ng-container [ngSwitch]="filter.type">
-      <div class="filter_row" *ngSwitchCase="filterType.TagsFilter">
+      <div class="filter_row--inner" *ngSwitchCase="filterType.TagsFilter">
         <mh-tags-filter
-          [placeHolder]="filter.placeHolder"
-          (updateFilter)="updateTagsFilter($event)"
-          [disabled] = "disabled"
-          [tooltip] = "tooltip">
+          [placeholder]="filter.placeholder"
+          (updateFilter)="handleUpdateFilter($event, filter)"
+          [disabled] = "disabled">
         </mh-tags-filter>
+      </div>
+      <div class="filter_row--inner" *ngSwitchCase="filterType.DateTimeFilter">
+        <mh-datetime-filter
+          [placeholder]="filter.placeholder"
+          (updateFilter)="handleUpdateFilter($event, filter)">
+        </mh-datetime-filter>
       </div>
     </ng-container>
   </div>

@@ -28,12 +28,16 @@ export class NoteService extends BaseService {
     this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 
-  getNotes(noteFilterRequest?: NoteFilterRequest): Observable<NoteResponse[]> {
+  getNotes(noteFilterRequest?: NoteFilterRequest, isLoader = true): Observable<NoteResponse[]> {
     const searchParams = this.generateSearchParams(noteFilterRequest);
-    this._loaderService.show();
+    if (isLoader) {
+      this._loaderService.show();
+    }
     return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, this.headers, searchParams)
     .finally(() => {
-      this._loaderService.hide();
+      if (isLoader) {
+        this._loaderService.hide();
+      }
     });
   }
 

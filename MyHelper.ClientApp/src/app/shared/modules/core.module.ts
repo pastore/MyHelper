@@ -6,10 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MhMaterialModule } from './mh-material.module';
 
 import { LoaderComponent } from '../loader/loader.component';
+import { NoWhiteSpaceDirective } from '../directives/no-whitespace.directive';
 
 @NgModule({
     declarations: [
-    LoaderComponent
+    LoaderComponent,
+    NoWhiteSpaceDirective
   ],
    imports: [
     CommonModule,
@@ -26,7 +28,8 @@ import { LoaderComponent } from '../loader/loader.component';
       ReactiveFormsModule,
       FlexLayoutModule,
       MhMaterialModule,
-      LoaderComponent
+      LoaderComponent,
+      NoWhiteSpaceDirective
     ]
 })
 

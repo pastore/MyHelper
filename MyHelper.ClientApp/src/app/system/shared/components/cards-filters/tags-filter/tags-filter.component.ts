@@ -11,16 +11,14 @@ import { TagViewModel } from '../../../../../shared/models/tags/tag-view.model';
   styleUrls: ['./tags-filter.component.scss']
 })
 export class TagsFilterComponent implements OnInit, AfterViewChecked {
-
   removable = true;
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;
   selectedTags: TagViewModel[] = [];
   filteredTags: TagViewModel[];
   tagCtrl: FormControl;
-  @Input() placeHolder: string;
+  @Input() placeholder: string;
   @Input() disabled: boolean;
-  @Input() tooltip: string;
   @Output() updateFilter = new EventEmitter<number[]>();
 
   constructor(

@@ -32,6 +32,8 @@ export class TasksPageComponent
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
+
+    this.cardsFilterModel.limit = 20;
   }
 
   updateTaskStatus(params) {
@@ -45,12 +47,29 @@ export class TasksPageComponent
       this.cards = responseCards.map((x) => {
         return { data : x, cardType : CardType.Task } as ICard<MhTaskResponse>;
       });
-      this.setTooltip();
     });
   }
 
   protected setFilterItems() {
-    this.filterItems = [new FilterItem(FilterType.TagsFilter, 'Tags')];
+    this.filterItems = [
+      new FilterItem(FilterType.TagsFilter, 'Tags'),
+      new FilterItem(FilterType.DateTimeFilter, 'From'),
+      new FilterItem(FilterType.DateTimeFilter, 'To')
+    ];
+  }
+
+  protected handleScroll() {
+    const offset = Math.floor(this.cards.length / this.cardsFilterModel.limit);
+    this.cardsFilterModel.offset = offset * this.cardsFilterModel.limit;
+
+    this._taskService.getTasks(this.cardsFilterModel, false)
+    .subscribe((tasks: MhTaskResponse[]) => {
+      if (tasks.length > 0 && (this.cards.length % this.cardsFilterModel.limit) === 0) {
+        this.cards = this.cards.concat(tasks.map((x) => {
+          return { data : x, cardType : CardType.Note } as ICard<MhTaskResponse>;
+        }));
+      }
+    });
   }
 
   protected detectChanges() {

@@ -7,11 +7,11 @@
       <div class="auth_row_input">
         <mat-form-field>
             <input matInput
-                    [(ngModel)]="model.username"
-                    name="username"
-                    #username="ngModel"
-                    placeholder="Username"
-                    required>
+                  [(ngModel)]="model.username"
+                  name="username"
+                  #username="ngModel"
+                  placeholder="Username"
+                  required>
         </mat-form-field>
         <mat-hint *ngIf="registrationForm.submitted && (!username.pristine || !username.valid)">
             <span [hidden]="!username.errors?.required">Username is required.</span>
@@ -45,6 +45,7 @@
                     [(ngModel)]="model.password"
                     #password="ngModel"
                     placeholder="Password"
+                    autocomplete="new-password"
                     required>
         </mat-form-field>
         <mat-hint *ngIf="registrationForm.submitted && (password.dirty || password.invalid)">

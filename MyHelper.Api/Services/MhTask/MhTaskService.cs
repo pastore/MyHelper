@@ -16,7 +16,7 @@ namespace MyHelper.Api.Services.MhTask
     {
         public MhTaskService(MyHelperContext myHelperDbContex, IMapper mapper) : base(myHelperDbContex, mapper) { }
 
-        public async Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(MhTaskFilterRequest mhTaskFIlterRequest)
+        public async Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(long accountId, MhTaskFilterRequest mhTaskFIlterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -24,7 +24,8 @@ namespace MyHelper.Api.Services.MhTask
                 .Include(x => x.ScheduleMhTask)
                 .Include(x => x.MhTaskTags)
                 .ThenInclude(e => e.Tag)
-                .Where(x => x.MhTaskState != EMhTaskState.Delete).AsQueryable();
+                .Where(x => x.MhTaskState != EMhTaskState.Delete && x.AppUserId == accountId)
+                .AsQueryable();
 
                 query = FilterMhTasks(query, mhTaskFIlterRequest);
 
@@ -32,11 +33,11 @@ namespace MyHelper.Api.Services.MhTask
             });
         }
 
-        public async Task<AOResult<MhTaskResponse>> GetMhTaskAsync(long id)
+        public async Task<AOResult<MhTaskResponse>> GetMhTaskAsync(long accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id);
+                var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id && x.AppUserId == accountId);
 
                 if (mhTask == null)
                     return AOBuilder.SetError<MhTaskResponse>(Constants.Errors.TaskNotExists);

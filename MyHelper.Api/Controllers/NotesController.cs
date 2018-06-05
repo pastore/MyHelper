@@ -24,14 +24,14 @@ namespace MyHelper.Api.Controllers
         [ProducesResponseType(typeof(ServerResponse<List<NoteResponse>>), 200)]
         public async Task<ServerResponse<List<NoteResponse>>> GetNotesAsync(NoteFilterRequest noteFilterRequest)
         {
-            return AOResultToServerResponse(await _noteService.GetNotesAsync(noteFilterRequest));
+            return AOResultToServerResponse(await _noteService.GetNotesAsync(AccountId, noteFilterRequest));
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ServerResponse<NoteResponse>), 200)]
         public async Task<ServerResponse<NoteResponse>> GetNoteAsync(long id)
         {
-            return AOResultToServerResponse(await _noteService.GetNoteAsync(id));
+            return AOResultToServerResponse(await _noteService.GetNoteAsync(AccountId, id));
         }
 
         [HttpPost]

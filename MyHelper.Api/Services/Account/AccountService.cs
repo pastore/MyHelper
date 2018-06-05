@@ -89,7 +89,8 @@ namespace MyHelper.Api.Services.Account
             {
                 new KeyValuePair<object, object>(ClaimTypes.Role, EUserRole.User.GetName()),
                 new KeyValuePair<object, object>(ClaimTypes.Email, appUser.Email),
-                new KeyValuePair<object, object>(ClaimTypes.Name, appUser.Username)
+                new KeyValuePair<object, object>(ClaimTypes.Name, appUser.Username),
+                new KeyValuePair<object, object>(ClaimTypes.NameIdentifier, appUser.Id)
             };
         }
 
