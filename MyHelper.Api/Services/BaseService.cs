@@ -133,7 +133,7 @@ namespace MyHelper.Api.Services
         /// <param name="func">Func.</param>
         /// <param name="request">Request.</param>
         /// <typeparam name="TReturn">The 1st type parameter.</typeparam>
-        protected async Task<AOResult<TReturn>> BaseInvokeAsync<TReturn>(Func<Task<AOResult<TReturn>>> func, object request = null)
+        protected async Task<AOResult<TReturn>>  BaseInvokeAsync<TReturn>(Func<Task<AOResult<TReturn>>> func, object request = null)
         {
             try
             {

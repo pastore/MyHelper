@@ -28,15 +28,14 @@ namespace MyHelper.Api.Services.Note
 
                 query = FilterNotes(query, noteFilterRequest);
 
-
-                if (noteFilterRequest.Offset.HasValue)
-                {
-                    query = query.Skip(noteFilterRequest.Offset.Value);
-                }
-                if (noteFilterRequest.Limit.HasValue)
-                {
-                    query = query.Take(noteFilterRequest.Limit.Value);
-                }
+                //if (noteFilterRequest.Offset.HasValue)
+                //{
+                //    query = query.Skip(noteFilterRequest.Offset.Value);
+                //}
+                //if (noteFilterRequest.Limit.HasValue)
+                //{
+                //    query = query.Take(noteFilterRequest.Limit.Value);
+                //}
 
                 return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<DAL.Entities.Note, NoteResponse>(x)).ToList());
             });
