@@ -23,7 +23,7 @@ namespace MyHelper.Api.Services.Note
                 var query = _myHelperDbContext.Notes
                     .Include(x => x.NoteTags)
                     .ThenInclude(e => e.Tag)
-                    //.Where(x => x.AppUserId == accountId)
+                    .Where(x => x.AppUserId == accountId)
                     .AsQueryable();
 
                 query = FilterNotes(query, noteFilterRequest);
