@@ -22,6 +22,7 @@
         public static class Updates
         {
             public const string CreateMhTask = "Create task";
+            public const string CreateChildMhTask = "Create child task";
             public const string UpdateEntireMhTask = "Update entire task";
             public const string UpdateStatusMhTask = "Update status task";
             public const string DeleteMhTask = "Delete task";

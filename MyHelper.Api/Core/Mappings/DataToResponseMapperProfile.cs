@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Tag;
+using MyHelper.Api.Models.Task;
 using MyHelper.Api.Models.User;
 
 namespace MyHelper.Api.Core.Mappings
@@ -18,8 +19,11 @@ namespace MyHelper.Api.Core.Mappings
 
             CreateMap<Tag, TagViewModel>();
 
+            CreateMap<ScheduleMhTask, ScheduleMhTaskViewModel>();
+
             CreateMap<MhTask, MhTaskResponse>()
-                .ForMember(x => x.Tags, x => x.MapFrom(q => q.MhTaskTags.Select(r => r.Tag)));
+                .ForMember(x => x.Tags, x => x.MapFrom(q => q.MhTaskTags.Select(r => r.Tag)))
+                .ForMember(x => x.ScheduleMhTaskViewModel, x => x.MapFrom(q => q.ScheduleMhTask));
 
             CreateMap<Note, NoteResponse>()
                 .ForMember(x => x.Tags, x => x.MapFrom(q => q.NoteTags.Select(r => r.Tag)));

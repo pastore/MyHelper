@@ -12,7 +12,7 @@ export class MhTaskResponse {
   public mhTaskStatus: MhTaskStatus;
   public mhTaskState: MhTaskState;
   public isRecurring: boolean;
-  public scheduleMhTask: ScheduleMhTaskViewModel;
+  public scheduleMhTaskViewModel: ScheduleMhTaskViewModel;
   public appUserId: number;
   public tags: TagViewModel[] = [];
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyHelper.Api.Core.Extensions
 {
@@ -20,11 +19,7 @@ namespace MyHelper.Api.Core.Extensions
 
         public static TEnum GetEnumValue<TEnum>(this string enumStr) where TEnum : struct
         {
-            var ret = default(TEnum);
-            if (Enum.TryParse<TEnum>(enumStr, out ret))
-                return ret;
-
-            return ret;
+            return Enum.TryParse<TEnum>(enumStr, out var ret) ? ret : default(TEnum);
         }
     }
 }

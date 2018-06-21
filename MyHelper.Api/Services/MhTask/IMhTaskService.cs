@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 
-namespace MyHelper.Api.Services.MhTask
+namespace MyHelper.Api.Services.MHTask
 {
     public interface IMhTaskService
     {
@@ -11,7 +12,7 @@ namespace MyHelper.Api.Services.MhTask
 
         Task<AOResult<MhTaskResponse>> GetMhTaskAsync(long accountId, long id);
 
-        Task<AOResult> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, DAL.Entities.MhTask parentMhTask = null);
+        Task<AOResult> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, MhTask parentMhTask = null);
 
         Task<AOResult> UpdateMhTaskAsync(MhTaskRequest mhTaskRequest);
 

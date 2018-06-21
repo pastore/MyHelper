@@ -1,14 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { ICard } from '../../../../shared/models/base/i-card.model';
-import { MatDialog } from '@angular/material';
-import { NoteDeleteModalComponent } from '../note-delete-modal/note-delete-modal.component';
 
+import { MatDialog } from '@angular/material';
+import { CardDeleteModel } from '../../../../shared/models/base/card-delete.model';
+import { CardsDeleteModalComponent } from '../../../shared/components/cards-delete-modal/cards-delete-modal.component';
+import { CardType } from '../../../../shared/utilities/enums';
 @Component({
   selector: 'mh-note-card',
   templateUrl: './note-card.component.html'
 })
-export class NoteCardComponent implements OnInit {
+export class NoteCardComponent {
+
   isExpandCard = false;
   expandTitle = 'Expand';
   @Input() card: ICard<NoteResponse>;
@@ -17,16 +20,13 @@ export class NoteCardComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
-  }
-
   editCard() {
     this.openEditCard.emit(this.card.data);
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(NoteDeleteModalComponent, {
-      data: this.card.data
+    const dialogRef = this.dialog.open(CardsDeleteModalComponent, {
+      data: new CardDeleteModel(this.card.data.id, this.card.data.name, CardType[CardType.Note])
     });
 
     dialogRef.afterClosed().subscribe(result => {

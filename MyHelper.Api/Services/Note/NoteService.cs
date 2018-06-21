@@ -107,10 +107,9 @@ namespace MyHelper.Api.Services.Note
 
                 await _myHelperDbContext.NoteTags.AddRangeAsync(
                     noteRequest.TagIds
-                    .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
-                    .Where(x => !noteTags.Select(y => y.TagId).Contains(x.Id))
-                    .Select(x => new NoteTag { Tag = x, Note = note })
-                    );
+                        .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                        .Where(x => !noteTags.Select(y => y.TagId).Contains(x.Id))
+                        .Select(x => new NoteTag { Tag = x, Note = note }));
 
                 await _myHelperDbContext.SaveChangesAsync();
 

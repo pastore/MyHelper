@@ -6,6 +6,9 @@
      (change)="updateTaskStatus()">
     </mat-checkbox>
     <div class="card_name">{{ card.data.name }}</div>
+    <div *ngIf="card.data.mhTaskState == mhTaskStates.ReSchedule" class="card_state">
+      <mat-chip class="color-black">schedule</mat-chip>
+    </div>
     <div class="card_buttons">
       <button mat-icon-button [matMenuTriggerFor]="menuRef">
         <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">more_vert</mat-icon>
@@ -14,8 +17,11 @@
         <button mat-menu-item (click)="showDescription()">
           {{ expandTitle }}
         </button>
-        <button mat-menu-item (click)="editCard()">
+        <button *ngIf="card.data.mhTaskState != mhTaskStates.ReSchedule" mat-menu-item (click)="editCard()">
           Edit
+        </button>
+        <button mat-menu-item (click)="openDialog()">
+          Delete
         </button>
       </mat-menu>
     </div>
@@ -27,6 +33,6 @@
             {{ tag.name }}
         </mat-chip>
     </mat-chip-list>
-    <div class="card_date">{{  card.data.startDate | date: 'dd/MM/yyyy' }}</div>
+    <div class="card_date">{{  card.data.startDate | date: 'MM/dd/yyyy' }}</div>
   </div>
 </mat-card>

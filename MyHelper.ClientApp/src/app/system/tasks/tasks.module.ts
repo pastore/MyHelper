@@ -13,12 +13,10 @@ import { TaskEditCardComponent } from './shared/task-edit-card/task-edit-card.co
     CoreModule,
     CardFilterModule
   ],
-  exports: [],
   declarations: [
     TasksPageComponent,
     TaskCardComponent,
     TaskEditCardComponent
-  ],
-  providers: [],
+  ]
 })
 export class TasksModule { }

@@ -41,6 +41,15 @@ export class TasksPageComponent
     .subscribe(response => {});
   }
 
+  deleteTask(id: number) {
+    this._taskService.deleteTask(id)
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.getCards();
+        }
+      });
+  }
+
   protected getCards() {
     this._taskService.getTasks(this.cardsFilterModel)
     .subscribe((responseCards: MhTaskResponse[]) => {

@@ -5,15 +5,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyHelper.Api.Core.Mappings;
+using MyHelper.Api.Core.Scheduler;
 using MyHelper.Api.DAL;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.Models.Options;
 using MyHelper.Api.Services.Account;
-using MyHelper.Api.Services.MhTask;
+using MyHelper.Api.Services.MHTask;
 using MyHelper.Api.Services.Note;
 using MyHelper.Api.Services.Tag;
 using MyHelper.Api.Services.Token;
+using System;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace MyHelper.Api
 {
@@ -75,6 +79,9 @@ namespace MyHelper.Api
             });
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
+
+            // scheduling mhtasks
+            services.AddSingleton<IHostedService, ScheduleTask>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

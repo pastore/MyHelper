@@ -42,8 +42,9 @@ export class TaskEditCardComponent implements OnInit {
   ngOnInit() {
     this.editCardModel = this.originalEditCardModel ? {... this.originalEditCardModel} : new MhTaskResponse();
     this.editCardModel.tags = this.originalEditCardModel ? this.originalEditCardModel.tags.slice() : [];
-    this.editCardModel.scheduleMhTask = this.originalEditCardModel ?
-      this.originalEditCardModel.scheduleMhTask : new ScheduleMhTaskViewModel();
+    this.editCardModel.scheduleMhTaskViewModel = this.originalEditCardModel && this.originalEditCardModel.scheduleMhTaskViewModel
+      ? {... this.originalEditCardModel.scheduleMhTaskViewModel}
+      : new ScheduleMhTaskViewModel();
     this.tagCtrl = new FormControl(this.editCardModel.tags, [], asyncRequiredTagsValidator.bind(this));
     this._tagService.tags.subscribe(tags => {
       this.tags = tags;
@@ -70,7 +71,7 @@ export class TaskEditCardComponent implements OnInit {
       mhTaskRequest.startDate = this.editCardModel.startDate;
       mhTaskRequest.mhTaskVisibleType = this.editCardModel.mhTaskVisibleType;
       mhTaskRequest.isRecurring = this.editCardModel.isRecurring;
-      mhTaskRequest.scheduleMhTask = this.editCardModel.scheduleMhTask;
+      mhTaskRequest.scheduleMhTaskViewModel = this.editCardModel.scheduleMhTaskViewModel;
 
       const method = mhTaskRequest.id ? 'updateTask' : 'addTask';
 

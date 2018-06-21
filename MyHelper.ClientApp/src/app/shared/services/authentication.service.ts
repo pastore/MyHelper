@@ -44,6 +44,7 @@ export class AuthenticationService extends BaseService {
 
   logout(): void {
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('token');
   }
 
   createUser(registrationRequest: RegistrationRequest): Observable<boolean> {

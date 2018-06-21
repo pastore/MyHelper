@@ -29,22 +29,19 @@ namespace MyHelper.Api.DAL.Entities
 
         public long? ParentId { get; set; }
 
-        [ForeignKey(nameof(ParentId))]
         public virtual MhTask Parent { get; set; }
 
         public int AppUserId { get; set; }
 
         public AppUser AppUser { get; set; }
 
-        public long? ScheduleMhTaskId { get; set; }
-
         public ScheduleMhTask ScheduleMhTask { get; set; }
 
         // Reverse navigation
-        public ICollection<UpdateMhTask> Updates { get; set; }
+        public ICollection<UpdateMhTask> Updates { get; set; } = new List<UpdateMhTask>();
 
         public ICollection<MhTaskTag> MhTaskTags { get; } = new List<MhTaskTag>();
 
-        public virtual ICollection<MhTask> Children { get; set; }
+        public virtual ICollection<MhTask> Children { get; set; } = new List<MhTask>();
     }
 }

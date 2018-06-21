@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using MyHelper.Api.Core;
 using MyHelper.Api.DAL.Context;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System;
 
 namespace MyHelper.Api.Migrations

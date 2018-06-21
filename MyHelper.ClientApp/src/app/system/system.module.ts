@@ -7,6 +7,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { SystemComponent } from './system.component';
 import { SystemSidebarComponent } from './shared/components/system-sidebar/system-sidebar.component';
 import { SystemHeaderComponent } from './shared/components/system-header/system-header.component';
+import { CardsDeleteModalComponent } from './shared/components/cards-delete-modal/cards-delete-modal.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,9 @@ import { SystemHeaderComponent } from './shared/components/system-header/system-
   declarations: [
     SystemComponent,
     SystemSidebarComponent,
-    SystemHeaderComponent
-  ]
+    SystemHeaderComponent,
+    CardsDeleteModalComponent
+  ],
+  entryComponents: [CardsDeleteModalComponent]
 })
 export class SystemModule { }

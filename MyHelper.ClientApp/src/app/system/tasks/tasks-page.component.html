@@ -30,7 +30,8 @@
                   *ngFor="let card of cards"
                   [card]="card"
                   (openEditCard)="openEditCard(null, $event)"
-                  (emitUpdateTaskStatus)="updateTaskStatus($event)">
+                  (emitUpdateTaskStatus)="updateTaskStatus($event)"
+                  (deleteMhTask)="deleteTask($event)">
                 </mh-task-card>
               </ng-container>
         </ng-container>

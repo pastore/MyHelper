@@ -18,6 +18,6 @@ namespace MyHelper.Api.Models.Request
         public int AppUserId { get; set; }
 
         [CollectionHasElements(ErrorMessage = "Collection must contain an element.")]
-        public ICollection<long> TagIds { get; } = new List<long>();
+        public ICollection<long> TagIds { get; set; } = new List<long>();
     }
 }

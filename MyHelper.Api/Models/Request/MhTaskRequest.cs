@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Attributes;
-using MyHelper.Api.Models.MhTask;
+using MyHelper.Api.Models.Task;
 
 namespace MyHelper.Api.Models.Request
 {
@@ -32,6 +32,6 @@ namespace MyHelper.Api.Models.Request
         public int AppUserId { get; set; }
 
         [CollectionHasElements(ErrorMessage = "Collection must contain an element.")]
-        public ICollection<long> TagIds { get; } = new List<long>();
+        public ICollection<long> TagIds { get; set; } = new List<long>();
     }
 }

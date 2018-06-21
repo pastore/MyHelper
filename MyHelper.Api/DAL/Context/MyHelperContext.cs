@@ -58,6 +58,7 @@ namespace MyHelper.Api.DAL.Context
             modelBuilder.Entity<MhTask>()
                 .HasMany(x => x.Children)
                 .WithOne(x => x.Parent)
+                .HasForeignKey(x => x.ParentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UpdateMhTask>()

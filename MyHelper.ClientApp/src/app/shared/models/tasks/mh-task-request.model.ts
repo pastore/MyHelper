@@ -9,7 +9,7 @@ export class MhTaskRequest {
   public mhTaskVisibleType: MhTaskVisibleType;
   public mhTaskStatus: MhTaskStatus;
   public isRecurring: boolean;
-  public scheduleMhTask: ScheduleMhTaskViewModel;
+  public scheduleMhTaskViewModel: ScheduleMhTaskViewModel;
   public appUserId: number;
   public tagIds: number[];
 }

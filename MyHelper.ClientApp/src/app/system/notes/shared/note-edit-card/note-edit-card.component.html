@@ -28,8 +28,12 @@
     <div class="card_details_row">
         <mat-form-field>
           <mat-chip-list #chipList required>
-            <mat-chip *ngFor="let tag of editCardModel.tags" [selectable]="selectable"
-                      [removable]="removable" (remove)="removeTag(tag)">
+            <mat-chip
+              class="color-black"
+              *ngFor="let tag of editCardModel.tags"
+               [selectable]="selectable"
+               [removable]="removable"
+               (remove)="removeTag(tag)">
               {{tag.name}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>

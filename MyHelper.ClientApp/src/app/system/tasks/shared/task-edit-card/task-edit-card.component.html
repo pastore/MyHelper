@@ -47,6 +47,7 @@
         <mat-form-field>
           <mat-chip-list #chipList required>
             <mat-chip
+            class="color-black"
               *ngFor="let tag of editCardModel.tags"
               [selectable]="selectable"
               [removable]="removable"
@@ -94,8 +95,8 @@
       <mat-form-field>
         <mat-select
           placeholder="Schedule type"
-          [(ngModel)]="editCardModel.scheduleMhTask.scheduleMhTaskType"
-          name="scheduleMhTask.scheduleMhTaskType">
+          [(ngModel)]="editCardModel.scheduleMhTaskViewModel.scheduleMhTaskType"
+          name="scheduleMhTaskViewModel.scheduleMhTaskType">
           <mat-option *ngFor="let type of scheduleMhTaskTypes" [value]="type.id">
             {{ type.name }}
           </mat-option>
@@ -103,8 +104,8 @@
       </mat-form-field>
       <mat-form-field>
         <input matInput
-          [(ngModel)]="editCardModel.scheduleMhTask.maxCount"
-          name="scheduleMhTask.maxCount"
+          [(ngModel)]="editCardModel.scheduleMhTaskViewModel.maxCount"
+          name="scheduleMhTaskViewModel.maxCount"
           type="number"
           min="0"
           placeholder="Max Count">
