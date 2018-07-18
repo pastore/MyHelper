@@ -14,10 +14,13 @@ In future plan to make social network from one.
 ----------------
 1. ASP.NET Core 2
 2. Angular 5
-3. Postgres 10
-4. Nginx
-5. Linux
-6. Entty Framework Core
+3. Angular Material
+4. Postgres 10
+5. Nginx
+6. Linux
+7. Entty Framework Core
+8. RabbitMQ (in process)
+9. Docker (planned)
 
 **Quick start**
 ----------------
