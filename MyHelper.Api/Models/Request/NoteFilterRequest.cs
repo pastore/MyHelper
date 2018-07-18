@@ -6,7 +6,7 @@ using MyHelper.Api.Models.Tag;
 
 namespace MyHelper.Api.Models.Request
 {
-    public class NoteFilterRequest
+    public class NoteFilterRequest : IFetchRequest
     {
         public DateTime? FromDate { get; set; }
 

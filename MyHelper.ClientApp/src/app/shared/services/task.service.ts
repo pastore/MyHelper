@@ -16,24 +16,21 @@ import { LoaderService } from '../loader/loader.service';
 @Injectable()
 export class TaskService extends BaseService {
 
-  private headers: HttpHeaders;
-
   constructor(
     protected httpClient: HttpClient,
-    private authService: AuthenticationService,
+    private _authService: AuthenticationService,
     private _loaderService: LoaderService
   ) {
     super(httpClient);
-    const token = this.authService.currentUser ? this.authService.token : '';
-    this.headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
   }
 
   getTasks(mhTaskFilterRequest?: MhTaskFilterRequest, isLoader = true): Observable<MhTaskResponse[]> {
     const searchParams = this.generateSearchParams(mhTaskFilterRequest);
+    const headers = this._generateAuthHeaders();
     if (isLoader) {
       this._loaderService.show();
     }
-    return this.sendRequest<MhTaskResponse[]>(RequestMethod.Get, ApiRoute.Tasks, null, this.headers, searchParams)
+    return this.sendRequest<MhTaskResponse[]>(RequestMethod.Get, ApiRoute.Tasks, null, headers, searchParams)
     .finally(() => {
       if (isLoader) {
         this._loaderService.hide();
@@ -42,18 +39,27 @@ export class TaskService extends BaseService {
   }
 
   addTask(mhTask: MhTaskRequest): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Post, ApiRoute.Tasks, mhTask, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Post, ApiRoute.Tasks, mhTask, headers);
   }
 
   updateTask(mhTask: MhTaskRequest): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Put, ApiRoute.Tasks, mhTask, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Put, ApiRoute.Tasks, mhTask, headers);
   }
 
   updateTaskStatus(id: number, status: number): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Patch, ApiRoute.Tasks + '/' + id, status, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Patch, ApiRoute.Tasks + '/' + id, status, headers);
   }
 
   deleteTask(id: number): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Delete, ApiRoute.Tasks + '/' + id, null, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Delete, ApiRoute.Tasks + '/' + id, null, headers);
+  }
+
+  private _generateAuthHeaders(): HttpHeaders {
+    const token = this._authService.currentUser ? this._authService.token : '';
+    return new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 }

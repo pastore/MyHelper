@@ -17,6 +17,8 @@ using MyHelper.Api.Services.Note;
 using MyHelper.Api.Services.Tag;
 using MyHelper.Api.Services.Token;
 using System;
+using MyHelper.Api.Services.Friends;
+using MyHelper.Api.Services.User;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace MyHelper.Api
@@ -61,6 +63,8 @@ namespace MyHelper.Api
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IMhTaskService, MhTaskService>();
             services.AddScoped<INoteService, NoteService>();
+            services.AddScoped<IAppUserService, AppUserService>();
+            services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<ITagService, TagService>();
 
             var sp = services.BuildServiceProvider();
@@ -68,6 +72,7 @@ namespace MyHelper.Api
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    
                     options.TokenValidationParameters = tokenService.GetTokenValidationParameters();
                 });
 

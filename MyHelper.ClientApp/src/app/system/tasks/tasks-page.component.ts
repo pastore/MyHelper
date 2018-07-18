@@ -6,7 +6,7 @@ import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { FilterType, CardType, MhTaskStatus } from '../../shared/utilities/enums';
 import { TaskService } from '../../shared/services/task.service';
 import { LoaderService } from '../../shared/loader/loader.service';
-import { CardsPageComponent } from '../shared/components/cards-page/cards-page.component';
+import { BaseEditCardsComponent } from '../shared/components/base/base-edit-cards.component';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 
 @Component({
@@ -14,7 +14,7 @@ import { ILoaderState } from '../../shared/loader/i-loader-state.model';
   templateUrl: './tasks-page.component.html'
 })
 export class TasksPageComponent
- extends CardsPageComponent<MhTaskResponse, MhTaskFilterRequest>
+ extends BaseEditCardsComponent<ICard<MhTaskResponse>, MhTaskFilterRequest>
  implements OnInit {
 
   constructor(

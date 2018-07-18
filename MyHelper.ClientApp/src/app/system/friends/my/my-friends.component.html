@@ -1,0 +1,20 @@
+<div class="cards_page_content" #cardList>
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="cards.length > 0; else nocards">
+      <mh-person-card
+        *ngFor="let card of cards"
+        [card]="card">
+        <button
+          mat-menu-item
+          [disabled]="card.disabled"
+          (click)="cancelFriend(card)">
+            Cancel
+        </button>
+      </mh-person-card>
+    </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #nocards>
+  <div class="no_cards">There are no friends!</div>
+</ng-template>

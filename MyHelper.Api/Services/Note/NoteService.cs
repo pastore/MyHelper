@@ -16,7 +16,7 @@ namespace MyHelper.Api.Services.Note
     {
         public NoteService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<AOResult<List<NoteResponse>>> GetNotesAsync(long accountId, NoteFilterRequest noteFilterRequest)
+        public async Task<AOResult<List<NoteResponse>>> GetNotesAsync(int accountId, NoteFilterRequest noteFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -28,20 +28,13 @@ namespace MyHelper.Api.Services.Note
 
                 query = FilterNotes(query, noteFilterRequest);
 
-                if (noteFilterRequest.Offset.HasValue)
-                {
-                    query = query.Skip(noteFilterRequest.Offset.Value);
-                }
-                if (noteFilterRequest.Limit.HasValue)
-                {
-                    query = query.Take(noteFilterRequest.Limit.Value);
-                }
+                query = FetchItems(query, noteFilterRequest);
 
                 return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<DAL.Entities.Note, NoteResponse>(x)).ToList());
             });
         }
 
-        public async Task<AOResult<NoteResponse>> GetNoteAsync(long accountId, long id)
+        public async Task<AOResult<NoteResponse>> GetNoteAsync(int accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -135,26 +128,26 @@ namespace MyHelper.Api.Services.Note
 
         #region -- Private methods --
 
-        private IQueryable<DAL.Entities.Note> FilterNotes(IQueryable<DAL.Entities.Note> query, NoteFilterRequest noteFIlterRequest)
+        private IQueryable<DAL.Entities.Note> FilterNotes(IQueryable<DAL.Entities.Note> query, NoteFilterRequest noteFilterRequest)
         {
-            if (noteFIlterRequest.FromDate.HasValue)
+            if (noteFilterRequest.FromDate.HasValue)
             {
-                query = query.Where(x => x.CreateDate >= noteFIlterRequest.FromDate.Value);
+                query = query.Where(x => x.CreateDate >= noteFilterRequest.FromDate.Value);
             }
 
-            if (noteFIlterRequest.ToDate.HasValue)
+            if (noteFilterRequest.ToDate.HasValue)
             {
-                query = query.Where(x => x.CreateDate <= noteFIlterRequest.ToDate.Value);
+                query = query.Where(x => x.CreateDate <= noteFilterRequest.ToDate.Value);
             }
 
-            if (!string.IsNullOrWhiteSpace(noteFIlterRequest.Search))
+            if (!string.IsNullOrWhiteSpace(noteFilterRequest.Search))
             {
-                query = query.Where(x => x.Name.ToLower().Contains(noteFIlterRequest.Search.ToLower()));
+                query = query.Where(x => x.Name.ToLower().Contains(noteFilterRequest.Search.ToLower()));
             }
 
-            if (noteFIlterRequest.TagIds.Any())
+            if (noteFilterRequest.TagIds.Any())
             {
-                query = query.Where(x => x.NoteTags.Any(tag => noteFIlterRequest.TagIds.Any(t => t == tag.Tag.Id)));
+                query = query.Where(x => x.NoteTags.Any(tag => noteFilterRequest.TagIds.Any(t => t == tag.Tag.Id)));
             }
 
             return query;

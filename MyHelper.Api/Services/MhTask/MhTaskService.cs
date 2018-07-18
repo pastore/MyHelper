@@ -16,7 +16,7 @@ namespace MyHelper.Api.Services.MHTask
     {
         public MhTaskService(MyHelperContext myHelperDbContex, IMapper mapper) : base(myHelperDbContex, mapper) { }
 
-        public async Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(long accountId, MhTaskFilterRequest mhTaskFIlterRequest)
+        public async Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(int accountId, MhTaskFilterRequest mhTaskFIlterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -29,11 +29,13 @@ namespace MyHelper.Api.Services.MHTask
 
                 query = FilterMhTasks(query, mhTaskFIlterRequest);
 
+                query = FetchItems(query, mhTaskFIlterRequest);
+
                 return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<MhTask, MhTaskResponse>(x)).ToList()); 
             });
         }
 
-        public async Task<AOResult<MhTaskResponse>> GetMhTaskAsync(long accountId, long id)
+        public async Task<AOResult<MhTaskResponse>> GetMhTaskAsync(int accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -198,26 +200,31 @@ namespace MyHelper.Api.Services.MHTask
 
         #region -- Private methods --
 
-        private IQueryable<MhTask> FilterMhTasks(IQueryable<MhTask> query, MhTaskFilterRequest mhTaskFIlterRequest)
+        private IQueryable<MhTask> FilterMhTasks(IQueryable<MhTask> query, MhTaskFilterRequest mhTaskFilterRequest)
         {
-            if (mhTaskFIlterRequest.FromDate.HasValue)
+            if (mhTaskFilterRequest.FromDate.HasValue)
             {
-                query = query.Where(x => x.StartDate >= mhTaskFIlterRequest.FromDate.Value);
+                query = query.Where(x => x.StartDate >= mhTaskFilterRequest.FromDate.Value);
             }
 
-            if (mhTaskFIlterRequest.ToDate.HasValue)
+            if (mhTaskFilterRequest.ToDate.HasValue)
             {
-                query = query.Where(x => x.StartDate <= mhTaskFIlterRequest.ToDate.Value);
+                query = query.Where(x => x.StartDate <= mhTaskFilterRequest.ToDate.Value);
             }
 
-            if (mhTaskFIlterRequest.MhTaskStatus.HasValue)
+            if (mhTaskFilterRequest.MhTaskStatus.HasValue)
             {
-                query = query.Where(x => x.MhTaskStatus == mhTaskFIlterRequest.MhTaskStatus.Value);
+                query = query.Where(x => x.MhTaskStatus == mhTaskFilterRequest.MhTaskStatus.Value);
             }
 
-            if (mhTaskFIlterRequest.TagIds.Any())
+            if (!string.IsNullOrWhiteSpace(mhTaskFilterRequest.Search))
             {
-                query = query.Where(x => x.MhTaskTags.Any(mhtag => mhTaskFIlterRequest.TagIds.Any(t => t == mhtag.Tag.Id)));
+                query = query.Where(x => x.Name.ToLower().Contains(mhTaskFilterRequest.Search.ToLower()));
+            }
+
+            if (mhTaskFilterRequest.TagIds.Any())
+            {
+                query = query.Where(x => x.MhTaskTags.Any(mhtag => mhTaskFilterRequest.TagIds.Any(t => t == mhtag.Tag.Id)));
             }
 
             return query;

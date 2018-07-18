@@ -17,6 +17,15 @@
 
             // Note
             public const string NoteNotExists = "Note doesn't exists";
+
+            // Friend
+            public const string FriendNotExists = "Friend not exists";
+            public const string FriendNotApproved = "Friend not approved";
+            public const string FriendAlreadyApproved = "Friend already approved";
+            public const string FriendAlreadyRejected = "Friend already rejected";
+            public const string FriendAlreadyBlocked = "Friend already blocked";
+            public const string FriendAlreadySpamed = "Friend already spamed";
+            public const string RequestsAlreadyExists = "Requests already exists";
         }
 
         public static class Updates

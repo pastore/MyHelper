@@ -16,24 +16,21 @@ import { LoaderService } from '../loader/loader.service';
 @Injectable()
 export class NoteService extends BaseService {
 
-  private headers: HttpHeaders;
-
   constructor(
     protected httpClient: HttpClient,
     private _authService: AuthenticationService,
     private _loaderService: LoaderService
   ) {
     super(httpClient);
-    const token = this._authService.currentUser ? this._authService.token : '';
-    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 
   getNotes(noteFilterRequest?: NoteFilterRequest, isLoader = true): Observable<NoteResponse[]> {
     const searchParams = this.generateSearchParams(noteFilterRequest);
+    const headers = this._generateAuthHeaders();
     if (isLoader) {
       this._loaderService.show();
     }
-    return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, this.headers, searchParams)
+    return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, headers, searchParams)
     .finally(() => {
       if (isLoader) {
         this._loaderService.hide();
@@ -42,14 +39,22 @@ export class NoteService extends BaseService {
   }
 
   addNote(note: NoteRequest): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Post, ApiRoute.Notes, note, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Post, ApiRoute.Notes, note, headers);
   }
 
   updateNote(note: NoteRequest): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Put, ApiRoute.Notes, note, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Put, ApiRoute.Notes, note, headers);
   }
 
   deleteNote(id: number): Observable<boolean> {
-    return this.sendRequest<boolean>(RequestMethod.Delete, ApiRoute.Notes + '/' + id, null, this.headers);
+    const headers = this._generateAuthHeaders();
+    return this.sendRequest<boolean>(RequestMethod.Delete, ApiRoute.Notes + '/' + id, null, headers);
+  }
+
+  private _generateAuthHeaders(): HttpHeaders {
+    const token = this._authService.currentUser ? this._authService.token : '';
+    return new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 }

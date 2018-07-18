@@ -20,6 +20,12 @@
 .card{
   border-radius: 0;
 
+  .card_logo{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+  }
   .card_name{
     font-size: 15px;
     font-weight: 600;
@@ -37,7 +43,12 @@
   .card_task_status{
     margin-right: 15px;
   }
+
+  &.card--disabled{
+    opacity: 0.5;
+  }
 }
+
 .task_edit_card{
   .nw-editor{
     height: 200px;

@@ -21,7 +21,6 @@ import { arrayFromEnum, isNotNullOrEmpty } from '../../../../shared/utilities/to
   templateUrl: './task-edit-card.component.html'
 })
 export class TaskEditCardComponent implements OnInit {
-
   removable = true;
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;

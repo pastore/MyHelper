@@ -8,15 +8,15 @@ namespace MyHelper.Api.Models.User
 {
     public class AppUserViewModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public string Email { get; set; }
 
         public string Avatar { get; set; }
 
-        public EUserRole Role { get; set; }
+        public EUserRole UserRole { get; set; }
 
         public DateTime CreatedDate { get; set; }
     }

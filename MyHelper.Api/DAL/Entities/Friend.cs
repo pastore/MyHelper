@@ -20,6 +20,6 @@ namespace MyHelper.Api.DAL.Entities
 
         public DateTime? BecameFriendsTime { get; set; }
 
-        public EFriendRequestFlag FriendRequestFlag { get; set; }
+        public EFriendRequestFlag FriendRequestFlag { get; set; } = EFriendRequestFlag.None;
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Tag;
+using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api.Controllers
 {
@@ -15,7 +16,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly ITagService _tagService;
 
-        public TagsController(ITagService tagService)
+        public TagsController(ITagService tagService, ITokenService tokenService) : base(tokenService)
         {
             _tagService = tagService;
         }

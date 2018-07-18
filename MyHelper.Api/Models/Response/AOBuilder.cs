@@ -64,5 +64,12 @@ namespace MyHelper.Api.Models.Response
         {
             return SetError<T>(null, message);
         }
+
+        public static AOResult SetFailure()
+        {
+            var aoResult = new AOResult();
+            aoResult.SetFailure();
+            return aoResult;
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginRequest } from '../../shared/models/auth/login-request.model';
@@ -8,16 +8,11 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
   selector: 'mh-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit {
-
+export class LoginComponent {
   model: LoginRequest = new LoginRequest();
 
   constructor(private router: Router,
     private authService: AuthenticationService) { }
-
-  ngOnInit() {
-    this.authService.logout();
-  }
 
   login(loginForm: FormGroup) {
       if (loginForm.valid) {

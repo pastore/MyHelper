@@ -11,10 +11,10 @@ import { CardsDeleteModalComponent } from './shared/components/cards-delete-moda
 
 @NgModule({
   imports: [
-    SystemRoutingModule,
     CoreModule,
     NotesModule,
-    TasksModule
+    TasksModule,
+    SystemRoutingModule
   ],
   declarations: [
     SystemComponent,

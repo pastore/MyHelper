@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
-  HttpResponse,
   HttpHeaders,
   HttpParams,
   HttpErrorResponse
@@ -10,8 +9,8 @@ import { Observable } from 'rxjs/Observable';
 import { IServerResponse } from '../models/base/server-response.model';
 import '../utilities/rxjs-operators';
 import { RequestMethod } from '../utilities/enums';
-import { HttpParamsOptions } from '@angular/common/http/src/params';
 import { environment } from '../../../environments/environment';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class BaseService {
@@ -20,7 +19,9 @@ export class BaseService {
   private _routePrefix = 'api';
   private defaultApiVersion = 'v1';
 
-  constructor(protected httpClient: HttpClient) {}
+  constructor(
+    protected httpClient: HttpClient
+  ) {}
 
   protected sendRequest<T>(
     method: RequestMethod,

@@ -1,6 +1,5 @@
 import {
   HttpClient,
-  HttpResponse,
   HttpHeaders
  } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
@@ -34,11 +33,10 @@ export abstract class DataAPIService<T> {
       protected authService: AuthenticationService,
     ) {
     this.cache = new ReplaySubject<T[]>(1);
-    const token = this.authService.currentUser ? this.authService.token : '';
-    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
    }
 
   protected get(): Observable<T[]> {
+    this._generateAuthHeaders();
     this.httpClient.get(this._generateUrl(this.apiUrl), {
       headers: this.headers
     })
@@ -68,6 +66,11 @@ export abstract class DataAPIService<T> {
 
   private _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
     return this._domain + '/' + this._routePrefix + '/' + apiVersion + '/' + route;
+  }
+
+  private _generateAuthHeaders() {
+    const token = this.authService.currentUser ? this.authService.token : '';
+    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 }
 

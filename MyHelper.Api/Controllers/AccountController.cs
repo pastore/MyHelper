@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Account;
+using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api.Controllers
 {
@@ -12,7 +14,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly IAccountService _accountService;
 
-        public AccountController(IAccountService appUserService)
+        public AccountController(IAccountService appUserService, ITokenService tokenService) : base(tokenService)
         {
             _accountService = appUserService;
         }

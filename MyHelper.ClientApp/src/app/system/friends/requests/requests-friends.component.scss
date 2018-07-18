@@ -1,0 +1,22 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+:host::ng-deep{
+  .mat-tab-group{
+    height: 100%;
+  }
+
+  .mat-tab-body-wrapper{
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .mat-tab-body-content{
+    overflow: unset;
+  }
+}
+
+

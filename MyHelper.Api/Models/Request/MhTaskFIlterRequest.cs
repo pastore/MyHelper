@@ -5,7 +5,7 @@ using MyHelper.Api.Models.Tag;
 
 namespace MyHelper.Api.Models.Request
 {
-    public class MhTaskFilterRequest
+    public class MhTaskFilterRequest : IFetchRequest
     {
         public DateTime? FromDate { get; set; }
 

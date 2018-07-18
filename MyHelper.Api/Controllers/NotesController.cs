@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Note;
+using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api.Controllers
 {
@@ -15,7 +16,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly INoteService _noteService;
 
-        public NotesController(INoteService noteService)
+        public NotesController(INoteService noteService, ITokenService tokenService) : base(tokenService)
         {
             _noteService = noteService;
         }

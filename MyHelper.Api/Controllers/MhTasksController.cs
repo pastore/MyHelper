@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.MHTask;
+using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api.Controllers
 {
@@ -15,7 +16,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly IMhTaskService _mhTaskService;
 
-        public MhTasksController(IMhTaskService mhTaskService)
+        public MhTasksController(IMhTaskService mhTaskService, ITokenService tokenService) : base(tokenService)
         {
             _mhTaskService = mhTaskService;
         }

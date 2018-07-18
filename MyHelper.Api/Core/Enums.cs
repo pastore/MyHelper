@@ -20,6 +20,12 @@ namespace MyHelper.Api.Core
         Spam
     }
 
+    public enum EFriendRequestDirection
+    {
+        ByMe = 1,
+        ToMe = 2
+    }
+
     public enum EMhTaskStatus
     {
         None,

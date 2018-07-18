@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MyHelper.Api.DAL.Entities;
+using MyHelper.Api.Models.Friend;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Tag;
 using MyHelper.Api.Models.Task;
@@ -15,7 +16,8 @@ namespace MyHelper.Api.Core.Mappings
     {
         public DataToResponseMapperProfile() : base("DataToResponse")
         {
-            CreateMap<AppUser, AppUserViewModel>(); 
+            CreateMap<AppUser, AppUserViewModel>();
+            CreateMap<AppUser, FriendViewModel>();
 
             CreateMap<Tag, TagViewModel>();
 

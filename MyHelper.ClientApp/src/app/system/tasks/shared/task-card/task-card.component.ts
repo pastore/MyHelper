@@ -11,7 +11,6 @@ import { CardDeleteModel } from '../../../../shared/models/base/card-delete.mode
   templateUrl: './task-card.component.html'
 })
 export class TaskCardComponent implements OnInit {
-
   mhTaskStates = MhTaskState;
   isExpandCard = false;
   expandTitle = 'Expand';

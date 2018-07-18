@@ -3,6 +3,19 @@ export enum UserRole {
   User = 2
 }
 
+export enum FriendRequestFlag {
+  None,
+  Approved,
+  Rejected,
+  Blocked,
+  Spam
+}
+
+export enum FriendRequestDirection {
+  ByMe = 1,
+  ToMe = 2
+}
+
 export enum CardType {
   Task = 1,
   Note = 2,
@@ -31,7 +44,8 @@ export enum RequestMethod {
 
 export enum Icons {
   Note = 'note',
-  Schedule = 'schedule'
+  Schedule = 'schedule',
+  People = 'people'
 }
 
 export enum MhTaskStatus {

@@ -1,0 +1,29 @@
+<mat-sidenav-container>
+    <mat-sidenav position="end" class="cards_page_sidenav" #start [opened]="screenWidth >= 780" [mode]="(screenWidth >= 780) ? 'side' : 'over'">
+      <div class="cards_page_sidenav_wrapper">
+        <mat-nav-list dense>
+          <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
+              <a mat-line [routerLink]="['/friends/my']" >My</a>
+          </mat-list-item>
+          <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
+            <a mat-line [routerLink]="['/friends/requests']" >Requests</a>
+        </mat-list-item>
+        <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
+          <a mat-line [routerLink]="['/friends/search']" >Search</a>
+      </mat-list-item>
+      </mat-nav-list>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mh-loader></mh-loader>
+      <mh-search-filter
+        (searchInput)="triggerChangeSearch($event)"
+        [screenWidth]="screenWidth"
+        [disabled] = "false"
+        [tooltip] = ""
+        [placeholder]="searchPlaceholder"
+        (toggleFilterSidenav)="start.toggle()">
+      </mh-search-filter>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -11,7 +11,6 @@ import { CardType } from '../../../../shared/utilities/enums';
   templateUrl: './note-card.component.html'
 })
 export class NoteCardComponent {
-
   isExpandCard = false;
   expandTitle = 'Expand';
   @Input() card: ICard<NoteResponse>;

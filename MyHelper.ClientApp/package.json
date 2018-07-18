@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "open": "ng serve --o --ssl 1",
+    "open": "ng serve --aot --o --ssl 1",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",

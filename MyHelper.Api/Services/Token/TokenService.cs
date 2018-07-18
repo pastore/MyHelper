@@ -42,11 +42,11 @@ namespace MyHelper.Api.Services.Token
             IEnumerable<KeyValuePair<object, object>> filteredClaims = keyValuePairs.Where(x => x.Key != null && x.Value != null);
 
             DateTime now = DateTime.Now;
-            DateTime expires = now.Add(TimeSpan.FromDays(_authOptions.Value.MinutesLifetime));
+            DateTime expires = now.Add(TimeSpan.FromMinutes(_authOptions.Value.MinutesLifetime));
 
             var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _authOptions.Value.Issuer,
-                audience: _authOptions.Value.Audience,
+                _authOptions.Value.Issuer,
+                _authOptions.Value.Audience,
                 notBefore: now,
                 claims: filteredClaims.Any() ? keyValuePairs.Select(x => new Claim(x.Key.ToString(), x.Value.ToString())) : null,
                 expires: expires,
@@ -65,7 +65,7 @@ namespace MyHelper.Api.Services.Token
             if (token == null)
                 throw new ArgumentNullException(nameof(token));
 
-            if (!IsTokenValid(token))
+            if (!IsTokenValid(token.Replace("Bearer ", string.Empty)))
                 throw new Exception("Token is invalid");
 
             var handler = new JwtSecurityTokenHandler();

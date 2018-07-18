@@ -31,7 +31,7 @@ namespace MyHelper.Api.Services.Account
             return await BaseInvokeAsync(async () =>
             {
                 var appUser = await _myHelperDbContext.AppUsers
-                    .FirstOrDefaultAsync(x => x.Username == request.Username);
+                    .FirstOrDefaultAsync(x => x.Username == request.UserName);
 
                 if (appUser == null || !HashPasswordHelper.Verify(appUser.Password, request.Password))
                     return AOBuilder.SetError<AuthorizationTokenResponse>("Username or password is incorrect");
@@ -53,12 +53,12 @@ namespace MyHelper.Api.Services.Account
         {
             return await BaseInvokeAsync(async () =>
             {
-                if (_myHelperDbContext.AppUsers.Any(x => x.Email == request.Email || x.Username == request.Username))
+                if (_myHelperDbContext.AppUsers.Any(x => x.Email == request.Email || x.Username == request.UserName))
                     return AOBuilder.SetError<AuthorizationTokenResponse>(Constants.Errors.UserAlreadyRegistered);
 
                 var appUser = new AppUser
                 {
-                    Username = request.Username,
+                    Username = request.UserName,
                     Email = request.Email,
                     Password = HashPasswordHelper.Hash(request.Password),
                     UserRole = EUserRole.User,
@@ -81,13 +81,13 @@ namespace MyHelper.Api.Services.Account
             }, request);
         }
 
-        #region -- private methods --
+        #region -- Private methods --
 
         private KeyValuePair<object, object>[] GetClaimsFromAppUser(AppUser appUser)
         {
-            return new KeyValuePair<object, object>[]
+            return new[]
             {
-                new KeyValuePair<object, object>(ClaimTypes.Role, EUserRole.User.GetName()),
+                new KeyValuePair<object, object>(ClaimTypes.Role, appUser.UserRole.GetName()),
                 new KeyValuePair<object, object>(ClaimTypes.Email, appUser.Email),
                 new KeyValuePair<object, object>(ClaimTypes.Name, appUser.Username),
                 new KeyValuePair<object, object>(ClaimTypes.NameIdentifier, appUser.Id)

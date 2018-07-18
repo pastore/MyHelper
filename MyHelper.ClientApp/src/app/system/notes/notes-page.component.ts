@@ -6,7 +6,7 @@ import { ICard } from '../../shared/models/base/i-card.model';
 import { CardType, FilterType } from '../../shared/utilities/enums';
 import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request.model';
-import { CardsPageComponent } from '../shared/components/cards-page/cards-page.component';
+import { BaseEditCardsComponent } from '../shared/components/base/base-edit-cards.component';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 import { Observable } from 'rxjs/Observable';
 
@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './notes-page.component.html'
 })
 export class NotesPageComponent
-  extends CardsPageComponent<NoteResponse, NoteFilterRequest>
+  extends BaseEditCardsComponent<ICard<NoteResponse>, NoteFilterRequest>
   implements OnInit {
 
   constructor(

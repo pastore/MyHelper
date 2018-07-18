@@ -6,11 +6,14 @@ import { SystemComponent } from './system.component';
 import { NotesPageComponent } from './notes/notes-page.component';
 import { TasksPageComponent } from './tasks/tasks-page.component';
 
+export const friends = './friends/friends.module#FriendsModule';
+
 const routes: Routes = [
   { path: '', component: SystemComponent, canActivate: [AuthGuard],
       children: [
         {path: 'notes', component: NotesPageComponent},
-        {path: 'tasks', component: TasksPageComponent}
+        {path: 'tasks', component: TasksPageComponent},
+        {path: 'friends', loadChildren: friends}
       ]
   }
 ];

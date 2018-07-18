@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MyHelper.Api.DAL.Context;
+using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
@@ -209,6 +210,21 @@ namespace MyHelper.Api.Services
                     return AOBuilder.SetError<TReturn>(ex.Message);
                 }
             }
+        }
+
+        protected IQueryable<T> FetchItems<T, TFr>(IQueryable<T> query, TFr fetchRequest) 
+            where TFr: IFetchRequest
+        {
+            if (fetchRequest.Offset.HasValue)
+            {
+                query = query.Skip(fetchRequest.Offset.Value);
+            }
+            if (fetchRequest.Limit.HasValue)
+            {
+                query = query.Take(fetchRequest.Limit.Value);
+            }
+
+            return query;
         }
 
         #region -- Private helpers --

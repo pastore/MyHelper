@@ -1,27 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using MyHelper.Api.Models.Response;
 using System.Linq;
 using System.Security.Claims;
-using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Token;
 
 namespace MyHelper.Api.Controllers
 {
     public abstract class BaseController: Controller
     {
+        private readonly ITokenService _tokenService;
+
+        protected BaseController(ITokenService tokenService)
+        {
+            _tokenService = tokenService;
+        }
+
         /// <summary>
         /// Gets the account identifier.
         /// </summary>
         /// <value>The account identifier.</value>
-        protected long AccountId
+        protected int AccountId
         {
             get
             {
                 //find claim for account Id
                 Claim accountClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 
+                string accessToken = HttpContext.GetTokenAsync(ClaimTypes.Name).Result;
+                string idToken = HttpContext.GetTokenAsync("id_token").Result;
+                var claims = _tokenService.GetClaims(HttpContext.Request.Headers["Authorization"]);
                 //parse
-                if (accountClaim == null || !long.TryParse(accountClaim.Value, out long accountId))
+                if (accountClaim == null || !int.TryParse(accountClaim.Value, out int accountId))
                     return 0;
 
                 return accountId;

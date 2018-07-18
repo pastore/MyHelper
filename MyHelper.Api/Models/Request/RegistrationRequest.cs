@@ -9,7 +9,7 @@ namespace MyHelper.Api.Models.Request
     public class RegistrationRequest
     {
         [Required(ErrorMessage = "Name cannot be empty")]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Email cannot be empty")]
         [EmailAddress(ErrorMessage = "Incorrect email")]

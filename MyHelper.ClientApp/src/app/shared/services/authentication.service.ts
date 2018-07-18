@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpClient,
+  HttpClient, HttpHeaders,
 } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AppUserViewModel } from '../models/user/app-user-view.model';
@@ -42,9 +42,9 @@ export class AuthenticationService extends BaseService {
     return this.sendRequest(RequestMethod.Post, ApiRoute.Login, loginRequest, null, null, this._handleResponse.bind(this));
   }
 
-  logout(): void {
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('token');
+  logout() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
   }
 
   createUser(registrationRequest: RegistrationRequest): Observable<boolean> {
