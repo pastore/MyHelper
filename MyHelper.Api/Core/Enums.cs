@@ -53,4 +53,10 @@ namespace MyHelper.Api.Core
         Weekly = 7,
         Monthly = 30
     }
+
+    public enum EFeedType
+    {
+        CreateNote = 1,
+        CreateMhTask = 2
+    }
 }

@@ -29,8 +29,8 @@
               <mh-note-card
                 *ngFor="let card of cards"
                 [card]="card"
-                (openEditCard)="openEditCard(null, $event)"
-                (deleteNote)="deleteNote($event)">
+                (deleteNote)="deleteNote($event)"
+                (openEditCard)="openEditCard(null, $event)">
               </mh-note-card>
             </ng-container>
           </ng-container>

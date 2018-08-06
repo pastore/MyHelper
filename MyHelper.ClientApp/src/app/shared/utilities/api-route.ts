@@ -4,6 +4,7 @@ export class ApiRoute {
   public static Registration = 'registration';
 
   public static System = 'system';
+  public static Feeds = 'feeds';
   public static Tasks = 'tasks';
   public static Notes = 'notes';
   public static Friends = 'friends';

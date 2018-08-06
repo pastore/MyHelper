@@ -1,0 +1,15 @@
+.card_feed_type {
+  background-color: #03a9f4;
+  color: #fff;
+  transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 24px;
+  align-items: center;
+  cursor: default;
+}
+
+.card_feed_name {
+  margin-bottom: 10px;
+  font-size: 14px !important;
+}

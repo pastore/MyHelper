@@ -1,0 +1,33 @@
+<mat-card class="card card--feed">
+  <div fxLayout="row" fxLayoutAlign=" center">
+    <div class="card_name">{{ card.data.appUserViewModel.userName }}</div>
+    <div class="card_buttons">
+      <button mat-icon-button [matMenuTriggerFor]="menuRef">
+        <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menuRef="matMenu">
+        <button mat-menu-item (click)="showDescription()">
+          {{ expandTitle }}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <div *ngIf="isExpandCard" class="card_name card_feed_name">{{ card.data.feedData.name }}</div>
+  <div *ngIf="isExpandCard" class="card_description rich_editor_wrapper" [innerHTML]="card.data.feedData.description">
+  </div>
+  <div fxLayout="row">
+    <div class="card_feed_type">
+        <ng-container [ngSwitch]="card.data.feedType">
+            <ng-container *ngSwitchCase="feedType.CreateNote">
+              Create Note
+            </ng-container>
+            <ng-container *ngSwitchCase="feedType.CreateMhTask">
+              Create Task
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="card_date">{{  card.data.createDate | date: 'MM/dd/yyyy' }}</div>
+  </div>
+</mat-card>
+

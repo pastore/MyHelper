@@ -11,15 +11,18 @@
             public const string EmailsAreNotEqual = "Token in email and in request are no equal.";
             public const string WrongRoleType = "Role type is wrong.";
 
+            //AppUser
+            public const string AppUserNotExists = "App User doesn't exist";
+
             // MhTask
-            public const string TaskNotExists = "Task doesn't exists";
+            public const string TaskNotExists = "Task doesn't exist";
             public const string TaskReShedule = "Re-shedule task can not be updated";
 
             // Note
-            public const string NoteNotExists = "Note doesn't exists";
+            public const string NoteNotExists = "Note doesn't exist";
 
             // Friend
-            public const string FriendNotExists = "Friend not exists";
+            public const string FriendNotExists = "Friend doesn't exist";
             public const string FriendNotApproved = "Friend not approved";
             public const string FriendAlreadyApproved = "Friend already approved";
             public const string FriendAlreadyRejected = "Friend already rejected";

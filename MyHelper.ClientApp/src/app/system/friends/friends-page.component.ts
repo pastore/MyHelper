@@ -11,7 +11,7 @@ export class FriendsPageComponent implements OnInit {
   searchPlaceholder = 'Search friends';
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.screenWidth =  window.innerWidth;
   }
 

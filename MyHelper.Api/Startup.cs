@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using GreenPipes;
+using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,18 +10,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyHelper.Api.Core.Mappings;
+using MyHelper.Api.Core.Messanging;
+using MyHelper.Api.Core.Messanging.Consumers;
 using MyHelper.Api.Core.Scheduler;
 using MyHelper.Api.DAL;
 using MyHelper.Api.DAL.Context;
+using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Options;
 using MyHelper.Api.Services.Account;
+using MyHelper.Api.Services.Feeds;
+using MyHelper.Api.Services.Friends;
 using MyHelper.Api.Services.MHTask;
-using MyHelper.Api.Services.Note;
+using MyHelper.Api.Services.Notes;
 using MyHelper.Api.Services.Tag;
 using MyHelper.Api.Services.Token;
-using System;
-using MyHelper.Api.Services.Friends;
 using MyHelper.Api.Services.User;
+using System;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace MyHelper.Api
@@ -35,6 +42,8 @@ namespace MyHelper.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region -- ASP Core  --
+
             services.AddApiVersioning(
                 o => o.ReportApiVersions = true
             );
@@ -53,11 +62,24 @@ namespace MyHelper.Api
                     });
                 });
             services.AddAutoMapper();
-            
+
+            #endregion
+
+            #region -- App settings --
+
             services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
+            services.Configure<AuthOptions>(Configuration.GetSection("RabitMQ"));
+
+            #endregion
+
+            #region -- Ef Core --
 
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<MyHelperContext>(options => options.UseNpgsql(Configuration["ConnectionStrings:Postgresql"]));
+
+            #endregion
+
+            #region -- Services -- 
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountService, AccountService>();
@@ -66,17 +88,26 @@ namespace MyHelper.Api
             services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IFeedService, FeedService>();
+
+            #endregion
+
+            #region -- Authentication --
 
             var sp = services.BuildServiceProvider();
             var tokenService = sp.GetService<ITokenService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    
+
                     options.TokenValidationParameters = tokenService.GetTokenValidationParameters();
                 });
 
+            #endregion
+
             services.AddScoped<DbSeeder>();
+
+            #region -- Automapper config --
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -85,8 +116,62 @@ namespace MyHelper.Api
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-            // scheduling mhtasks
+            #endregion
+
+            #region -- Scheduling mhtasks --
+
             services.AddSingleton<IHostedService, ScheduleTask>();
+
+            #endregion
+
+            #region -- Messanging --
+
+            services.AddScoped<FeedConsumer>();
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<FeedConsumer>();
+            });
+
+            services.AddSingleton(provider =>
+            {
+                var rabbitMqHost = Configuration["RabitMQ:Host"];
+                var username = Configuration["RabitMQ:UserName"];
+                var password = Configuration["RabitMQ:Password"];
+                var queueAddress = Configuration["RabitMQ:QueueAddress"];
+
+                var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    var host = cfg.Host(new Uri(rabbitMqHost), h =>
+                    {
+                        h.Username(username);
+                        h.Password(password);
+                    });
+
+                    cfg.ReceiveEndpoint(host, queueAddress, e =>
+                    {
+                        e.PrefetchCount = 16;
+                        e.UseMessageRetry(x => x.Interval(2, 100));
+
+                        e.LoadFrom(provider);
+
+                        EndpointConvention.Map<IFeedMessage>(e.InputAddress);
+                    });
+                });
+
+                busControl.Start();
+                return busControl;
+            });
+
+            services.AddSingleton<IPublishEndpoint>(provider => provider.GetRequiredService<IBusControl>());
+            services.AddSingleton<ISendEndpointProvider>(provider => provider.GetRequiredService<IBusControl>());
+            services.AddSingleton<IBus>(provider => provider.GetRequiredService<IBusControl>());
+
+            services.AddScoped(provider => provider.GetRequiredService<IBus>().CreateRequestClient<IFeedMessage>());
+
+            services.AddSingleton<IHostedService, BusService>();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

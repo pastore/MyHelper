@@ -52,7 +52,6 @@ namespace MyHelper.Api.Services.Friends
 
                 friends = FetchItems(friends, friendFilterRequest);
 
-
                 return AOBuilder.SetSuccess(friends.MapFriendsToViewModels(accountId));
             });
         }

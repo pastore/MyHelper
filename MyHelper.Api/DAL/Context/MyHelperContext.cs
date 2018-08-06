@@ -9,6 +9,8 @@ namespace MyHelper.Api.DAL.Context
 
         public DbSet<AppUser> AppUsers { get; set; }
 
+        public DbSet<Feed> Feeds { get; set; }
+
         public DbSet<Friend> Friends { get; set; }
 
         public DbSet<MhTask> MhTasks { get; set; }

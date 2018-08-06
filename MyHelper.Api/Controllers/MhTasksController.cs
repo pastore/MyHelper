@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.MHTask;
@@ -15,10 +17,12 @@ namespace MyHelper.Api.Controllers
     public class MhTasksController : BaseController 
     {
         private readonly IMhTaskService _mhTaskService;
+        private readonly IRequestClient<IFeedMessage> _requestClient;
 
-        public MhTasksController(IMhTaskService mhTaskService, ITokenService tokenService) : base(tokenService)
+        public MhTasksController(IMhTaskService mhTaskService, ITokenService tokenService, IRequestClient<IFeedMessage> requestClient) : base(tokenService)
         {
             _mhTaskService = mhTaskService;
+            _requestClient = requestClient;
         }
 
         [HttpGet]
@@ -39,7 +43,14 @@ namespace MyHelper.Api.Controllers
         [ProducesResponseType(typeof(ServerResponse), 200)]
         public async Task<ServerResponse> CreateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
         {
-            return AOResultToServerResponse(await _mhTaskService.CreateMhTaskAsync(mhTaskRequest));
+            return AOResultToServerResponse(await _mhTaskService.CreateMhTaskAsync(mhTaskRequest).ContinueWith(x =>
+            {
+                var request = _requestClient.Create(_mhTaskService.CreateMhTaskFeedMessage(mhTaskRequest, x.Result.Result));
+
+                request.GetResponse<FeedMessage>();
+
+                return x.Result;
+            }));
         }
 
         [HttpPut]

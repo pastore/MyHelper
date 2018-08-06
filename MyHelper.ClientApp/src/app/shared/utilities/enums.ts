@@ -19,7 +19,8 @@ export enum FriendRequestDirection {
 export enum CardType {
   Task = 1,
   Note = 2,
-  Friend = 3
+  Friend = 3,
+  Feed = 4
 }
 
 export enum FilterType {
@@ -45,7 +46,8 @@ export enum RequestMethod {
 export enum Icons {
   Note = 'note',
   Schedule = 'schedule',
-  People = 'people'
+  People = 'people',
+  Domain = 'domain'
 }
 
 export enum MhTaskStatus {
@@ -70,4 +72,9 @@ export enum MhTaskState {
   Current = 1,
   Delete = 2,
   ReSchedule = 3
+}
+
+export enum FeedType {
+  CreateNote = 1,
+  CreateMhTask = 2
 }

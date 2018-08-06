@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
 import { LoaderService } from '../../shared/loader/loader.service';
@@ -8,7 +8,6 @@ import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { NoteFilterRequest } from '../../shared/models/notes/note-filter-request.model';
 import { BaseEditCardsComponent } from '../shared/components/base/base-edit-cards.component';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'mh-notes-page',

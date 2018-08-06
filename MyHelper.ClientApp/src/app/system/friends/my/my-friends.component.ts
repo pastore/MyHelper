@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FriendViewModel } from '../../../shared/models/friend/friend-view.model';
 import { FriendFilterRequest } from '../../../shared/models/friend/friend-filter-request.model';
 import { BaseCardsComponent } from '../../shared/components/base/base-cards.component';

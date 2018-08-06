@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MyHelper.Api.Models.Request;
+﻿using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MyHelper.Api.Models.Messanging;
 
-namespace MyHelper.Api.Services.Note
+namespace MyHelper.Api.Services.Notes
 {
     public interface INoteService
     {
@@ -13,10 +12,12 @@ namespace MyHelper.Api.Services.Note
 
         Task<AOResult<NoteResponse>> GetNoteAsync(int accountId, long id);
 
-        Task<AOResult> CreateNoteAsync(NoteRequest noteRequest);
+        Task<AOResult<long>> CreateNoteAsync(NoteRequest noteRequest);
 
         Task<AOResult> UpdateNoteAsync(NoteRequest noteRequest);
 
         Task<AOResult> DeleteNoteAsync(long id);
+
+        FeedMessage CreateNoteFeedMessage(NoteRequest noteRequest, long sourceId);
     }
 }

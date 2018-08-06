@@ -8,6 +8,7 @@ import { TaskService } from '../services/task.service';
 import { LoaderService } from '../loader/loader.service';
 import { AppUserService } from '../services/app-user.service';
 import { FriendService } from '../services/friend.service';
+import { FeedService } from '../services/feed.service';
 
 @NgModule({
   declarations: []
@@ -24,7 +25,8 @@ export class SharedModule {
               TaskService,
               AppUserService,
               FriendService,
-              TagService
+              TagService,
+              FeedService
             ]
         };
     }

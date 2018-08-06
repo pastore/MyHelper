@@ -10,7 +10,6 @@ import { AuthenticationService } from '../../../../shared/services/authenticatio
 import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
 import { MatChipInputEvent } from '@angular/material';
 import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
-import { Validators } from '@angular/forms';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 import { EditCardEventType } from '../../../../shared/utilities/enums';
 import { isNotNullOrEmpty } from '../../../../shared/utilities/tools';

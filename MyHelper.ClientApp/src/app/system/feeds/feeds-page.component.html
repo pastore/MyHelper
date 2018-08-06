@@ -1,0 +1,25 @@
+<mat-sidenav-container>
+  <mat-sidenav class="cards_page_sidenav" #start [opened]="screenWidth >= 780" [mode]="(screenWidth >= 780) ? 'side' : 'over'">
+    <div class="cards_page_sidenav_wrapper">
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mh-loader></mh-loader>
+    <div class="cards_page_content" #cardList>
+        <div>
+          <ng-container *ngIf="!isLoading">
+            <ng-container *ngIf="cards.length > 0; else nocards">
+              <mh-feed-card
+                *ngFor="let card of cards"
+                [card]="card">
+              </mh-feed-card>
+            </ng-container>
+          </ng-container>
+        </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<ng-template #nocards>
+  <div class="no_cards">There are no feeds!</div>
+</ng-template>

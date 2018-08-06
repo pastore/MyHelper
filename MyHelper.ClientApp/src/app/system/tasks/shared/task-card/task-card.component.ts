@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ICard } from '../../../../shared/models/base/i-card.model';
 import { MhTaskResponse } from '../../../../shared/models/tasks/mh-task-response.model';
 import { MatDialog } from '@angular/material';
@@ -10,7 +10,7 @@ import { CardDeleteModel } from '../../../../shared/models/base/card-delete.mode
   selector: 'mh-task-card',
   templateUrl: './task-card.component.html'
 })
-export class TaskCardComponent implements OnInit {
+export class TaskCardComponent {
   mhTaskStates = MhTaskState;
   isExpandCard = false;
   expandTitle = 'Expand';
@@ -20,9 +20,6 @@ export class TaskCardComponent implements OnInit {
   @Output() deleteMhTask = new EventEmitter<number>();
 
   constructor(public dialog: MatDialog) { }
-
-  ngOnInit() {
-  }
 
   editCard() {
     this.openEditCard.emit(this.card.data);

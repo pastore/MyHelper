@@ -7,8 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
 using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.DAL.Context;
+using MyHelper.Api.Models.Feed;
+using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
+using Newtonsoft.Json;
 
 namespace MyHelper.Api.Services.MHTask
 {
@@ -48,7 +51,7 @@ namespace MyHelper.Api.Services.MHTask
             });
         }
 
-        public async Task<AOResult> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, MhTask parentMhTask = null)
+        public async Task<AOResult<long>> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, MhTask parentMhTask = null)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -97,7 +100,7 @@ namespace MyHelper.Api.Services.MHTask
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.CreateMhTask);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return AOBuilder.SetSuccess(mhTask.Id);
             }, mhTaskRequest);   
         }
 
@@ -196,6 +199,26 @@ namespace MyHelper.Api.Services.MHTask
 
                 return AOBuilder.SetSuccess();
             });
+        }
+
+        public FeedMessage CreateMhTaskFeedMessage(MhTaskRequest noteRequest, long sourceId)
+        {
+            var mhTaskFeedData = new MhTaskFeedData
+            {
+                SourceId = sourceId,
+                Name = noteRequest.Name,
+                Description = noteRequest.Description,
+                IsReccuring = noteRequest.IsRecurring
+            };
+            var mhTaskFeedDataJson = JsonConvert.SerializeObject(mhTaskFeedData);
+
+            return new FeedMessage()
+            {
+                AppUserId = noteRequest.AppUserId,
+                CreateDate = DateTime.Now,
+                FeedType = EFeedType.CreateMhTask,
+                FeedData = mhTaskFeedDataJson
+            };
         }
 
         #region -- Private methods --

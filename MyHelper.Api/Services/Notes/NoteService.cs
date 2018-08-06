@@ -7,10 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
+using MyHelper.Api.Models.Feed;
+using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
+using Newtonsoft.Json;
 
-namespace MyHelper.Api.Services.Note
+namespace MyHelper.Api.Services.Notes
 {
     public class NoteService: BaseService, INoteService
     {
@@ -30,7 +33,7 @@ namespace MyHelper.Api.Services.Note
 
                 query = FetchItems(query, noteFilterRequest);
 
-                return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<DAL.Entities.Note, NoteResponse>(x)).ToList());
+                return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<Note, NoteResponse>(x)).ToList());
             });
         }
 
@@ -43,15 +46,15 @@ namespace MyHelper.Api.Services.Note
                 if (note == null)
                     return AOBuilder.SetError<NoteResponse>(Constants.Errors.TaskNotExists);
 
-                return AOBuilder.SetSuccess(_mapper.Map<DAL.Entities.Note, NoteResponse>(note));
+                return AOBuilder.SetSuccess(_mapper.Map<Note, NoteResponse>(note));
             });
         }
 
-        public async Task<AOResult> CreateNoteAsync(NoteRequest noteRequest)
+        public async Task<AOResult<long>> CreateNoteAsync(NoteRequest noteRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = new DAL.Entities.Note
+                var note = new Note
                 {
                     Name = noteRequest.Name,
                     Description = noteRequest.Description,
@@ -59,7 +62,7 @@ namespace MyHelper.Api.Services.Note
                     AppUserId = noteRequest.AppUserId
                 };
 
-                _myHelperDbContext.Notes.Add(note);
+                await _myHelperDbContext.Notes.AddAsync(note);
 
                 if (noteRequest.TagIds.Any())
                 {
@@ -76,7 +79,7 @@ namespace MyHelper.Api.Services.Note
 
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return AOBuilder.SetSuccess(note.Id);
             }, noteRequest);
         }
 
@@ -84,7 +87,7 @@ namespace MyHelper.Api.Services.Note
         {
             return await BaseInvokeAsync(async () =>
             {
-                DAL.Entities.Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
+                Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
 
                 if (note == null)
                     return AOBuilder.SetError(Constants.Errors.NoteNotExists);
@@ -126,9 +129,28 @@ namespace MyHelper.Api.Services.Note
             });
         }
 
+        public FeedMessage CreateNoteFeedMessage(NoteRequest noteRequest, long sourceId)
+        {
+            var noteFeedData = new NoteFeedData
+            {
+                SourceId = sourceId,
+                Name = noteRequest.Name,
+                Description = noteRequest.Description
+            };
+            var noteFeedDataJson = JsonConvert.SerializeObject(noteFeedData);
+
+            return new FeedMessage()
+            {
+                AppUserId = noteRequest.AppUserId,
+                CreateDate = DateTime.Now,
+                FeedType = EFeedType.CreateNote,
+                FeedData = noteFeedDataJson
+            };
+        }
+
         #region -- Private methods --
 
-        private IQueryable<DAL.Entities.Note> FilterNotes(IQueryable<DAL.Entities.Note> query, NoteFilterRequest noteFilterRequest)
+        private IQueryable<Note> FilterNotes(IQueryable<Note> query, NoteFilterRequest noteFilterRequest)
         {
             if (noteFilterRequest.FromDate.HasValue)
             {

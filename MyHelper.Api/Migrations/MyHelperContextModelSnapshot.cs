@@ -16,7 +16,7 @@ namespace MyHelper.Api.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("MyHelper.Api.DAL.Entities.AppUser", b =>
@@ -39,6 +39,28 @@ namespace MyHelper.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers");
+                });
+
+            modelBuilder.Entity("MyHelper.Api.DAL.Entities.Feed", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AppUserData");
+
+                    b.Property<int>("AppUserId");
+
+                    b.Property<DateTime>("CreateDate");
+
+                    b.Property<string>("FeedData");
+
+                    b.Property<int>("FeedRank");
+
+                    b.Property<int>("FeedType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Feeds");
                 });
 
             modelBuilder.Entity("MyHelper.Api.DAL.Entities.Friend", b =>

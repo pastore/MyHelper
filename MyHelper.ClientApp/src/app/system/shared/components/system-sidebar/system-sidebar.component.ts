@@ -23,7 +23,8 @@ export class SystemSidebarComponent implements OnInit {
     const notes = new SidebarLink(ApiRoute.Notes, Icons.Note);
     const tasks = new SidebarLink(ApiRoute.Tasks, Icons.Schedule);
     const friends = new SidebarLink(ApiRoute.Friends, Icons.People);
+    const feeds = new SidebarLink(ApiRoute.Feeds, Icons.Domain);
 
-    this.sidebarLinks.push(... [notes, tasks, friends]);
+    this.sidebarLinks.push(... [feeds, notes, tasks, friends]);
   }
 }

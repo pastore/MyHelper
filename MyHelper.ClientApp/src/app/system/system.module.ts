@@ -3,6 +3,7 @@ import { SystemRoutingModule } from './system-routing.module';
 import { CoreModule } from '../shared/modules/core.module';
 import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
+import { FeedsModule } from './feeds/feeds.module';
 
 import { SystemComponent } from './system.component';
 import { SystemSidebarComponent } from './shared/components/system-sidebar/system-sidebar.component';
@@ -14,6 +15,7 @@ import { CardsDeleteModalComponent } from './shared/components/cards-delete-moda
     CoreModule,
     NotesModule,
     TasksModule,
+    FeedsModule,
     SystemRoutingModule
   ],
   declarations: [

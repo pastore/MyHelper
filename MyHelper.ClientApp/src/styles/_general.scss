@@ -38,6 +38,10 @@ body {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
+.bg-accent{
+  background: $color-accent;
+}
+
 @media (max-width: 959px){
   .mat-toolbar-row, .mat-toolbar-single-row{
     padding: 0 !important;
