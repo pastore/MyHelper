@@ -41,7 +41,7 @@ In future plan to make social network from one.
 1. Make sure that you in **MyHelper.ClientApp** folder
 2. Open cmd and type => npm install
 3. Add url your server to environment.ts file
-4. In cmd type ng server --o
+4. In cmd type npm run open
 
 **Contribution**
 ----------------
