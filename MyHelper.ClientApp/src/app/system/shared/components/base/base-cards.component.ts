@@ -1,4 +1,4 @@
-import { OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 

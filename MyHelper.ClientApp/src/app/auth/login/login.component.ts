@@ -19,7 +19,7 @@ export class LoginComponent {
           this.authService.login(this.model)
             .subscribe(success => {
                 if (success) {
-                    this.router.navigateByUrl('/notes');
+                    this.router.navigateByUrl('/feeds');
                 } else {
 
                 }

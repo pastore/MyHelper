@@ -20,7 +20,7 @@ export class RegistrationComponent {
         this.authService.createUser(this.model)
           .subscribe(success => {
               if (success) {
-                this.router.navigateByUrl('/notes');
+                this.router.navigateByUrl('/feeds');
               } else {
 
               }

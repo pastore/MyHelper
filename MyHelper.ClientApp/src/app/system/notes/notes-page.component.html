@@ -2,7 +2,9 @@
     <mat-sidenav class="cards_page_sidenav" #start [opened]="screenWidth >= 780" [mode]="(screenWidth >= 780) ? 'side' : 'over'">
       <div class="cards_page_sidenav_wrapper">
         <button class="mat-primary cards_page_create_button" mat-raised-button
-          (click)="openEditCard((screenWidth >= 780) ? null : start, null)">Add note</button>
+          (click)="openEditCard((screenWidth >= 780) ? null : start, null)">
+          Add note
+        </button>
         <mh-wrapper-filter
           [matTooltip]="!isCardsVisible ? tooltip : ''"
           [ngClass]="{'pointer-events-none': !isCardsVisible}"

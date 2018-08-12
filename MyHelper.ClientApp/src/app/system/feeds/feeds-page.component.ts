@@ -6,6 +6,7 @@ import { FeedService } from '../../shared/services/feed.service';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 import { LoaderService } from '../../shared/loader/loader.service';
 import { CardType } from '../../shared/utilities/enums';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'mh-feeds-page',
@@ -15,6 +16,8 @@ export class FeedsPageComponent
 extends BaseCardsComponent<ICard<FeedResponse>, null>
  implements OnInit {
   screenWidth: number;
+  firstLoadDate: Date;
+  newCards: ICard<FeedResponse>[];
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -32,23 +35,48 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
   ngOnInit() {
     super.ngOnInit();
     this.screenWidth = window.innerWidth;
+    this.newCards = [];
     this._loaderService.loaderState
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
+    Observable.timer(60000).subscribe(() => {
+      this._feedService.getFeeds().subscribe((feeds: FeedResponse[]) => {
+        const items = feeds
+        .filter((x) => {
+          return x.createDate > this.firstLoadDate;
+        })
+        .map((x) => {
+          return { data : x, cardType : CardType.Feed };
+        });
+        this.newCards = items.concat(...this.newCards);
+      });
+    });
+  }
+
+  showNewFeeds() {
+    this.cards = this.newCards.concat(...this.cards);
+    this.newCards = [];
+    const [first] = this.cards;
+    this.firstLoadDate = first.data.createDate;
   }
 
   protected getCards() {
     this._feedService.getFeeds()
     .subscribe((feeds: FeedResponse[]) => {
-      this.cards = feeds.map((x) => {
+      this.cards = feeds.map((x, i) => {
+        if (i === 0) {
+          this.firstLoadDate = x.createDate;
+        }
         return { data : x, cardType : CardType.Feed };
       });
     });
   }
+
   protected handleScroll() {
 
   }
+
   protected detectChanges() {
     this._cdr.detectChanges();
   }

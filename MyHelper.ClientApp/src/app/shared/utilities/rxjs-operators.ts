@@ -9,3 +9,4 @@ import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/timer';

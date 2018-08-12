@@ -6,16 +6,23 @@
   <mat-sidenav-content>
     <mh-loader></mh-loader>
     <div class="cards_page_content" #cardList>
-        <div>
-          <ng-container *ngIf="!isLoading">
-            <ng-container *ngIf="cards.length > 0; else nocards">
-              <mh-feed-card
-                *ngFor="let card of cards"
-                [card]="card">
-              </mh-feed-card>
-            </ng-container>
+      <button
+        *ngIf="newCards.length > 0"
+         class="mat-primary"
+         (click)="showNewFeeds()"
+         mat-raised-button>
+          {{ newCards.length }} new feeds
+      </button>
+      <div>
+        <ng-container *ngIf="!isLoading">
+          <ng-container *ngIf="cards.length > 0; else nocards">
+            <mh-feed-card
+              *ngFor="let card of cards"
+              [card]="card">
+            </mh-feed-card>
           </ng-container>
-        </div>
+        </ng-container>
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

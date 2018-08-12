@@ -10,7 +10,6 @@ import { IServerResponse } from '../models/base/server-response.model';
 import '../utilities/rxjs-operators';
 import { RequestMethod } from '../utilities/enums';
 import { environment } from '../../../environments/environment';
-import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class BaseService {
