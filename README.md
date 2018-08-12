@@ -19,7 +19,7 @@ In future plan to make social network from one.
 5. Nginx
 6. Linux
 7. Entty Framework Core
-8. RabbitMQ (in process)
+8. RabbitMQ and MassTransit
 9. Docker (planned)
 
 **Quick start**
@@ -31,8 +31,7 @@ In future plan to make social network from one.
 3. Clone or fork repository
 4. Make sure that you in **MyHelper.API** folder
 5. Open cmd and type => dotnet restore
-6. Install database , in cmd type => 
-    - dotnet ef migrations add name
+6. Update database , in cmd type => 
     - dotnet ef database update
 7. In cmd type => dotnet run 
 
@@ -41,7 +40,14 @@ In future plan to make social network from one.
 1. Make sure that you in **MyHelper.ClientApp** folder
 2. Open cmd and type => npm install
 3. Add url your server to environment.ts file
-4. In cmd type ng server --o
+4. In cmd type npm run open
+
+**RabbitMQ and MassTransit**
+
+1. Make sure that Erlang is installed
+2. Make sure that RabbitMQ is installed
+3. Install MassTransit.RabbitMQ =>
+    - PM> Install-Package MassTransit.RabbitMQ.
 
 **Contribution**
 ----------------
