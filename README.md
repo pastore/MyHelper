@@ -24,14 +24,14 @@ In future plan to make social network from one.
 
 **Quick start**
 ----------------
-1) **By Docker**
+1) **Docker**
    1. Make sure that Docker is installed
    2. Open terminal and type 
         - docker-compose build
         - docker-compose run start-dependencies
         - docker-compose up
 
-2) **By manually**
+2) **Manually**
 
     **ASP.NET Core**
 
