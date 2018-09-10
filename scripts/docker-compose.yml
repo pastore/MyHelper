@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+    start-dependencies:
+        image: dadarek/wait-for-dependencies
+        depends_on:
+            - rabbitmq
+        command: rabbitmq:5672
+        networks:
+            - network
+
+    myhelper.clientapp:
+        environment:
+            - COMPOSE_CONVERT_WINDOWS_PATHS=1
+        build: ../MyHelper.ClientApp/.
+        image: myhelper.clientapp
+        ports:
+            - '4200:4200'
+        volumes:
+            - '../MyHelper.ClientApp/src:/clientApp/src'
+        networks:
+            - network
+
+    postgres:
+        image: 'postgres'
+        environment:
+            POSTGRES_USER: 'postgres'
+            POSTGRES_PASSWORD: 't906090'
+        ports:
+            - '5432:5432'
+        networks:
+            - network
+
+    myhelper.api:
+        build: ../MyHelper.Api/.
+        image: myhelper.api
+        ports:
+            - '5000:5000'
+        links:
+            - postgres
+            - rabbitmq
+        networks:
+            - network
+                
+    rabbitmq:
+        hostname: rabbitmq
+        image: rabbitmq:latest
+        environment:
+            RABBITMQ_DEFAULT_USER: guest    
+            RABBITMQ_DEFAULT_PASS: guest
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        networks:
+            - network
+
+networks:
+  network:
+    driver: bridge

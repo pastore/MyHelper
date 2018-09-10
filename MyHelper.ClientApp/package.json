@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "open": "ng serve --aot --o --ssl 1",
+    "docker": "ng serve --env=docker --aot --ssl 1",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",

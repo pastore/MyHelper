@@ -39,5 +39,10 @@
             public const string UpdateStatusMhTask = "Update status task";
             public const string DeleteMhTask = "Delete task";
         }
+
+        public static class HostEnvironment
+        {
+            public const string Docker = "Docker";
+        }
     }
 }

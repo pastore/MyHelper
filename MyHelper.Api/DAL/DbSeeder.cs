@@ -1,23 +1,31 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Hosting;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Helpers;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
+using System;
+using System.Linq;
 
 namespace MyHelper.Api.DAL
 {
     public class DbSeeder
     {
         private readonly MyHelperContext _myHelperDbContext;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public DbSeeder(MyHelperContext dbContext)
+        public DbSeeder(MyHelperContext dbContext, IHostingEnvironment hostingEnvironment)
         {
             _myHelperDbContext = dbContext;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public void SeedDb()
         {
+            if (_hostingEnvironment.IsEnvironment(Constants.HostEnvironment.Docker))
+            {
+                _myHelperDbContext.Database.EnsureCreated();
+            }
+
             using (var transaction = _myHelperDbContext.Database.BeginTransaction())
             {
                 try
@@ -55,7 +63,7 @@ namespace MyHelper.Api.DAL
                         };
 
                         _myHelperDbContext.AddRange(
-                           new NoteTag { Note = note, Tag = tags[0]},
+                           new NoteTag { Note = note, Tag = tags[0] },
                            new NoteTag { Note = note, Tag = tags[1] }
                         );
                         _myHelperDbContext.SaveChanges();
