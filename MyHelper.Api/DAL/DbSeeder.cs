@@ -34,9 +34,9 @@ namespace MyHelper.Api.DAL
                     {
                         var user = new AppUser
                         {
-                            Email = "pastorednepr@gmail.com",
+                            Email = "admin@admin.com",
                             Username = "admin",
-                            Password = HashPasswordHelper.Hash("Pastore567"),
+                            Password = HashPasswordHelper.Hash("admin"),
                             UserRole = EUserRole.Admin,
                             CreatedDate = DateTime.Now
                         };
