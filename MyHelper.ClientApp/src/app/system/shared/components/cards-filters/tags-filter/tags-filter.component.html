@@ -4,7 +4,7 @@
       class="color-black"
       *ngFor="let tag of selectedTags"
       [removable]="removable"
-      (remove)="removeTag(tag)">
+      (removed)="removeTag(tag)">
       {{tag.name}}
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>

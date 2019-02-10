@@ -1,4 +1,4 @@
-FROM node
+FROM node:carbon
 
 RUN mkdir -p /clientApp
 

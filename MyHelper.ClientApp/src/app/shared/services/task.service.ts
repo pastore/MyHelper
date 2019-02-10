@@ -6,7 +6,8 @@ import {
 import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
 import { ApiRoute } from '../utilities/api-route';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { RequestMethod } from '../utilities/enums';
 import { MhTaskFilterRequest } from '../models/tasks/mh-task-filter-request.model';
 import { MhTaskResponse } from '../models/tasks/mh-task-response.model';
@@ -31,11 +32,11 @@ export class TaskService extends BaseService {
       this._loaderService.show();
     }
     return this.sendRequest<MhTaskResponse[]>(RequestMethod.Get, ApiRoute.Tasks, null, headers, searchParams)
-    .finally(() => {
+    .pipe(finalize(() => {
       if (isLoader) {
         this._loaderService.hide();
       }
-    });
+    }));
   }
 
   addTask(mhTask: MhTaskRequest): Observable<boolean> {

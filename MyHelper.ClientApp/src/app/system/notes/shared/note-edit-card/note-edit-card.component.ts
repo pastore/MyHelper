@@ -3,8 +3,8 @@ import { TagService } from '../../../../shared/services/tag.service';
 import { NoteService } from '../../../../shared/services/note.service';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import '../../../../shared/utilities/rxjs-operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
@@ -138,8 +138,11 @@ export class NoteEditCardComponent implements OnInit {
   }
 
   private _subscribeChangeTags() {
-    this.reactiveTags = this.tagCtrl.valueChanges
-      .startWith(null)
-      .map(val => this._selectTagsByName(val));
+    this.reactiveTags = this.tagCtrl
+    .valueChanges
+    .pipe(
+      startWith(null),
+      map(val => this._selectTagsByName(val))
+    );
   }
 }

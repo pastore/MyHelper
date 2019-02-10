@@ -7,7 +7,8 @@ import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
 import { ApiRoute } from '../utilities/api-route';
 import { NoteResponse } from '../models/notes/note-response.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { NoteRequest } from '../models/notes/note-request.model';
 import { NoteFilterRequest } from '../models/notes/note-filter-request.model';
 import { RequestMethod } from '../utilities/enums';
@@ -31,11 +32,11 @@ export class NoteService extends BaseService {
       this._loaderService.show();
     }
     return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, headers, searchParams)
-    .finally(() => {
+    .pipe(finalize(() => {
       if (isLoader) {
         this._loaderService.hide();
       }
-    });
+    }));
   }
 
   addNote(note: NoteRequest): Observable<boolean> {

@@ -3,14 +3,13 @@ import { TagService } from '../../../../shared/services/tag.service';
 import { TaskService } from '../../../../shared/services/task.service';
 import { MhTaskResponse } from '../../../../shared/models/tasks/mh-task-response.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import '../../../../shared/utilities/rxjs-operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 import { MhTaskRequest } from '../../../../shared/models/tasks/mh-task-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
 import { MatChipInputEvent } from '@angular/material';
 import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
-import { Validators } from '@angular/forms';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 import { EditCardEventType, ScheduleMhTaskType, MhTaskVisibleType } from '../../../../shared/utilities/enums';
 import { ScheduleMhTaskViewModel } from '../../../../shared/models/tasks/schedule-mh-task-view.model';
@@ -152,8 +151,11 @@ export class TaskEditCardComponent implements OnInit {
   }
 
   private _subscribeChangeTags() {
-    this.reactiveTags = this.tagCtrl.valueChanges
-      .startWith(null)
-      .map(val => this._selectTagsByName(val));
+    this.reactiveTags = this.tagCtrl
+      .valueChanges
+      .pipe(
+        startWith(null),
+        map(val => this._selectTagsByName(val))
+      );
   }
 }

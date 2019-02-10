@@ -1,3 +1,6 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
@@ -5,9 +8,7 @@ import {
   HttpParams,
   HttpErrorResponse
  } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { IServerResponse } from '../models/base/server-response.model';
-import '../utilities/rxjs-operators';
 import { RequestMethod } from '../utilities/enums';
 import { environment } from '../../../environments/environment';
 
@@ -34,16 +35,16 @@ export class BaseService {
       method,
       this._generateUrl(route),
       { body: data, headers: headers, params: params }
-    )
-    .map((response: IServerResponse) => {
-      const body = response;
-      return handleResponse
-        ? handleResponse(body) : body.isSuccess
-        ? (body.result ? body.result : body.isSuccess) : Observable.throw(body.message);
-    })
-    .catch((error: HttpErrorResponse) => {
-      return Observable.throw(error.message);
-    });
+    ).pipe(
+      map((response: IServerResponse) => {
+        const body = response;
+        return handleResponse
+          ? handleResponse(body) : body.isSuccess
+          ? (body.result ? body.result : body.isSuccess) : observableThrowError(body.message);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return observableThrowError(error.message);
+    }));
   }
 
   protected generateSearchParams<T>(filter: T): HttpParams {

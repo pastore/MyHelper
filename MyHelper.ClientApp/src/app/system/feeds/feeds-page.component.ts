@@ -6,7 +6,7 @@ import { FeedService } from '../../shared/services/feed.service';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 import { LoaderService } from '../../shared/loader/loader.service';
 import { CardType } from '../../shared/utilities/enums';
-import { Observable } from 'rxjs/Observable';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'mh-feeds-page',
@@ -40,7 +40,7 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
-    Observable.timer(60000).subscribe(() => {
+    timer(60000).subscribe(() => {
       this._feedService.getFeeds().subscribe((feeds: FeedResponse[]) => {
         const items = feeds
         .filter((x) => {
@@ -74,7 +74,7 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
   }
 
   protected handleScroll() {
-
+    // TODO
   }
 
   protected detectChanges() {

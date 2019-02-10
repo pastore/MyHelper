@@ -2,9 +2,8 @@ import {
   HttpClient,
   HttpHeaders
  } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import '../utilities/rxjs-operators';
+import { Observable ,  ReplaySubject } from 'rxjs';
+import { map, share, mergeMap, skipWhile } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
 import { IServerResponse } from '../models/base/server-response.model';
 import { environment } from '../../../environments/environment';
@@ -40,8 +39,10 @@ export abstract class DataAPIService<T> {
     this.httpClient.get(this._generateUrl(this.apiUrl), {
       headers: this.headers
     })
-    .map(this.handleData.bind(this))
-    .share()
+    .pipe(
+      map(this.handleData.bind(this)),
+      share()
+    )
     .subscribe((data: T[]) => {
       this.cacheIsDirty = false;
       this.cache.next(data);
@@ -56,10 +57,12 @@ export abstract class DataAPIService<T> {
       this._generateUrl(this.apiUrl),
       data,
       { headers: this.headers })
-    .share()
-    .flatMap(() => {
-      return this.get().skipWhile(() => this.cacheIsDirty);
-    });
+    .pipe(
+      share(),
+      mergeMap(() => {
+        return this.get().pipe(skipWhile(() => this.cacheIsDirty));
+      })
+    );
   }
 
   protected abstract handleData(res: IServerResponse): T[];

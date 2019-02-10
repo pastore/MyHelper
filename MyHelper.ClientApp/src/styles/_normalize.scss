@@ -13,37 +13,41 @@ a{
 
 // fix error input form field
 mat-form-field.mat-form-field-invalid {
-    .mat-input-placeholder {
-        color: $color-primary;
+    .mat-form-field-label {
+        color: $color-primary !important;
 
         .mat-form-field-required-marker {
-            color: $color-primary;
+            color: $color-primary !important;
         }
 
     }
 
-    .mat-input-underline {
-        border-top-width: 1px;
-        border-color: $color-primary;
+    .mat-form-field-underline {
+        border-top-width: 1px !important;
+        border-color: $color-primary !important;
     }
 
-    .mat-input-ripple {
-        background-color: $color-primary;
+    .mat-form-field-ripple {
+        background-color: $color-primary !important;
     }
 }
 
 .mat-form-field-wrapper {
-    padding-bottom: 2px;
+    padding-bottom: 2px !important;
 }
 
 .mat-form-field-underline {
-    bottom: 0;
+    bottom: 0 !important;
+}
+
+.mat-drawer-side {
+  border: none !important;
 }
 
 // fix autofill password
 mat-form-field {
     .mat-input-element[type=password]:-webkit-autofill {
-        &+ .mat-input-placeholder-wrapper {
+        &+ .mat-form-field-label-wrapper {
             label:not(.md-no-float) {
                 transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
             }

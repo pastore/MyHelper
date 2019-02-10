@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
 import { LoaderService } from '../loader/loader.service';
@@ -27,11 +28,11 @@ export class FriendService extends BaseService {
       this._loaderService.show();
     }
     return this.sendRequest<AppUserViewModel[]>(RequestMethod.Get, route, null, headers, searchParams)
-    .finally(() => {
+    .pipe(finalize(() => {
       if (isLoader) {
         this._loaderService.hide();
       }
-    });
+    }));
   }
 
   inviteFriend(personId): Observable<boolean> {

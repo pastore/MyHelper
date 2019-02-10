@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Input , Output, ChangeDetectorRef, AfterViewChecked  } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { TagService } from '../../../../../shared/services/tag.service';
 import { AuthenticationService } from '../../../../../shared/services/authentication.service';
@@ -83,7 +84,9 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
 
   private _subscribeChangeTags() {
     this.reactiveTags = this.tagCtrl.valueChanges
-      .startWith(null)
-      .map(val => this._selectTagsByName(val));
+    .pipe(
+      startWith(null),
+      map(val => this._selectTagsByName(val))
+    );
   }
 }

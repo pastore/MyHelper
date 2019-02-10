@@ -1,6 +1,7 @@
 import { OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { fromEvent, pipe } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 export abstract class BaseCardsComponent<T_Card, T_Filter> implements OnInit, AfterViewInit, AfterViewChecked {
   cards: T_Card[] = [];
@@ -14,8 +15,8 @@ export abstract class BaseCardsComponent<T_Card, T_Filter> implements OnInit, Af
 
   ngAfterViewInit(): void {
     this.getCards();
-    Observable.fromEvent(this.cardList.nativeElement, 'scroll')
-    .debounceTime(50)
+    fromEvent(this.cardList.nativeElement, 'scroll')
+    .pipe(debounceTime(50))
       .subscribe((result: Event) => {
         const nativeCardList = result.srcElement;
         if ((nativeCardList.scrollHeight - nativeCardList.scrollTop) <= nativeCardList.clientHeight) {

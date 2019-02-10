@@ -1,13 +1,18 @@
 :host /deep/  {
-  .mat-input-infix{
+  .mat-form-field-infix{
     width: auto;
   }
-
   .mat-chip{
     display: inline-flex !important;
+    width: auto !important;
   }
   .mat-form-field{
     width: 100%;
+  }
+  .mat-chip-list-wrapper {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: baseline !important;
   }
 }
 

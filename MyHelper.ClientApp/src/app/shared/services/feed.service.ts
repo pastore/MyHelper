@@ -6,7 +6,8 @@ import {
 import { BaseService } from './base.service';
 import { AuthenticationService } from './authentication.service';
 import { ApiRoute } from '../utilities/api-route';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { RequestMethod } from '../utilities/enums';
 import { LoaderService } from '../loader/loader.service';
 import { FeedResponse } from '../models/feeds/feed-response.model';
@@ -28,11 +29,11 @@ export class FeedService extends BaseService {
       this._loaderService.show();
     }
     return this.sendRequest<FeedResponse[]>(RequestMethod.Get, ApiRoute.Feeds, null, headers, null)
-    .finally(() => {
+    .pipe(finalize(() => {
       if (isLoader) {
         this._loaderService.hide();
       }
-    });
+    }));
   }
 
   private _generateAuthHeaders(): HttpHeaders {
