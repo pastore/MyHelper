@@ -11,8 +11,8 @@ import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
 import { MatChipInputEvent } from '@angular/material';
 import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
-import { EditCardEventType } from '../../../../shared/utilities/enums';
 import { isNotNullOrEmpty } from '../../../../shared/utilities/tools';
+import { Entity } from '../../../../shared/models/base/entity.model';
 
 @Component({
   selector: 'mh-note-edit-card',
@@ -27,7 +27,7 @@ export class NoteEditCardComponent implements OnInit {
   editCardModel: NoteResponse;
   isTagsSelected = false;
   @Input() originalEditCardModel: NoteResponse;
-  @Output() closeEditCard = new EventEmitter<EditCardEventType>();
+  @Output() closeEditCard = new EventEmitter<Entity>();
 
   constructor(
     private _noteService: NoteService,
@@ -46,7 +46,7 @@ export class NoteEditCardComponent implements OnInit {
   }
 
   onCancel() {
-    this.closeEditCard.emit(EditCardEventType.Cancel);
+    this.closeEditCard.emit(null);
   }
 
   onSave(editCardForm: FormGroup) {
@@ -62,10 +62,11 @@ export class NoteEditCardComponent implements OnInit {
 
       this._noteService[method](noteRequest)
         .subscribe(x => {
-          this.closeEditCard.emit(EditCardEventType.Save);
+          this.closeEditCard.emit(this.editCardModel);
         });
     }
   }
+
   addTag(event: MatChipInputEvent) {
     const input = event.input;
     const value = event.value;

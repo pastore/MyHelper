@@ -1,14 +1,16 @@
 import { OnInit, HostListener, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { EditCardEventType } from '../../../../shared/utilities/enums';
 import { FilterItem } from '../../../../shared/models/base/filter-item.model';
 import { BaseCardsComponent } from './base-cards.component';
+import { ICard } from '../../../../shared/models/base/i-card.model';
+import { Entity } from '../../../../shared/models/base/entity.model';
+import { timer } from 'rxjs';
 
-export abstract class BaseEditCardsComponent<T_Card, T_Filter>
+export abstract class BaseEditCardsComponent<T_Card extends ICard<Entity>, T_Filter>
  extends BaseCardsComponent<T_Card, T_Filter>
  implements OnInit, AfterViewInit, AfterViewChecked {
   filterItems: FilterItem[];
-  editCardModel: T_Card;
+  editCardModel: Entity;
   isCardsVisible = true;
   screenWidth: number;
   searchPlaceholder: string;
@@ -34,20 +36,26 @@ export abstract class BaseEditCardsComponent<T_Card, T_Filter>
     super.ngAfterViewChecked();
   }
 
-  openEditCard(start: MatSidenav, card: T_Card) {
+  openEditCard(start: MatSidenav, card: Entity) {
     this.editCardModel = card ? card : null;
     this.isCardsVisible = false;
     this.setTooltip();
     this.toggleSideNav(start);
   }
 
-  closeEditCard(editCardEventType: EditCardEventType) {
-    if (editCardEventType === EditCardEventType.Save) {
-      this.getCards();
+  closeEditCard(editCard: Entity) {
+    if (editCard) {
+      const cardIndex = this.cards.findIndex((x) => x.data.id === editCard.id);
+      if (cardIndex >= 0) {
+        this.cards[cardIndex].data = editCard;
+      }
     }
 
     this.isCardsVisible = true;
     this.setTooltip();
+    timer(1).subscribe(() => {
+      this.scrollTo(this.editCardModel.id);
+    });
   }
 
   triggerChangeWrapFilter(wrapFilter, start) {
@@ -67,4 +75,9 @@ export abstract class BaseEditCardsComponent<T_Card, T_Filter>
   }
 
   protected abstract setFilterItems();
+
+  private scrollTo(cardId: number) {
+    const element = document.getElementById(`card_${cardId}`) as HTMLElement;
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
 }

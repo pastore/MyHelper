@@ -11,9 +11,10 @@ import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
 import { MatChipInputEvent } from '@angular/material';
 import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
-import { EditCardEventType, ScheduleMhTaskType, MhTaskVisibleType } from '../../../../shared/utilities/enums';
+import { ScheduleMhTaskType, MhTaskVisibleType } from '../../../../shared/utilities/enums';
 import { ScheduleMhTaskViewModel } from '../../../../shared/models/tasks/schedule-mh-task-view.model';
 import { arrayFromEnum, isNotNullOrEmpty } from '../../../../shared/utilities/tools';
+import { Entity } from '../../../../shared/models/base/entity.model';
 
 @Component({
   selector: 'mh-task-edit-card',
@@ -30,7 +31,7 @@ export class TaskEditCardComponent implements OnInit {
   editCardModel: MhTaskResponse;
   isTagsSelected = false;
   @Input() originalEditCardModel: MhTaskResponse;
-  @Output() closeEditCard = new EventEmitter<EditCardEventType>();
+  @Output() closeEditCard = new EventEmitter<Entity>();
 
   constructor(
     private _taskService: TaskService,
@@ -55,7 +56,7 @@ export class TaskEditCardComponent implements OnInit {
   }
 
   onCancel() {
-    this.closeEditCard.emit(EditCardEventType.Cancel);
+    this.closeEditCard.emit(null);
   }
 
   onSave(editCardForm: FormGroup) {
@@ -75,7 +76,7 @@ export class TaskEditCardComponent implements OnInit {
 
       this._taskService[method](mhTaskRequest)
         .subscribe(x => {
-          this.closeEditCard.emit(EditCardEventType.Save);
+          this.closeEditCard.emit(this.editCardModel);
         });
     }
   }
