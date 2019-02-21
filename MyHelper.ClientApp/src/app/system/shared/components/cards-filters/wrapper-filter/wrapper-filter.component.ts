@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FilterType } from '../../../../../shared/utilities/enums';
 import { FilterItem } from '../../../../../shared/models/base/filter-item.model';
+import { stringToKeyValue } from '@angular/flex-layout/extended/typings/style/style-transforms';
 
 @Component({
   selector: 'mh-wrapper-filter',
@@ -25,8 +26,8 @@ export class WrapperFilterComponent implements OnInit {
       case FilterType.TagsFilter:
         this.filterRequest['tagIds'] = eventItem.length > 0 ? eventItem : null;
         break;
-      case FilterType.TagsFilter:
-        this.filterRequest[filterItem.placeholder + 'Date'] = eventItem.value.toISOString();
+      case FilterType.DateTimeFilter:
+        this.filterRequest[filterItem.placeholder + 'Date'] = eventItem.value ? eventItem.value.toISOString() : '';
         break;
     }
     this.updateWrapFilter.emit(this.filterRequest);
