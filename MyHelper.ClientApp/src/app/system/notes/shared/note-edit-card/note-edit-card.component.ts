@@ -90,6 +90,7 @@ export class NoteEditCardComponent implements OnInit {
         sub.unsubscribe();
       });
     }
+
     if (input) {
       input.value = '';
     }

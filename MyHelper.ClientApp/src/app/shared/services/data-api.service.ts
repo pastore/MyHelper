@@ -17,7 +17,7 @@ export abstract class DataAPIService<T> {
   private headers: HttpHeaders;
   private _domain = environment.domain;
   private _routePrefix = 'api';
-  private defaultApiVersion = 'v1';
+  private _defaultApiVersion = 'v1';
 
   protected get data(): Observable<T[]> {
     if (this.isPristine || this.cacheIsDirty) {
@@ -67,7 +67,7 @@ export abstract class DataAPIService<T> {
 
   protected abstract handleData(res: IServerResponse): T[];
 
-  private _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
+  private _generateUrl(route: string, apiVersion: string = this._defaultApiVersion): string {
     return this._domain + '/' + this._routePrefix + '/' + apiVersion + '/' + route;
   }
 

@@ -4,7 +4,6 @@ export function asyncRequiredTagsValidator(control: FormControl): any {
   const that = this;
 
   return new Promise(resolve => {
-  // debugger;
    if ( that.editCardModel.tags.length > 0 ) {
     resolve(null);
     } else {
