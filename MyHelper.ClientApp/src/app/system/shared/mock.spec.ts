@@ -3,6 +3,7 @@ import { AppUserViewModel } from '../../shared/models/user/app-user-view.model';
 import { UserRole } from '../../shared/utilities/enums';
 import { TagViewModel } from '../../shared/models/tags/tag-view.model';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
+import { MatChipInputEvent } from '@angular/material';
 
 const mockAppUserViewModel: AppUserViewModel = {
   id: 1,
@@ -49,10 +50,16 @@ export let mockNoteService = {
 
 export let mockTagService = {
   tags: obsevableOf(mockTags),
-  createTag: jasmine.createSpy('createTag').and.returnValue(obsevableOf(mockTags)),
+  createTag: () => obsevableOf(mockTags),
 };
-
 
 export let mockAuthenticationService = {
   currentUser: mockAppUserViewModel
 };
+
+export class MatChipInputEventMock implements MatChipInputEvent {
+  input: HTMLInputElement;
+  value: string;
+}
+
+export let spyMatDialog = jasmine.createSpyObj('MatDialog', ['open']);

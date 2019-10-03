@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { TagService } from '../../../../shared/services/tag.service';
 import { NoteService } from '../../../../shared/services/note.service';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
@@ -18,7 +18,7 @@ import { Entity } from '../../../../shared/models/base/entity.model';
   selector: 'mh-note-edit-card',
   templateUrl: './note-edit-card.component.html'
 })
-export class NoteEditCardComponent implements OnInit {
+export class NoteEditCardComponent implements OnInit, OnDestroy {
   removable = true;
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;
@@ -26,6 +26,7 @@ export class NoteEditCardComponent implements OnInit {
   tagCtrl: FormControl;
   editCardModel: NoteResponse;
   isTagsSelected = false;
+  subs = new Subscription();
   @Input() originalEditCardModel: NoteResponse;
   @Output() closeEditCard = new EventEmitter<Entity>();
 
@@ -43,6 +44,10 @@ export class NoteEditCardComponent implements OnInit {
       this._filteredTags();
       this._subscribeChangeTags();
     });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   onCancel() {
@@ -86,9 +91,8 @@ export class NoteEditCardComponent implements OnInit {
 
         this._filteredTags();
         this._subscribeChangeTags();
-
-        sub.unsubscribe();
       });
+      this.subs.add(sub);
     }
 
     if (input) {
