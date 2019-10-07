@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace MyHelper.Api.Services.Notes
 {
-    public class NoteService: BaseService, INoteService
+    public class NoteService : BaseService, INoteService
     {
         public NoteService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
@@ -41,7 +41,7 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id  && x.AppUserId == accountId);
+                var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id && x.AppUserId == accountId);
 
                 if (note == null)
                     return AOBuilder.SetError<NoteResponse>(Constants.Errors.TaskNotExists);
@@ -87,7 +87,7 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
+                Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id);
 
                 if (note == null)
                     return AOBuilder.SetError(Constants.Errors.NoteNotExists);
