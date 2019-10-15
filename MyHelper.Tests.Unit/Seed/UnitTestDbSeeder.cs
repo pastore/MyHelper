@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using MyHelper.Api.Core;
+﻿using MyHelper.Api.Core;
 using MyHelper.Api.Core.Helpers;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
@@ -17,11 +16,11 @@ namespace MyHelper.Tests.Unit.Seed
 
         public void SeedDb()
         {
-
             if (!_myHelperDbContext.AppUsers.Any(x => x.UserRole == EUserRole.Admin))
             {
                 var user1 = new AppUser
                 {
+                    Id = 1,
                     Email = "admin1@admin1.com",
                     Username = "admin1",
                     Password = HashPasswordHelper.Hash("admin1"),
@@ -31,6 +30,7 @@ namespace MyHelper.Tests.Unit.Seed
 
                 var user2 = new AppUser
                 {
+                    Id = 2,
                     Email = "user2@user2.com",
                     Username = "user2",
                     Password = HashPasswordHelper.Hash("user2"),
@@ -40,6 +40,7 @@ namespace MyHelper.Tests.Unit.Seed
 
                 var user3 = new AppUser
                 {
+                    Id = 3,
                     Email = "user3@user3.com",
                     Username = "user3",
                     Password = HashPasswordHelper.Hash("user3"),
@@ -68,7 +69,7 @@ namespace MyHelper.Tests.Unit.Seed
                     Description = "note_name2_description",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
-                    AppUser = _myHelperDbContext.AppUsers.Skip(1).FirstOrDefault()
+                    AppUser = _myHelperDbContext.AppUsers.FirstOrDefault()
                 };
 
                 var note3 = new Note
@@ -77,7 +78,7 @@ namespace MyHelper.Tests.Unit.Seed
                     Description = "note_name3_description",
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now,
-                    AppUser = _myHelperDbContext.AppUsers.Skip(2).FirstOrDefault()
+                    AppUser = _myHelperDbContext.AppUsers.FirstOrDefault()
                 };
 
                 var tags = new Tag[]
