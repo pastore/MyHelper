@@ -7,6 +7,7 @@ using MyHelper.Api.Services.Notes;
 using MyHelper.Tests.Unit.Seed;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace MyHelper.Tests.Unit.Services
 {
@@ -24,16 +25,48 @@ namespace MyHelper.Tests.Unit.Services
             _myHelperDbContext = new MyHelperContext(dbOptions);
             new UnitTestDbSeeder(_myHelperDbContext).SeedDb();
             _noteService = new NoteService(_myHelperDbContext, new Mock<IMapper>().Object);
+        }
+
+        [Test]
+        public void GetNotesAsyncTest1()
+        {
             noteFilterRequest = new NoteFilterRequest()
             {
                 FromDate = DateTime.Now.Date.AddDays(-1)
             };
+
+            Assert.That(_noteService.GetNotesAsync(1, noteFilterRequest).Result.Result.Count, Is.EqualTo(3));
         }
 
         [Test]
-        public void GetNotesAsyncTest()
+        public void GetNotesAsyncTest2()
         {
-           Assert.That(_noteService.GetNotesAsync(1, noteFilterRequest).Result.Result.Count, Is.EqualTo(3));
+            noteFilterRequest = new NoteFilterRequest()
+            {
+                ToDate = DateTime.Now.Date.AddDays(1)
+            };
+
+            Assert.That(_noteService.GetNotesAsync(1, noteFilterRequest).Result.Result.Count, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GetNotesAsyncTest3()
+        {
+            noteFilterRequest = new NoteFilterRequest()
+            {
+                Search = "note_name1"
+            };
+
+            Assert.That(_noteService.GetNotesAsync(1, noteFilterRequest).Result.Result.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void GetNotesAsyncTest4()
+        {
+            noteFilterRequest = new NoteFilterRequest();
+            (noteFilterRequest.TagIds as List<long>).AddRange(new long[] { 1, 2, 3 }); 
+
+            Assert.That(_noteService.GetNotesAsync(1, noteFilterRequest).Result.Result.Count, Is.EqualTo(3));
         }
     }
 }

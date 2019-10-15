@@ -83,9 +83,9 @@ namespace MyHelper.Tests.Unit.Seed
 
                 var tags = new Tag[]
                 {
-                    new Tag { Name = "tag1" },
-                    new Tag { Name = "tag2" },
-                    new Tag { Name = "tag3" }
+                    new Tag { Id = 1 , Name = "tag1" },
+                    new Tag { Id = 2 , Name = "tag2" },
+                    new Tag { Id = 3 , Name = "tag3" }
                 };
 
                 _myHelperDbContext.AddRange(
