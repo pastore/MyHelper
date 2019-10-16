@@ -28,7 +28,7 @@ namespace MyHelper.Tests.Unit.Services
         }
 
         [Test]
-        public void GetNotesAsyncTest1()
+        public void GetNotesAsyncTest_NotesCreateDateFieldIsLaterThanFiltersFromDate_WorkProperly()
         {
             noteFilterRequest = new NoteFilterRequest()
             {
@@ -39,7 +39,7 @@ namespace MyHelper.Tests.Unit.Services
         }
 
         [Test]
-        public void GetNotesAsyncTest2()
+        public void GetNotesAsyncTest_FiltersToDateFieldIsLaterThanNotesCreateDate_WorkProperly()
         {
             noteFilterRequest = new NoteFilterRequest()
             {
@@ -50,7 +50,7 @@ namespace MyHelper.Tests.Unit.Services
         }
 
         [Test]
-        public void GetNotesAsyncTest3()
+        public void GetNotesAsyncTest_FiltersSearchFieldEqualsToNotesName_WorkProperly()
         {
             noteFilterRequest = new NoteFilterRequest()
             {
@@ -61,7 +61,7 @@ namespace MyHelper.Tests.Unit.Services
         }
 
         [Test]
-        public void GetNotesAsyncTest4()
+        public void GetNotesAsyncTest_FiltersTagIdsFieldEqualsToNotesTagsIds_WorkProperly()
         {
             noteFilterRequest = new NoteFilterRequest();
             (noteFilterRequest.TagIds as List<long>).AddRange(new long[] { 1, 2, 3 }); 
