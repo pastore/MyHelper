@@ -16,6 +16,7 @@ import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 export class TasksPageComponent
  extends BaseEditCardsComponent<ICard<MhTaskResponse>, MhTaskFilterRequest>
  implements OnInit {
+  today = new Date().toISOString();
 
   constructor(
     private _taskService: TaskService,
@@ -28,17 +29,16 @@ export class TasksPageComponent
 
   ngOnInit() {
     super.ngOnInit();
+    this.setFilterFromTodayDate();
     this._loaderService.loaderState
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
-
-    this.cardsFilterModel.limit = 20;
   }
 
   updateTaskStatus(params) {
     this._taskService.updateTaskStatus(params.id, (params.status ? MhTaskStatus.Done : MhTaskStatus.None))
-    .subscribe(response => {});
+      .subscribe(response => {});
   }
 
   deleteTask(id: number) {
@@ -50,35 +50,46 @@ export class TasksPageComponent
       });
   }
 
-  protected getCards() {
+  getCards() {
     this._taskService.getTasks(this.cardsFilterModel)
-    .subscribe((responseCards: MhTaskResponse[]) => {
-      this.cards = responseCards.map((x) => {
-        return { data : x, cardType : CardType.Task } as ICard<MhTaskResponse>;
+      .subscribe((responseCards: MhTaskResponse[]) => {
+        this.cards = responseCards.map((x) => {
+          return { data : x, cardType : CardType.Task } as ICard<MhTaskResponse>;
+        });
       });
-    });
   }
 
-  protected setFilterItems() {
+  setFilterItems() {
+    const fromDate = new FilterItem(FilterType.DateTimeFilter, 'From');
+    fromDate.value = this.today;
+
     this.filterItems = [
       new FilterItem(FilterType.TagsFilter, 'Tags'),
-      new FilterItem(FilterType.DateTimeFilter, 'From'),
+      fromDate,
       new FilterItem(FilterType.DateTimeFilter, 'To')
     ];
   }
 
-  protected handleScroll() {
+  handleScroll() {
     const offset = Math.floor(this.cards.length / this.cardsFilterModel.limit);
     this.cardsFilterModel.offset = offset * this.cardsFilterModel.limit;
 
-    this._taskService.getTasks(this.cardsFilterModel, false)
-    .subscribe((tasks: MhTaskResponse[]) => {
-      if (tasks.length > 0 && (this.cards.length % this.cardsFilterModel.limit) === 0) {
-        this.cards = this.cards.concat(tasks.map((x) => {
-          return { data : x, cardType : CardType.Note } as ICard<MhTaskResponse>;
-        }));
-      }
-    });
+    if ((this.cards.length % this.cardsFilterModel.limit) === 0 && this.isScroll) {
+      this._taskService.getTasks(this.cardsFilterModel, false)
+        .subscribe((tasks: MhTaskResponse[]) => {
+          if (tasks.length > 0) {
+            this.cards = this.cards.concat(tasks.map((x) => {
+              return { data : x, cardType : CardType.Note } as ICard<MhTaskResponse>;
+            }));
+          } else {
+            this.isScroll = false;
+          }
+        });
+    }
+  }
+
+  setFilterFromTodayDate() {
+    this.cardsFilterModel.fromDate = this.today as any;
   }
 
   protected detectChanges() {

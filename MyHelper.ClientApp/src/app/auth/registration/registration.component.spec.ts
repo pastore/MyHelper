@@ -1,5 +1,11 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
+import { MhMaterialModule } from '../../shared/modules/mh-material.module';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { mockAuthenticationService, mockRouter } from '../../system/shared/mock.spec';
 import { RegistrationComponent } from './registration.component';
 
 describe('RegistrationComponent', () => {
@@ -8,7 +14,18 @@ describe('RegistrationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegistrationComponent ]
+      imports: [
+        NoopAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MhMaterialModule
+      ],
+      declarations: [ RegistrationComponent ],
+      providers: [
+        {provide: Router, useValue: mockRouter },
+        {provide: AuthenticationService, useValue: mockAuthenticationService}
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));

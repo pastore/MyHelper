@@ -32,11 +32,11 @@ export class NoteService extends BaseService {
       this._loaderService.show();
     }
     return this.sendRequest<NoteResponse[]>(RequestMethod.Get, ApiRoute.Notes, null, headers, searchParams)
-    .pipe(finalize(() => {
-      if (isLoader) {
-        this._loaderService.hide();
-      }
-    }));
+      .pipe(finalize(() => {
+        if (isLoader) {
+          this._loaderService.hide();
+        }
+      }));
   }
 
   addNote(note: NoteRequest): Observable<boolean> {

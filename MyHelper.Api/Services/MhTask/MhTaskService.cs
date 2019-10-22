@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
-using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.DAL.Context;
+using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Feed;
 using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.MHTask
 {
@@ -31,6 +31,8 @@ namespace MyHelper.Api.Services.MHTask
                 .AsQueryable();
 
                 query = FilterMhTasks(query, mhTaskFIlterRequest);
+
+                query = query.OrderBy(x => x.StartDate);
 
                 query = FetchItems(query, mhTaskFIlterRequest);
 

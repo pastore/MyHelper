@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SystemSidebarComponent } from './system-sidebar.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('SystemSidebarComponent', () => {
   let component: SystemSidebarComponent;
@@ -8,7 +9,8 @@ describe('SystemSidebarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SystemSidebarComponent ]
+      declarations: [ SystemSidebarComponent ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));

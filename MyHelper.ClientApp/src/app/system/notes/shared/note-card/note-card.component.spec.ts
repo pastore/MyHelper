@@ -4,13 +4,15 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MhMaterialModule } from '../../../../shared/modules/mh-material.module';
 import { NoteCardComponent } from './note-card.component';
-import { spyMatDialog } from '../../../../system/shared/mock.spec';
+import { MatDialogMock } from '../../../../system/shared/mock.spec';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { CardType } from '../../../../shared/utilities/enums';
+import { EMPTY } from 'rxjs';
 
-fdescribe('NoteCardComponent', () => {
+describe('NoteCardComponent', () => {
   let component: NoteCardComponent;
   let fixture: ComponentFixture<NoteCardComponent>;
+  const noteResponse = new NoteResponse();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,7 +22,7 @@ fdescribe('NoteCardComponent', () => {
       ],
       declarations: [ NoteCardComponent ],
       providers: [
-        {provide: MatDialog, useValue: spyMatDialog }
+        {provide: MatDialog, useClass: MatDialogMock }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -28,6 +30,8 @@ fdescribe('NoteCardComponent', () => {
     .then(() => {
       fixture = TestBed.createComponent(NoteCardComponent);
       component = fixture.componentInstance;
+      component.card = { data: noteResponse, cardType: CardType.Note };
+      fixture.detectChanges();
     });
   }));
 
@@ -37,9 +41,22 @@ fdescribe('NoteCardComponent', () => {
 
   it('should emit openEditCard with card.data', () => {
     spyOn(component.openEditCard, 'emit');
-    const noteResponse = new NoteResponse();
-    component.card = {data: noteResponse, cardType: CardType.Note };
+
     component.editCard();
     expect(component.openEditCard.emit).toHaveBeenCalledWith(noteResponse);
+  });
+
+  it('should be called openDialog', () => {
+    const spyDialog =  spyOn(component.dialog, 'open')
+      .and
+      .returnValue({afterClosed: () => EMPTY});
+
+    component.openDialog();
+    expect(spyDialog).toHaveBeenCalled();
+  });
+
+  it('should be expandTitle equals cCollapse', () => {
+    component.showDescription();
+    expect(component.expandTitle).toBe('Collapse');
   });
 });

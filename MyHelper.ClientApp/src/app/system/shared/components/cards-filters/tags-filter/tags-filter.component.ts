@@ -1,10 +1,9 @@
-import { Component, OnInit, EventEmitter, Input , Output, ChangeDetectorRef, AfterViewChecked  } from '@angular/core';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { TagService } from '../../../../../shared/services/tag.service';
-import { AuthenticationService } from '../../../../../shared/services/authentication.service';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { TagViewModel } from '../../../../../shared/models/tags/tag-view.model';
+import { TagService } from '../../../../../shared/services/tag.service';
 
 @Component({
   selector: 'mh-tags-filter',
@@ -24,7 +23,6 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private _tagService: TagService,
-    private _authService: AuthenticationService,
     private _cdr: ChangeDetectorRef ) { }
 
   ngOnInit() {
@@ -32,7 +30,7 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
     this._tagService.tags.subscribe(tags => {
       this.tags = tags;
       this._filteredTags();
-      this._subscribeChangeTags();
+      this.subscribeChangeTags();
     });
   }
 
@@ -49,7 +47,7 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
     this.updateFilter.emit(this.selectedTags.map(x => x.id));
     this._filteredTags();
     this.tagCtrl.reset();
-    this._subscribeChangeTags();
+    this.subscribeChangeTags();
   }
 
   selectTag(tag) {
@@ -61,7 +59,7 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
     }
 
     this.tagCtrl.reset();
-    this._subscribeChangeTags();
+    this.subscribeChangeTags();
   }
 
   private _filteredTags() {
@@ -72,7 +70,7 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  private _selectTagsByName(tagName: string): TagViewModel[] {
+  private selectTagsByName(tagName: string): TagViewModel[] {
     if (!tagName) {
       return this.filteredTags.slice();
     }
@@ -82,11 +80,11 @@ export class TagsFilterComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  private _subscribeChangeTags() {
+  private subscribeChangeTags() {
     this.reactiveTags = this.tagCtrl.valueChanges
     .pipe(
       startWith(null),
-      map(val => this._selectTagsByName(val))
+      map(val => this.selectTagsByName(val))
     );
   }
 }

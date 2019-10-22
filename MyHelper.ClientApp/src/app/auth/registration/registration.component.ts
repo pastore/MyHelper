@@ -12,8 +12,9 @@ export class RegistrationComponent {
 
   model: RegistrationRequest = new RegistrationRequest();
 
-  constructor(private router: Router,
-      public authService: AuthenticationService) { }
+  constructor(
+    private router: Router,
+    public authService: AuthenticationService) { }
 
   registration(registrationForm: FormGroup) {
     if (registrationForm.valid) {

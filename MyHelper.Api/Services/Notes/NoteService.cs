@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
 using MyHelper.Api.DAL.Context;
@@ -12,6 +8,10 @@ using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Notes
 {
@@ -30,6 +30,8 @@ namespace MyHelper.Api.Services.Notes
                     .AsQueryable();
 
                 query = FilterNotes(query, noteFilterRequest);
+
+                query = query.OrderByDescending(x => x.Id);
 
                 query = FetchItems(query, noteFilterRequest);
 

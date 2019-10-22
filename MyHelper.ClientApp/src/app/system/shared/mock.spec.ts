@@ -1,9 +1,11 @@
-import { of as obsevableOf } from 'rxjs';
+import { of } from 'rxjs';
 import { AppUserViewModel } from '../../shared/models/user/app-user-view.model';
 import { UserRole } from '../../shared/utilities/enums';
 import { TagViewModel } from '../../shared/models/tags/tag-view.model';
 import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { MatChipInputEvent } from '@angular/material';
+import { ILoaderState } from '../../shared/loader/i-loader-state.model';
+import { MhTaskResponse } from '../../shared/models/tasks/mh-task-response.model';
 
 const mockAppUserViewModel: AppUserViewModel = {
   id: 1,
@@ -31,9 +33,31 @@ export const createMockNoteResponce = (id?: number, name?: string, description?:
   return mockNoteResponce;
 };
 
-const mockNoteResponses = [
-  createMockNoteResponce(),
-  createMockNoteResponce()
+export const createMockMhTaskResponce = (id?: number, name?: string, description?: string, tags?: TagViewModel[]) => {
+  const mockNoteResponce = new MhTaskResponse();
+  if (id) {
+    mockNoteResponce.id = id;
+  }
+  if (name) {
+    mockNoteResponce.name = name;
+  }
+  if (description) {
+    mockNoteResponce.description = description;
+  }
+  if (tags) {
+    mockNoteResponce.tags = tags;
+  }
+  return mockNoteResponce;
+};
+
+export const mockNoteResponses = [
+  createMockNoteResponce(1),
+  createMockNoteResponce(2)
+];
+
+export const mockMhTaskResponses = [
+  createMockMhTaskResponce(1),
+  createMockMhTaskResponce(2)
 ];
 
 export const mockTags = [
@@ -42,15 +66,45 @@ export const mockTags = [
 ];
 
 export let mockNoteService = {
-  getNotes: jasmine.createSpy('getNotes').and.returnValue(obsevableOf(mockNoteResponses)),
-  addNote: jasmine.createSpy('addNote').and.returnValue(obsevableOf(true)),
-  updateNote: jasmine.createSpy('updateNote').and.returnValue(obsevableOf(true)),
-  deleteNote: jasmine.createSpy('deleteNote').and.returnValue(obsevableOf(true))
+  getNotes: jasmine.createSpy('getNotes').and.returnValue(of(mockNoteResponses)),
+  addNote: jasmine.createSpy('addNote').and.returnValue(of(true)),
+  updateNote: jasmine.createSpy('updateNote').and.returnValue(of(true)),
+  deleteNote: jasmine.createSpy('deleteNote')
+};
+
+export let mockTaskService = {
+  getTasks: () => of(mockMhTaskResponses),
+  addTask: () => of(true),
+  updateTask: () => of(true),
+  deleteTask: () => of(true)
+};
+
+export let mockFeedService = {
+  getFeeds: () => of([])
+};
+
+export let mockFriendService = {
+  getFriends: () => of([]),
+  inviteFriend: () => of(true),
+  cancelFriend: () => of(true),
+  deleteFriend: () => of(true),
+  updateFriendRequest: () => of(true)
+};
+
+export let mockFriendSearchService = {
+  getFriendSearch: () => of(''),
+  sharedFriendSearch: () => { }
+};
+
+export let mockLoaderService = {
+  loaderState: of({isShow: true} as ILoaderState),
+  show: jasmine.createSpy('show'),
+  hide: jasmine.createSpy('hide')
 };
 
 export let mockTagService = {
-  tags: obsevableOf(mockTags),
-  createTag: () => obsevableOf(mockTags),
+  tags: of(mockTags),
+  createTag: () => of(mockTags),
 };
 
 export let mockAuthenticationService = {
@@ -62,4 +116,14 @@ export class MatChipInputEventMock implements MatChipInputEvent {
   value: string;
 }
 
-export let spyMatDialog = jasmine.createSpyObj('MatDialog', ['open']);
+export class MatDialogMock {
+  open() {
+    return {
+      afterClosed: () => of(true)
+    };
+  }
+}
+
+export let mockRouter = {
+  navigate: jasmine.createSpy('navigate')
+};

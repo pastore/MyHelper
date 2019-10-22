@@ -8,6 +8,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class DatetimeFilterComponent {
   @Output() updateFilter = new EventEmitter<string>();
   @Input() placeholder: string;
+  @Input() value: any;
 
   constructor() { }
 

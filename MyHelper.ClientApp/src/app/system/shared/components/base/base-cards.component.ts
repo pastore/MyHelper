@@ -1,16 +1,19 @@
-import { OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { fromEvent, pipe } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Constants } from '../../../../shared/utilities/constants';
 
 export abstract class BaseCardsComponent<T_Card, T_Filter> implements OnInit, AfterViewInit, AfterViewChecked {
   cards: T_Card[] = [];
   cardsFilterModel: T_Filter;
   isLoading = false;
+  isScroll = true;
   @ViewChild('cardList', { read: ElementRef }) public cardList: ElementRef;
 
   ngOnInit() {
     this.cardsFilterModel = {} as T_Filter;
+    this.cardsFilterModel['limit'] = Constants.CardsPerPage;
   }
 
   ngAfterViewInit(): void {
@@ -18,7 +21,7 @@ export abstract class BaseCardsComponent<T_Card, T_Filter> implements OnInit, Af
     fromEvent(this.cardList.nativeElement, 'scroll')
     .pipe(debounceTime(50))
       .subscribe((result: Event) => {
-        const nativeCardList = result.srcElement;
+        const nativeCardList = result.srcElement as Element;
         if ((nativeCardList.scrollHeight - nativeCardList.scrollTop) <= nativeCardList.clientHeight) {
           this.handleScroll();
         }
@@ -30,6 +33,7 @@ export abstract class BaseCardsComponent<T_Card, T_Filter> implements OnInit, Af
   }
 
   triggerChangeSearch(search) {
+    this.cardsFilterModel['offset'] = 0;
     this.cardsFilterModel['search'] = search;
     this.getCards();
   }

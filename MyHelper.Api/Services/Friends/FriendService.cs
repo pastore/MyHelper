@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
-using MyHelper.Api.DAL.Context;
-using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Models.Response;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Extensions;
+using MyHelper.Api.DAL.Context;
+using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Friend;
 using MyHelper.Api.Models.Request;
-using MyHelper.Api.Models.User;
+using MyHelper.Api.Models.Response;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Friends
 {
@@ -30,6 +29,8 @@ namespace MyHelper.Api.Services.Friends
                 var searchFriends = _myHelperDbContext.AppUsers.Where(x => !friends.Contains(x.Id) && x.Id != accountId);
 
                 searchFriends = FilterSearchFriends(searchFriends, friendFilterRequest);
+
+                searchFriends = searchFriends.OrderByDescending(x => x.CreatedDate);
 
                 searchFriends = FetchItems(searchFriends, friendFilterRequest);
 
@@ -50,9 +51,11 @@ namespace MyHelper.Api.Services.Friends
 
                 friends = FilterFriends(friends, accountId, friendFilterRequest);
 
+                friends = friends.OrderByDescending(x => x.RequestTime);
+
                 friends = FetchItems(friends, friendFilterRequest);
 
-                return AOBuilder.SetSuccess(friends.MapFriendsToViewModels(accountId));
+                return await Task.FromResult(AOBuilder.SetSuccess(friends.MapFriendsToViewModels(accountId)));
             });
         }
 

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WrapperFilterComponent } from './wrapper-filter.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('WrapperFilterComponent', () => {
   let component: WrapperFilterComponent;
@@ -8,7 +9,8 @@ describe('WrapperFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WrapperFilterComponent ]
+      declarations: [ WrapperFilterComponent ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));

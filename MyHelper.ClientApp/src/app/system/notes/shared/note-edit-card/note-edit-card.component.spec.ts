@@ -53,6 +53,7 @@ describe('NoteEditCardComponent', () => {
     it('should nitialize editCardModel', () => {
       const id = 1;
       component.originalEditCardModel = createMockNoteResponce(id);
+
       component.ngOnInit();
       expect(component.editCardModel.id).toBe(id);
     });
@@ -71,12 +72,14 @@ describe('NoteEditCardComponent', () => {
   describe('onCancel', () => {
     it('should be called', () => {
       spyOn(component, 'onCancel').and.callThrough();
+
       component.onCancel();
       expect(component.onCancel).toHaveBeenCalled();
     });
 
     it('should emit closeEditCard with null', () => {
       spyOn(component.closeEditCard, 'emit');
+
       component.onCancel();
       expect(component.closeEditCard.emit).toHaveBeenCalledWith(null);
     });
@@ -101,6 +104,7 @@ describe('NoteEditCardComponent', () => {
     it('should be called', () => {
       const button = fixture.debugElement.nativeElement.querySelector('.js-button-save');
       spyOn(component, 'onSave');
+
       button.click();
       expect(component.onSave).toHaveBeenCalled();
     });
@@ -116,7 +120,6 @@ describe('NoteEditCardComponent', () => {
     it('should call updateNote method of _noteService', () => {
       spyOn(component, 'tagCtrl');
       spyOn(component.tagCtrl, 'valid').and.returnValue(true);
-
       component.editCardModel.id = 1;
 
       component.onSave(formGroup);
@@ -166,6 +169,7 @@ describe('NoteEditCardComponent', () => {
     it('should remove tag from editCardModel.tags', () => {
       const {0 : tagToRemove } = mockTags;
       component.editCardModel.tags = mockTags;
+
       component.removeTag(tagToRemove);
       expect(component.editCardModel.tags.map(x => x.name)).not.toContain(tagToRemove.name);
     });
@@ -184,6 +188,7 @@ describe('NoteEditCardComponent', () => {
     it('should be called tagCtrl.reset()', () => {
       spyOn(component, 'tagCtrl');
       spyOn(component.tagCtrl, 'reset');
+
       component.selectTag({id: 12, name: 'tagName'});
       expect(component.tagCtrl.reset).toHaveBeenCalled();
     });

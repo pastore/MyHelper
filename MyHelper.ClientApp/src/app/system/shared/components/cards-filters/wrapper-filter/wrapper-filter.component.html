@@ -13,6 +13,7 @@
       </div>
       <div class="filter_row--inner" *ngSwitchCase="filterType.DateTimeFilter">
         <mh-datetime-filter
+          [value]="filter.value"
           [placeholder]="filter.placeholder"
           (updateFilter)="handleUpdateFilter($event, filter)">
         </mh-datetime-filter>

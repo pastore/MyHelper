@@ -11,7 +11,8 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
 export class LoginComponent {
   model: LoginRequest = new LoginRequest();
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private authService: AuthenticationService) { }
 
   login(loginForm: FormGroup) {

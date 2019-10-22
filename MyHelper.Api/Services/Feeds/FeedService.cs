@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
@@ -9,7 +10,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace MyHelper.Api.Services.Feeds
 {

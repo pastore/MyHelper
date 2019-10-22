@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { CardDeleteModel } from '../../../../shared/models/base/card-delete.model';
 import { ICard } from '../../../../shared/models/base/i-card.model';
 import { MhTaskResponse } from '../../../../shared/models/tasks/mh-task-response.model';
-import { MatDialog } from '@angular/material';
-import { MhTaskState, CardType } from '../../../../shared/utilities/enums';
+import { CardType, MhTaskState } from '../../../../shared/utilities/enums';
 import { CardsDeleteModalComponent } from '../../../shared/components/cards-delete-modal/cards-delete-modal.component';
-import { CardDeleteModel } from '../../../../shared/models/base/card-delete.model';
 
 @Component({
   selector: 'mh-task-card',

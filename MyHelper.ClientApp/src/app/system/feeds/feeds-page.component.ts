@@ -1,12 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
-import { BaseCardsComponent } from '../shared/components/base/base-cards.component';
-import { FeedResponse } from '../../shared/models/feeds/feed-response.model';
-import { ICard } from '../../shared/models/base/i-card.model';
-import { FeedService } from '../../shared/services/feed.service';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { timer } from 'rxjs';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 import { LoaderService } from '../../shared/loader/loader.service';
+import { ICard } from '../../shared/models/base/i-card.model';
+import { FeedResponse } from '../../shared/models/feeds/feed-response.model';
+import { FeedService } from '../../shared/services/feed.service';
 import { CardType } from '../../shared/utilities/enums';
-import { timer } from 'rxjs';
+import { BaseCardsComponent } from '../shared/components/base/base-cards.component';
 
 @Component({
   selector: 'mh-feeds-page',

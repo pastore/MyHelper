@@ -68,28 +68,33 @@ implements OnInit {
 
   protected getCards() {
     this._friendService.getFriends(ApiRoute.RequestsFriends, this.cardsFilterModel)
-    .subscribe((users: FriendViewModel[]) => {
-      this.cards = users.map((x) => {
-        return { data : x, cardType : CardType.Friend } as IFriendCard<FriendViewModel>;
-      });
+      .subscribe((users: FriendViewModel[]) => {
+        this.cards = users.map((x) => {
+          return { data : x, cardType : CardType.Friend } as IFriendCard<FriendViewModel>;
+        });
 
-      this._separateRequests();
-    });
+        this._separateRequests();
+      });
   }
   protected handleScroll() {
     const offset = Math.floor(this.cards.length / this.cardsFilterModel.limit);
     this.cardsFilterModel.offset = offset * this.cardsFilterModel.limit;
 
-    this._friendService.getFriends(ApiRoute.RequestsFriends, this.cardsFilterModel, false)
-    .subscribe((users: FriendViewModel[]) => {
-      if (users.length > 0 && (this.cards.length % this.cardsFilterModel.limit) === 0) {
-        this.cards = this.cards.concat(users.map((x) => {
-          return { data : x, cardType : CardType.Friend } as IFriendCard<FriendViewModel>;
-        }));
-        this._separateRequests();
-      }
-    });
+    if ((this.cards.length % this.cardsFilterModel.limit) === 0 && this.isScroll) {
+      this._friendService.getFriends(ApiRoute.RequestsFriends, this.cardsFilterModel, false)
+        .subscribe((users: FriendViewModel[]) => {
+          if (users.length > 0) {
+            this.cards = this.cards.concat(users.map((x) => {
+              return { data : x, cardType : CardType.Friend } as IFriendCard<FriendViewModel>;
+            }));
+            this._separateRequests();
+          } else {
+            this.isScroll = false;
+          }
+        });
+    }
   }
+
   protected detectChanges() {
     this._cdr.detectChanges();
   }

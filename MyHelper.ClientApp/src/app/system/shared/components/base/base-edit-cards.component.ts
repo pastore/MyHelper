@@ -1,10 +1,11 @@
-import { OnInit, HostListener, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, HostListener, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { FilterItem } from '../../../../shared/models/base/filter-item.model';
-import { BaseCardsComponent } from './base-cards.component';
-import { ICard } from '../../../../shared/models/base/i-card.model';
-import { Entity } from '../../../../shared/models/base/entity.model';
 import { timer } from 'rxjs';
+import { Entity } from '../../../../shared/models/base/entity.model';
+import { FilterItem } from '../../../../shared/models/base/filter-item.model';
+import { ICard } from '../../../../shared/models/base/i-card.model';
+import { Constants } from '../../../../shared/utilities/constants';
+import { BaseCardsComponent } from './base-cards.component';
 
 export abstract class BaseEditCardsComponent<T_Card extends ICard<Entity>, T_Filter>
  extends BaseCardsComponent<T_Card, T_Filter>
@@ -48,19 +49,22 @@ export abstract class BaseEditCardsComponent<T_Card extends ICard<Entity>, T_Fil
       const cardIndex = this.cards.findIndex((x) => x.data.id === editCard.id);
       if (cardIndex >= 0) {
         this.cards[cardIndex].data = editCard;
+        timer(1).subscribe(() => {
+          this.scrollTo(editCard.id);
+        });
+      } else {
+        this.getCards();
       }
     }
 
     this.isCardsVisible = true;
     this.setTooltip();
-    timer(1).subscribe(() => {
-      this.scrollTo(this.editCardModel.id);
-    });
   }
 
   triggerChangeWrapFilter(wrapFilter, start) {
     this.toggleSideNav(start);
 
+    this.cardsFilterModel['offset'] = 0;
     Object.keys(wrapFilter)
     .forEach(key => {
       this.cardsFilterModel[key] = wrapFilter[key];
@@ -68,16 +72,16 @@ export abstract class BaseEditCardsComponent<T_Card extends ICard<Entity>, T_Fil
     this.getCards();
   }
 
-  protected setTooltip() {
+  setTooltip() {
     if (!this.isCardsVisible) {
       this.tooltip = 'Close edit card.';
     }
   }
 
-  protected abstract setFilterItems();
-
-  private scrollTo(cardId: number) {
+  scrollTo(cardId: number) {
     const element = document.getElementById(`card_${cardId}`) as HTMLElement;
     element.scrollIntoView({ behavior: 'smooth' });
   }
+
+  protected abstract setFilterItems();
 }
