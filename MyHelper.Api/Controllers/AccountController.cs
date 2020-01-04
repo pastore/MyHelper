@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Account;
 using MyHelper.Api.Services.Token;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
 {
@@ -20,17 +19,15 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(ServerResponse<AuthorizationTokenResponse>), 200)]
         public async Task<ServerResponse<AuthorizationTokenResponse>> LoginAsync([FromBody]LoginRequest request)
         {
-            return AOResultToServerResponse(await _accountService.LoginAsync(request));
+            return await _accountService.LoginAsync(request);
         }
 
         [HttpPost("registration")]
-        [ProducesResponseType(typeof(ServerResponse<AuthorizationTokenResponse>), 200)]
         public async Task<ServerResponse<AuthorizationTokenResponse>> RegisterAsync([FromBody]RegistrationRequest request)
         {
-            return AOResultToServerResponse(await _accountService.RegisterAsync(request));
+            return await _accountService.RegisterAsync(request);
         }
     }
 }

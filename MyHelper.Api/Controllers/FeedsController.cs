@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyHelper.Api.Models.Messanging;
-using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Feeds;
 using MyHelper.Api.Services.Token;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
 {
@@ -28,10 +23,9 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ServerResponse<List<FeedResponse>>), 200)]
         public async Task<ServerResponse<List<FeedResponse>>> GetNotesAsync()
         {
-            return AOResultToServerResponse(await _feedService.GetFeedsAsync(AccountId));
+            return await _feedService.GetFeedsAsync(AccountId);
         }
     }
 }

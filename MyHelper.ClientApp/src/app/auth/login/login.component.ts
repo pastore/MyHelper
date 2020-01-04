@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginRequest } from '../../shared/models/auth/login-request.model';
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { SnackBarService } from '../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'mh-login',
@@ -13,20 +14,17 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthenticationService) { }
+    private authService: AuthenticationService,
+    private snackBarService: SnackBarService) { }
 
   login(loginForm: FormGroup) {
       if (loginForm.valid) {
           this.authService.login(this.model)
             .subscribe(success => {
                 if (success) {
-                    this.router.navigateByUrl('/feeds');
-                } else {
-
+                  this.snackBarService.close();
+                  this.router.navigateByUrl('/feeds');
                 }
-            },
-            error => {
-              console.log('Error log in');
             });
       }
   }

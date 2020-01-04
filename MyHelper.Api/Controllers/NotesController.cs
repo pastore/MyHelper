@@ -29,45 +29,40 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ServerResponse<List<NoteResponse>>), 200)]
         public async Task<ServerResponse<List<NoteResponse>>> GetNotesAsync(NoteFilterRequest noteFilterRequest)
         {
-            return AOResultToServerResponse(await _noteService.GetNotesAsync(AccountId, noteFilterRequest));
+            return await _noteService.GetNotesAsync(AccountId, noteFilterRequest);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ServerResponse<NoteResponse>), 200)]
         public async Task<ServerResponse<NoteResponse>> GetNoteAsync(long id)
         {
-            return AOResultToServerResponse(await _noteService.GetNoteAsync(AccountId, id));
+            return await _noteService.GetNoteAsync(AccountId, id);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ServerResponse<long>), 200)]
         public async Task<ServerResponse<long>> CreateNoteAsync([FromBody] NoteRequest noteRequest)
         {
-            return AOResultToServerResponse(await _noteService.CreateNoteAsync(noteRequest).ContinueWith(x =>
+            return await _noteService.CreateNoteAsync(noteRequest).ContinueWith(x =>
             {
                 var request = _requestClient.Create(_noteService.CreateNoteFeedMessage(noteRequest, x.Result.Result));
 
                 request.GetResponse<FeedMessage>();
 
                 return x.Result;
-            }));
+            });
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> UpdateNoteAsync([FromBody] NoteRequest noteRequest)
+        public async Task<ServerResponse<bool>> UpdateNoteAsync([FromBody] NoteRequest noteRequest)
         {
-            return AOResultToServerResponse(await _noteService.UpdateNoteAsync(noteRequest));
+            return await _noteService.UpdateNoteAsync(noteRequest);
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> DeleteNotekAsync(long id)
+        public async Task<ServerResponse<bool>> DeleteNotekAsync(long id)
         {
-            return AOResultToServerResponse(await _noteService.DeleteNoteAsync(id));
+            return await _noteService.DeleteNoteAsync(id);
         }
     }
 }

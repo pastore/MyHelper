@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
+using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Feed;
@@ -19,7 +20,7 @@ namespace MyHelper.Api.Services.Notes
     {
         public NoteService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<AOResult<List<NoteResponse>>> GetNotesAsync(int accountId, NoteFilterRequest noteFilterRequest)
+        public async Task<ServerResponse<List<NoteResponse>>> GetNotesAsync(int accountId, NoteFilterRequest noteFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -35,24 +36,24 @@ namespace MyHelper.Api.Services.Notes
 
                 query = FetchItems(query, noteFilterRequest);
 
-                return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<Note, NoteResponse>(x)).ToList());
+                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable().Select(x => _mapper.Map<Note, NoteResponse>(x)).ToList());
             });
         }
 
-        public async Task<AOResult<NoteResponse>> GetNoteAsync(int accountId, long id)
+        public async Task<ServerResponse<NoteResponse>> GetNoteAsync(int accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
                 var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id  && x.AppUserId == accountId);
 
                 if (note == null)
-                    return AOBuilder.SetError<NoteResponse>(Constants.Errors.TaskNotExists);
+                    throw new NotFoundException(Constants.Errors.NoteNotExists);
 
-                return AOBuilder.SetSuccess(_mapper.Map<Note, NoteResponse>(note));
+                return ServerResponseBuilder.Build(_mapper.Map<Note, NoteResponse>(note));
             });
         }
 
-        public async Task<AOResult<long>> CreateNoteAsync(NoteRequest noteRequest)
+        public async Task<ServerResponse<long>> CreateNoteAsync(NoteRequest noteRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -81,18 +82,18 @@ namespace MyHelper.Api.Services.Notes
 
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess(note.Id);
+                return ServerResponseBuilder.Build(note.Id);
             }, noteRequest);
         }
 
-        public async Task<AOResult> UpdateNoteAsync(NoteRequest noteRequest)
+        public async Task<ServerResponse<bool>> UpdateNoteAsync(NoteRequest noteRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
                 Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
 
                 if (note == null)
-                    return AOBuilder.SetError(Constants.Errors.NoteNotExists);
+                    throw new NotFoundException(Constants.Errors.NoteNotExists);
 
                 note.Name = noteRequest.Name;
                 note.Description = noteRequest.Description;
@@ -111,23 +112,23 @@ namespace MyHelper.Api.Services.Notes
 
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             }, noteRequest);
         }
 
-        public async Task<AOResult> DeleteNoteAsync(long id)
+        public async Task<ServerResponse<bool>> DeleteNoteAsync(long id)
         {
             return await BaseInvokeAsync(async () =>
             {
                 var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (note == null)
-                    return AOBuilder.SetError(Constants.Errors.NoteNotExists);
+                    throw new NotFoundException(Constants.Errors.NoteNotExists);
 
                 _myHelperDbContext.Notes.Remove(note);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             });
         }
 

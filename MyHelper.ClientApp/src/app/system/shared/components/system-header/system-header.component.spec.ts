@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SystemHeaderComponent } from './system-header.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MhMaterialModule } from '../../../../shared/modules/mh-material.module';
-import { mockRouter, mockAuthenticationService } from '../../mock.spec';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { MhMaterialModule } from '../../../../shared/modules/mh-material.module';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
+import { SnackBarService } from '../../../../shared/snackbar/snackbar.service';
+import { mockAuthenticationService, mockRouter, mockSnackBarService } from '../../mock.spec';
+import { SystemHeaderComponent } from './system-header.component';
 
 describe('SystemHeaderComponent', () => {
   let component: SystemHeaderComponent;
@@ -19,7 +19,8 @@ describe('SystemHeaderComponent', () => {
       ],
       providers: [
         { provide: Router, useValue: mockRouter},
-        { provide: AuthenticationService, useValue: mockAuthenticationService}
+        { provide: AuthenticationService, useValue: mockAuthenticationService},
+        {provide: SnackBarService, useValue: mockSnackBarService}
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })

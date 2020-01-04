@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
+using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.Core.Extensions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
@@ -18,7 +19,7 @@ namespace MyHelper.Api.Services.Friends
     {
         public FriendService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<AOResult<List<FriendViewModel>>> GetSearchFriendsAsync(int accountId, FriendFilterRequest friendFilterRequest)
+        public async Task<ServerResponse<List<FriendViewModel>>> GetSearchFriendsAsync(int accountId, FriendFilterRequest friendFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -34,11 +35,12 @@ namespace MyHelper.Api.Services.Friends
 
                 searchFriends = FetchItems(searchFriends, friendFilterRequest);
 
-                return AOBuilder.SetSuccess(await searchFriends.ToAsyncEnumerable().Select(x => _mapper.Map<AppUser, FriendViewModel>(x)).ToList());
+                return ServerResponseBuilder.Build(await searchFriends.ToAsyncEnumerable().Select(x => _mapper.Map<AppUser, FriendViewModel>(x)).ToList());
             });
         }
 
-        public async Task<AOResult<List<FriendViewModel>>> GetFriendsByRequestFlag(int accountId, EFriendRequestFlag eFriendRequestFlag, FriendFilterRequest friendFilterRequest)
+        public async Task<ServerResponse<List<FriendViewModel>>> GetFriendsByRequestFlag(
+            int accountId, EFriendRequestFlag eFriendRequestFlag, FriendFilterRequest friendFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -55,11 +57,40 @@ namespace MyHelper.Api.Services.Friends
 
                 friends = FetchItems(friends, friendFilterRequest);
 
-                return await Task.FromResult(AOBuilder.SetSuccess(friends.MapFriendsToViewModels(accountId)));
+                return await Task.FromResult(ServerResponseBuilder.Build(friends.MapFriendsToViewModels(accountId)));
             });
         }
 
-        public async Task<AOResult> InviteFriendAsync(int accountId, int personId)
+        public async Task<ServerResponse<bool>> InviteFriendAsync(int accountId, int personId)
+        {
+            return await BaseInvokeAsync(async () =>
+            {
+                var friend = _myHelperDbContext.Friends.FirstOrDefault(x =>
+                    (x.RequestedById == accountId && x.RequestedToId == personId)
+                    || (x.RequestedById == personId && x.RequestedToId == accountId));
+
+                if (friend != null)
+                    throw new ConflictException(Constants.Errors.RequestsAlreadyExists);
+                
+                var appUser = _myHelperDbContext.AppUsers.First(x => x.Id == accountId);
+                var person = _myHelperDbContext.AppUsers.First(x => x.Id == personId);
+
+                friend = new Friend
+                {
+                    RequestedBy = appUser,
+                    RequestedTo = person,
+                    FriendRequestFlag = EFriendRequestFlag.None,
+                    RequestTime = DateTime.Now
+                };
+
+                await _myHelperDbContext.Friends.AddAsync(friend);
+                await _myHelperDbContext.SaveChangesAsync();
+
+                return ServerResponseBuilder.Build(true);
+            });
+        }
+
+        public async Task<ServerResponse<bool>> CancelFriendAsync(int accountId, int personId)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -68,29 +99,19 @@ namespace MyHelper.Api.Services.Friends
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
                 if (friend == null)
-                {
-                    var appUser = _myHelperDbContext.AppUsers.First(x => x.Id == accountId);
-                    var person = _myHelperDbContext.AppUsers.First(x => x.Id == personId);
+                    throw new NotFoundException(Constants.Errors.FriendNotExists);
 
-                    friend = new Friend
-                    {
-                        RequestedBy = appUser,
-                        RequestedTo = person,
-                        FriendRequestFlag = EFriendRequestFlag.None,
-                        RequestTime = DateTime.Now
-                    };
+                if (friend.FriendRequestFlag != EFriendRequestFlag.Approved)
+                    throw new ConflictException(Constants.Errors.FriendNotApproved);
 
-                    await _myHelperDbContext.Friends.AddAsync(friend);
-                    await _myHelperDbContext.SaveChangesAsync();
+                friend.FriendRequestFlag = EFriendRequestFlag.None;
+                await _myHelperDbContext.SaveChangesAsync();
 
-                    return AOBuilder.SetSuccess();
-                }
-
-                return AOBuilder.SetError(Constants.Errors.RequestsAlreadyExists);
+                return ServerResponseBuilder.Build(true);
             });
         }
 
-        public async Task<AOResult> CancelFriendAsync(int accountId, int personId)
+        public async Task<ServerResponse<bool>> UpdateFriendRequestAsync(int accountId, int personId, EFriendRequestFlag eFriendRequestFlag)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -98,60 +119,22 @@ namespace MyHelper.Api.Services.Friends
                     (x.RequestedById == accountId && x.RequestedToId == personId)
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
-                if (friend != null)
-                {
-                    if (friend.FriendRequestFlag != EFriendRequestFlag.Approved)
-                        return AOBuilder.SetError(Constants.Errors.FriendNotApproved);
+                if (friend == null)
+                    throw new NotFoundException(Constants.Errors.FriendNotExists);
 
-                    friend.FriendRequestFlag = EFriendRequestFlag.None;
-                    await _myHelperDbContext.SaveChangesAsync();
+                if (Constants.FriendRequestFlagsWithErrors.ContainsKey(friend.FriendRequestFlag))
+                    throw new ConflictException(Constants.FriendRequestFlagsWithErrors[friend.FriendRequestFlag]);
 
-                    return AOBuilder.SetSuccess();
-                }
+                friend.FriendRequestFlag = eFriendRequestFlag;
+                friend.BecameFriendsTime = eFriendRequestFlag == EFriendRequestFlag.Approved ? (DateTime?)DateTime.Now : null;
 
-                return AOBuilder.SetError(Constants.Errors.FriendNotExists);
+                await _myHelperDbContext.SaveChangesAsync();
+
+                return ServerResponseBuilder.Build(true);
             });
         }
 
-        public async Task<AOResult> UpdateFriendRequestAsync(int accountId, int personId, EFriendRequestFlag eFriendRequestFlag)
-        {
-            return await BaseInvokeAsync(async () =>
-            {
-                var friend = _myHelperDbContext.Friends.FirstOrDefault(x =>
-                    (x.RequestedById == accountId && x.RequestedToId == personId)
-                    || (x.RequestedById == personId && x.RequestedToId == accountId));
-
-                if (friend != null)
-                {
-                    if (friend.FriendRequestFlag == EFriendRequestFlag.Approved)
-                        return AOBuilder.SetError(Constants.Errors.FriendAlreadyApproved);
-                    if (friend.FriendRequestFlag == EFriendRequestFlag.Rejected)
-                        return AOBuilder.SetError(Constants.Errors.FriendAlreadyRejected);
-                    if (friend.FriendRequestFlag == EFriendRequestFlag.Blocked)
-                        return AOBuilder.SetError(Constants.Errors.FriendAlreadyBlocked);
-                    if (friend.FriendRequestFlag == EFriendRequestFlag.Spam)
-                        return AOBuilder.SetError(Constants.Errors.FriendAlreadySpamed);
-
-                    friend.FriendRequestFlag = eFriendRequestFlag;
-                    if (eFriendRequestFlag == EFriendRequestFlag.Approved)
-                    {
-                        friend.BecameFriendsTime = DateTime.Now;
-                    }
-                    else
-                    {
-                        friend.BecameFriendsTime = null;
-                    }
-
-                    await _myHelperDbContext.SaveChangesAsync();
-
-                    return AOBuilder.SetSuccess();
-                }
-
-                return AOBuilder.SetError(Constants.Errors.FriendNotExists);
-            });
-        }
-
-        public async Task<AOResult> DeleteFriendAsync(int accountId, int personId)
+        public async Task<ServerResponse<bool>> DeleteFriendAsync(int accountId, int personId)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -160,12 +143,12 @@ namespace MyHelper.Api.Services.Friends
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
                 if (!friends.Any())
-                    return AOBuilder.SetError(Constants.Errors.FriendNotExists);
+                    throw new NotFoundException(Constants.Errors.FriendNotExists);
 
                 _myHelperDbContext.Friends.RemoveRange(friends);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             });
         }
 

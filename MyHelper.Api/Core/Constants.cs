@@ -1,22 +1,26 @@
-﻿namespace MyHelper.Api.Core
+﻿using System.Collections.Generic;
+
+namespace MyHelper.Api.Core
 {
     public static class Constants
     {
         public static class Errors
         {
             // Autorization
-            public const string TokenIsBroken = "Token is broken.";
+            public const string TokenIsInvalid = "Token is invalid.";
             public const string TokenIsExpired = "Token is expired.";
             public const string UserAlreadyRegistered = "User with this email already registered.";
             public const string EmailsAreNotEqual = "Token in email and in request are no equal.";
             public const string WrongRoleType = "Role type is wrong.";
+            public const string UsernameIsIncorrect = "Username is incorrect";
+            public const string PasswordIsIncorrect = "Password is incorrect";
 
             //AppUser
             public const string AppUserNotExists = "App User doesn't exist";
 
             // MhTask
             public const string TaskNotExists = "Task doesn't exist";
-            public const string TaskReShedule = "Re-shedule task can not be updated";
+            public const string TaskReSheduleCannotBeUpdated = "Re-shedule task can not be updated";
 
             // Note
             public const string NoteNotExists = "Note doesn't exist";
@@ -44,5 +48,13 @@
         {
             public const string Docker = "Docker";
         }
+
+        public static Dictionary<EFriendRequestFlag, string> FriendRequestFlagsWithErrors = new Dictionary<EFriendRequestFlag, string>()
+        {
+            { EFriendRequestFlag.Approved, Errors.FriendAlreadyApproved },
+            { EFriendRequestFlag.Blocked, Errors.FriendAlreadyBlocked },
+            { EFriendRequestFlag.Rejected, Errors.FriendAlreadyRejected },
+            { EFriendRequestFlag.Spam, Errors.FriendAlreadySpamed }
+        };
     }
 }

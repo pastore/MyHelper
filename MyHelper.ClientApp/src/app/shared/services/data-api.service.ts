@@ -1,12 +1,9 @@
-import {
-  HttpClient,
-  HttpHeaders
- } from '@angular/common/http';
-import { Observable ,  ReplaySubject } from 'rxjs';
-import { map, share, mergeMap, skipWhile } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
-import { IServerResponse } from '../models/base/server-response.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, mergeMap, share, skipWhile } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { IServerResponse } from '../models/base/server-response.model';
+import { AuthenticationService } from './authentication.service';
 
 export abstract class DataAPIService<T> {
 

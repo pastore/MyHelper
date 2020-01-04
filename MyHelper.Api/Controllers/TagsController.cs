@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Tag;
 using MyHelper.Api.Services.Token;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
 {
@@ -22,17 +22,15 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ServerResponse<List<TagResponse>>), 200)]
-        public async Task<ServerResponse<List<TagResponse>>> GetNotesAsync()
+        public async Task<ServerResponse<List<TagResponse>>> GetTagsAsync()
         {
-            return AOResultToServerResponse(await _tagService.GetTagsAsync());
+            return await _tagService.GetTagsAsync();
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> CreateNoteAsync([FromBody] TagRequest tagRequest)
+        public async Task<ServerResponse<bool>> CreateTagAsync([FromBody] TagRequest tagRequest)
         {
-            return AOResultToServerResponse(await _tagService.CreateTagAsync(tagRequest));
+            return await _tagService.CreateTagAsync(tagRequest);
         }
     }
 }

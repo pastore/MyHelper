@@ -1,0 +1,12 @@
+@import './../variables';
+
+
+.primary_snackbar {
+  background: $color-primary;
+  color: white;
+}
+
+.accent_snackbar {
+  background: $color-accent;
+  color: white;
+}

@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AppUserViewModel } from '../models/user/app-user-view.model';
-import { LoginRequest } from '../models/auth/login-request.model';
 import { Observable } from 'rxjs';
-import { ApiRoute } from '../utilities/api-route';
+import { LoginRequest } from '../models/auth/login-request.model';
 import { RegistrationRequest } from '../models/auth/registration-request.model';
-import { BaseService } from './base.service';
 import { IServerResponse } from '../models/base/server-response.model';
+import { AppUserViewModel } from '../models/user/app-user-view.model';
+import { ApiRoute } from '../utilities/api-route';
 import { RequestMethod } from '../utilities/enums';
+import { BaseService } from './base.service';
 
 @Injectable()
 export class AuthenticationService extends BaseService {
@@ -52,7 +52,7 @@ export class AuthenticationService extends BaseService {
   }
 
   private _handleResponse(response: IServerResponse): boolean {
-    if (response.isSuccess && response.result) {
+    if (response.result) {
       this.currentUser = response.result.appUserViewModel;
       localStorage.setItem('token', JSON.stringify(response.result.token));
       return true;

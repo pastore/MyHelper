@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MyHelper.Api.Core;
+using MyHelper.Api.Core.Exceptions;
+using MyHelper.Api.Core.Extensions;
+using MyHelper.Api.Core.Helpers;
 using MyHelper.Api.DAL.Context;
+using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.User;
+using MyHelper.Api.Services.Token;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using MyHelper.Api.Core;
-using MyHelper.Api.Core.Extensions;
-using MyHelper.Api.Core.Helpers;
-using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Services.Token;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Account
 {
@@ -26,15 +27,17 @@ namespace MyHelper.Api.Services.Account
             _tokenService = tokenService;
         }
 
-        public async Task<AOResult<AuthorizationTokenResponse>> LoginAsync(LoginRequest request)
+        public async Task<ServerResponse<AuthorizationTokenResponse>> LoginAsync(LoginRequest request)
         {
             return await BaseInvokeAsync(async () =>
             {
                 var appUser = await _myHelperDbContext.AppUsers
                     .FirstOrDefaultAsync(x => x.Username == request.UserName);
 
-                if (appUser == null || !HashPasswordHelper.Verify(appUser.Password, request.Password))
-                    return AOBuilder.SetError<AuthorizationTokenResponse>("Username or password is incorrect");
+                if (appUser == null)
+                    throw new UnauthorizedException(Constants.Errors.UsernameIsIncorrect);
+                if (!HashPasswordHelper.Verify(appUser.Password, request.Password))
+                    throw new UnauthorizedException(Constants.Errors.PasswordIsIncorrect);
 
                 var tokenInfo = _tokenService.CreateToken(GetClaimsFromAppUser(appUser));
 
@@ -45,16 +48,16 @@ namespace MyHelper.Api.Services.Account
                     AppUserViewModel = _mapper.Map<AppUser, AppUserViewModel>(appUser)
                 };
 
-                return AOBuilder.SetSuccess(authorizationTokenResponse);
+                return ServerResponseBuilder.Build(authorizationTokenResponse);
             }, request);
         }
 
-        public async Task<AOResult<AuthorizationTokenResponse>> RegisterAsync(RegistrationRequest request)
+        public async Task<ServerResponse<AuthorizationTokenResponse>> RegisterAsync(RegistrationRequest request)
         {
             return await BaseInvokeAsync(async () =>
             {
                 if (_myHelperDbContext.AppUsers.Any(x => x.Email == request.Email || x.Username == request.UserName))
-                    return AOBuilder.SetError<AuthorizationTokenResponse>(Constants.Errors.UserAlreadyRegistered);
+                    throw new UnauthorizedException(Constants.Errors.UserAlreadyRegistered);
 
                 var appUser = new AppUser
                 {
@@ -77,7 +80,7 @@ namespace MyHelper.Api.Services.Account
                     AppUserViewModel = _mapper.Map<AppUser, AppUserViewModel>(appUser)
                 };
 
-                return AOBuilder.SetSuccess(authorizationTokenResponse);
+                return ServerResponseBuilder.Build(authorizationTokenResponse);
             }, request);
         }
 

@@ -8,6 +8,6 @@ namespace MyHelper.Api.Services.User
 {
     public interface IAppUserService
     {
-       Task<AOResult<List<AppUserViewModel>>> GetAppUsersAsync(int accountId, AppUserFilterRequest appUserFilterRequest);
+       Task<ServerResponse<List<AppUserViewModel>>> GetAppUsersAsync(int accountId, AppUserFilterRequest appUserFilterRequest);
     }
 }

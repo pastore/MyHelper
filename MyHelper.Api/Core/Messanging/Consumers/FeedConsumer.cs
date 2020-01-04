@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using MyHelper.Api.Models.Messanging;
-using System.Threading.Tasks;
 using MyHelper.Api.Services.Feeds;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Core.Messanging.Consumers
 {

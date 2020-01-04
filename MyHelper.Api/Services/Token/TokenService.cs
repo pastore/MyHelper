@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using MyHelper.Api.Core;
+using MyHelper.Api.Core.Exceptions;
+using MyHelper.Api.Models.Options;
+using MyHelper.Api.Models.Token;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using MyHelper.Api.Models.Token;
-using MyHelper.Api.Models.Options;
 
 namespace MyHelper.Api.Services.Token
 {
@@ -31,11 +33,6 @@ namespace MyHelper.Api.Services.Token
             };
         }
 
-        /// <summary>
-        /// Creates the token.
-        /// </summary>
-        /// <returns>The token.</returns>
-        /// <param name="claims">Claims.</param>
         public TokenInfo CreateToken(IEnumerable<KeyValuePair<object, object>> claims)
         {
             var keyValuePairs = claims as KeyValuePair<object, object>[] ?? claims.ToArray();
@@ -55,18 +52,10 @@ namespace MyHelper.Api.Services.Token
             return new TokenInfo() { Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken), ExpiredDate = expires };
         }
 
-        /// <summary>
-        /// Gets the claims.
-        /// </summary>
-        /// <returns>The claims.</returns>
-        /// <param name="token">Token.</param>
         public IEnumerable<Claim> GetClaims(string token)
         {
-            if (token == null)
-                throw new ArgumentNullException(nameof(token));
-
-            if (!IsTokenValid(token.Replace("Bearer ", string.Empty)))
-                throw new Exception("Token is invalid");
+            if (token == null || !IsTokenValid(token.Replace("Bearer ", string.Empty)))
+                throw new UnauthorizedException(Constants.Errors.TokenIsInvalid);
 
             var handler = new JwtSecurityTokenHandler();
 
@@ -76,12 +65,12 @@ namespace MyHelper.Api.Services.Token
             return jwtSecurityToken.Claims;
         }
 
-        /// <summary>
-        /// Determines whether the token valid.
-        /// </summary>
-        /// <returns><c>true</c>, if token is valid, <c>false</c> otherwise.</returns>
-        /// <param name="token">Token.</param>
-        public bool IsTokenValid(string token)
+        public TokenValidationParameters GetTokenValidationParameters()
+        {
+            return _tokenValidationParameters;
+        }
+
+        private bool IsTokenValid(string token)
         {
             var handler = new JwtSecurityTokenHandler();
 
@@ -90,12 +79,7 @@ namespace MyHelper.Api.Services.Token
             return securityKey != null;
         }
 
-        public TokenValidationParameters GetTokenValidationParameters()
-        {
-            return _tokenValidationParameters;
-        }
-
-        public  SymmetricSecurityKey GetSymmetricSecurityKey()
+        private  SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_authOptions.Value.Key));
         }

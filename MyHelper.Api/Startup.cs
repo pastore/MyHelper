@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using MyHelper.Api.Core.Mappings;
 using MyHelper.Api.Core.Messanging;
 using MyHelper.Api.Core.Messanging.Consumers;
+using MyHelper.Api.Core.Middleware;
 using MyHelper.Api.Core.Scheduler;
 using MyHelper.Api.DAL;
 using MyHelper.Api.DAL.Context;
@@ -42,7 +43,7 @@ namespace MyHelper.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region -- ASP Core  --
+            #region -- Asp Net Core  --
 
             services.AddApiVersioning(
                 o => o.ReportApiVersions = true
@@ -177,11 +178,7 @@ namespace MyHelper.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, DbSeeder seeder)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseAuthentication();
             app.UseCors("AllowAll");
             app.UseMvc();

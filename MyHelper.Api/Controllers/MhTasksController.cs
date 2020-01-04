@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Messanging;
@@ -8,6 +6,8 @@ using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.MHTask;
 using MyHelper.Api.Services.Token;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
 {
@@ -26,52 +26,47 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ServerResponse<List<MhTaskResponse>>), 200)]
         public async Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(MhTaskFilterRequest mhTaskFilterRequest)
         {
-            return AOResultToServerResponse( await _mhTaskService.GetMhTasksAsync(AccountId, mhTaskFilterRequest));
+            return await _mhTaskService.GetMhTasksAsync(AccountId, mhTaskFilterRequest);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ServerResponse<MhTaskResponse>), 200)]
         public async Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(long id)
         {
-            return AOResultToServerResponse(await _mhTaskService.GetMhTaskAsync(AccountId, id));
+            return await _mhTaskService.GetMhTaskAsync(AccountId, id);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> CreateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
+
+        public async Task<ServerResponse<long>> CreateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
         {
-            return AOResultToServerResponse(await _mhTaskService.CreateMhTaskAsync(mhTaskRequest).ContinueWith(x =>
+            return await _mhTaskService.CreateMhTaskAsync(mhTaskRequest).ContinueWith(x =>
             {
                 var request = _requestClient.Create(_mhTaskService.CreateMhTaskFeedMessage(mhTaskRequest, x.Result.Result));
 
                 request.GetResponse<FeedMessage>();
 
                 return x.Result;
-            }));
+            });
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> UpdateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
+        public async Task<ServerResponse<bool>> UpdateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
         {
-            return AOResultToServerResponse(await _mhTaskService.UpdateMhTaskAsync(mhTaskRequest));
+            return await _mhTaskService.UpdateMhTaskAsync(mhTaskRequest);
         }
 
         [HttpPatch("{id}")]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> UpdateMhTaskAsync(long id, [FromBody] int status)
+        public async Task<ServerResponse<bool>> UpdateMhTaskAsync(long id, [FromBody] int status)
         {
-            return AOResultToServerResponse(await _mhTaskService.UpdateStatusMhTaskAsync(id, status));
+            return await _mhTaskService.UpdateStatusMhTaskAsync(id, status);
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> DeleteMhTaskAsync(long id)
+        public async Task<ServerResponse<bool>> DeleteMhTaskAsync(long id)
         {
-            return AOResultToServerResponse(await _mhTaskService.DeleteMhTaskAsync(id));
+            return await _mhTaskService.DeleteMhTaskAsync(id);
         }
     }
 }

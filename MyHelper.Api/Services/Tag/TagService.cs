@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Tag
 {
@@ -14,17 +13,17 @@ namespace MyHelper.Api.Services.Tag
     {
         public TagService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<AOResult<List<TagResponse>>> GetTagsAsync()
+        public async Task<ServerResponse<List<TagResponse>>> GetTagsAsync()
         {
             return await BaseInvokeAsync(async () =>
             {
                 var query = _myHelperDbContext.Tags.Select(x => _mapper.Map<DAL.Entities.Tag, TagResponse>(x));
 
-                return AOBuilder.SetSuccess(await query.ToListAsync());
+                return ServerResponseBuilder.Build(await query.ToListAsync());
             });
         }
 
-        public async Task<AOResult> CreateTagAsync(TagRequest tagRequest)
+        public async Task<ServerResponse<bool>> CreateTagAsync(TagRequest tagRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -36,7 +35,7 @@ namespace MyHelper.Api.Services.Tag
                 await _myHelperDbContext.Tags.AddAsync(tag);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             }, tagRequest);
         }
     }

@@ -1,7 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SystemSidebarComponent } from './system-sidebar.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { SystemSidebarComponent } from './system-sidebar.component';
 
 describe('SystemSidebarComponent', () => {
   let component: SystemSidebarComponent;

@@ -3,6 +3,7 @@ import { AuthenticationService } from '../../../../shared/services/authenticatio
 import { AppUserViewModel } from '../../../../shared/models/user/app-user-view.model';
 import { Router } from '@angular/router';
 import { ApiRoute } from '../../../../shared/utilities/api-route';
+import { SnackBarService } from '../../../../shared/snackbar/snackbar.service';
 
 @Component({
   selector: 'mh-system-header',
@@ -14,13 +15,17 @@ export class SystemHeaderComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter();
   @Input() screenWidth: number;
 
-  constructor(private router: Router, private authService: AuthenticationService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService,
+    private snackBarService: SnackBarService) { }
 
   ngOnInit() {
     this.user = this.authService.currentUser;
   }
 
   logOut() {
+    this.snackBarService.close();
     this.authService.logout();
     this.router.navigateByUrl('/' + ApiRoute.Login);
   }

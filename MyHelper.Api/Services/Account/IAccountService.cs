@@ -1,14 +1,13 @@
-﻿using System.Threading.Tasks;
-using MyHelper.Api.Models.Request;
+﻿using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
-using MyHelper.Api.Models.User;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Account
 {
     public interface IAccountService
     {
-        Task<AOResult<AuthorizationTokenResponse>> LoginAsync(LoginRequest request);
+        Task<ServerResponse<AuthorizationTokenResponse>> LoginAsync(LoginRequest request);
 
-        Task<AOResult<AuthorizationTokenResponse>> RegisterAsync(RegistrationRequest request);
+        Task<ServerResponse<AuthorizationTokenResponse>> RegisterAsync(RegistrationRequest request);
     }
 }

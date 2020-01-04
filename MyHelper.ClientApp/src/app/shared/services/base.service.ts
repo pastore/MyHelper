@@ -1,16 +1,11 @@
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpErrorResponse
- } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { IServerResponse } from '../models/base/server-response.model';
 import { RequestMethod } from '../utilities/enums';
-import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class BaseService {
@@ -37,13 +32,10 @@ export class BaseService {
       { body: data, headers: headers, params: params }
     ).pipe(
       map((response: IServerResponse) => {
-        const body = response;
-        return handleResponse
-          ? handleResponse(body) : body.isSuccess
-          ? (body.result ? body.result : body.isSuccess) : observableThrowError(body.message);
+        return handleResponse ? handleResponse(response) : response.result;
       }),
       catchError((error: HttpErrorResponse) => {
-        return observableThrowError(error.message);
+        return throwError(error.message);
     }));
   }
 

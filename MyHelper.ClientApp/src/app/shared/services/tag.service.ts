@@ -1,15 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TagViewModel } from '../models/tags/tag-view.model';
-import { DataAPIService } from './data-api.service';
-import {
-  HttpClient,
-  HttpResponse
-} from '@angular/common/http';
-import { ApiRoute } from '../utilities/api-route';
 import { Observable } from 'rxjs';
-import { AuthenticationService } from './authentication.service';
-import { TagRequest } from '../models/tags/tag-request.model';
 import { IServerResponse } from '../models/base/server-response.model';
+import { TagRequest } from '../models/tags/tag-request.model';
+import { TagViewModel } from '../models/tags/tag-view.model';
+import { ApiRoute } from '../utilities/api-route';
+import { AuthenticationService } from './authentication.service';
+import { DataAPIService } from './data-api.service';
 
 @Injectable()
 export class TagService extends DataAPIService<TagViewModel> {
@@ -34,13 +31,6 @@ export class TagService extends DataAPIService<TagViewModel> {
   }
 
   protected handleData(response: IServerResponse): TagViewModel[] {
-    const body = response;
-
-    let tags: TagViewModel[];
-    if (body.isSuccess) {
-      tags = body.result;
-    }
-
-    return tags;
+    return response.result as TagViewModel[];
   }
 }

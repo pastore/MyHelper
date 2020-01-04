@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
+using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Messanging;
@@ -17,7 +18,7 @@ namespace MyHelper.Api.Services.Feeds
     {
         public FeedService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<AOResult<List<FeedResponse>>> GetFeedsAsync(int accountId)
+        public async Task<ServerResponse<List<FeedResponse>>> GetFeedsAsync(int accountId)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -25,23 +26,26 @@ namespace MyHelper.Api.Services.Feeds
                     .Include(x => x.ReceievedFriendRequests)
                     .Include(x => x.SentFriendRequests)
                     .FirstOrDefault(x => x.Id == accountId);
+
                 if (appUser == null)
-                    return AOBuilder.SetError<List<FeedResponse>>(Constants.Errors.AppUserNotExists);
+                    throw new NotFoundException(Constants.Errors.AppUserNotExists);
 
                 var friendIds = appUser
                     .ReceievedFriendRequests.Where(x => x.FriendRequestFlag == EFriendRequestFlag.Approved).Select(x => x.RequestedById)
-                    .Union(appUser.SentFriendRequests.Where(x => x.FriendRequestFlag == EFriendRequestFlag.Approved).Select(x => x.RequestedToId));
+                    .Union(appUser.SentFriendRequests.Where(x => x.FriendRequestFlag == EFriendRequestFlag.Approved)
+                        .Select(x => x.RequestedToId));
 
                 var query = _myHelperDbContext.Feeds
                     .Where(x => friendIds.Contains(x.AppUserId))
                     .OrderByDescending(x => x.CreateDate)
                     .AsQueryable();
 
-                return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<Feed, FeedResponse>(x)).ToList());
+                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable()
+                    .Select(x => _mapper.Map<Feed, FeedResponse>(x)).ToList());
             });
         }
 
-        public async Task<AOResult<long>> CreateFeedAsync(FeedMessage feedMessage)
+        public async Task<ServerResponse<long>> CreateFeedAsync(FeedMessage feedMessage)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -50,7 +54,7 @@ namespace MyHelper.Api.Services.Feeds
                 var appUser = _myHelperDbContext.AppUsers
                     .FirstOrDefault(x => x.Id == feedMessage.AppUserId);
                 if (appUser == null)
-                    return AOBuilder.SetError<long>(Constants.Errors.AppUserNotExists);
+                    throw new NotFoundException(Constants.Errors.AppUserNotExists);
 
                 var appUserDataJson = JsonConvert.SerializeObject(_mapper.Map<AppUser, AppUserViewModel>(appUser));
                 feed.AppUserData = appUserDataJson;
@@ -58,7 +62,7 @@ namespace MyHelper.Api.Services.Feeds
                 await _myHelperDbContext.Feeds.AddAsync(feed);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess(feed.Id);
+                return ServerResponseBuilder.Build(feed.Id);
             });
         }
     }

@@ -127,3 +127,7 @@ export class MatDialogMock {
 export let mockRouter = {
   navigate: jasmine.createSpy('navigate')
 };
+
+export let mockSnackBarService = { };
+
+export let mockMatSnackBar = {};

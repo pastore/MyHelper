@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyHelper.Api.Core;
+using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Feed;
@@ -19,7 +20,7 @@ namespace MyHelper.Api.Services.MHTask
     {
         public MhTaskService(MyHelperContext myHelperDbContex, IMapper mapper) : base(myHelperDbContex, mapper) { }
 
-        public async Task<AOResult<List<MhTaskResponse>>> GetMhTasksAsync(int accountId, MhTaskFilterRequest mhTaskFIlterRequest)
+        public async Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(int accountId, MhTaskFilterRequest mhTaskFIlterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -36,24 +37,24 @@ namespace MyHelper.Api.Services.MHTask
 
                 query = FetchItems(query, mhTaskFIlterRequest);
 
-                return AOBuilder.SetSuccess(await query.ToAsyncEnumerable().Select(x => _mapper.Map<MhTask, MhTaskResponse>(x)).ToList()); 
+                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable().Select(x => _mapper.Map<MhTask, MhTaskResponse>(x)).ToList());
             });
         }
 
-        public async Task<AOResult<MhTaskResponse>> GetMhTaskAsync(int accountId, long id)
+        public async Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(int accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
                 var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id && x.AppUserId == accountId);
 
                 if (mhTask == null)
-                    return AOBuilder.SetError<MhTaskResponse>(Constants.Errors.TaskNotExists);
+                    throw new NotFoundException(Constants.Errors.TaskNotExists);
 
-                return AOBuilder.SetSuccess(_mapper.Map<MhTask, MhTaskResponse>(mhTask));
+                return ServerResponseBuilder.Build(_mapper.Map<MhTask, MhTaskResponse>(mhTask));
             });
         }
 
-        public async Task<AOResult<long>> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, MhTask parentMhTask = null)
+        public async Task<ServerResponse<long>> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, MhTask parentMhTask = null)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -102,11 +103,11 @@ namespace MyHelper.Api.Services.MHTask
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.CreateMhTask);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess(mhTask.Id);
+                return ServerResponseBuilder.Build(mhTask.Id);
             }, mhTaskRequest);   
         }
 
-        public async Task<AOResult> UpdateMhTaskAsync(MhTaskRequest mhTaskRequest)
+        public async Task<ServerResponse<bool>> UpdateMhTaskAsync(MhTaskRequest mhTaskRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
@@ -123,10 +124,10 @@ namespace MyHelper.Api.Services.MHTask
                 }
 
                 if (mhTask == null)
-                    return AOBuilder.SetError(Constants.Errors.TaskNotExists);
+                    throw new NotFoundException(Constants.Errors.TaskNotExists);
 
                 if (mhTask.MhTaskState == EMhTaskState.ReSchedule)
-                    return AOBuilder.SetError(Constants.Errors.TaskReShedule);
+                    throw new ConflictException(Constants.Errors.TaskReSheduleCannotBeUpdated);
 
                 mhTask.Name = mhTaskRequest.Name;
                 mhTask.Description = mhTaskRequest.Description;
@@ -159,18 +160,18 @@ namespace MyHelper.Api.Services.MHTask
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateEntireMhTask);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             }, mhTaskRequest);
         }
 
-        public async Task<AOResult> UpdateStatusMhTaskAsync(long id, int status)
+        public async Task<ServerResponse<bool>> UpdateStatusMhTaskAsync(long id, int status)
         {
             return await BaseInvokeAsync(async () =>
             {
                 var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (mhTask == null)
-                    return AOBuilder.SetError(Constants.Errors.TaskNotExists);
+                    throw new NotFoundException(Constants.Errors.TaskNotExists);
 
                 mhTask.MhTaskStatus = (EMhTaskStatus) status;
                 mhTask.FinishDate = (EMhTaskStatus)status == EMhTaskStatus.Done ? DateTime.Now : (DateTime?) null;
@@ -180,18 +181,18 @@ namespace MyHelper.Api.Services.MHTask
 
                 await _myHelperDbContext.SaveChangesAsync();
                 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             });
         }
 
-        public async Task<AOResult> DeleteMhTaskAsync(long id)
+        public async Task<ServerResponse<bool>> DeleteMhTaskAsync(long id)
         {
             return await BaseInvokeAsync(async () =>
             {
                 var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (mhTask == null)
-                    return AOBuilder.SetError(Constants.Errors.TaskNotExists);
+                    throw new NotFoundException(Constants.Errors.TaskNotExists);
 
                 mhTask.MhTaskState = EMhTaskState.Delete;
 
@@ -199,7 +200,7 @@ namespace MyHelper.Api.Services.MHTask
                 await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.DeleteMhTask);
                 await _myHelperDbContext.SaveChangesAsync();
 
-                return AOBuilder.SetSuccess();
+                return ServerResponseBuilder.Build(true);
             });
         }
 

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MyHelper.Api.Models.Request;
+﻿using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Tag
 {
     public interface ITagService
     {
-        Task<AOResult<List<TagResponse>>> GetTagsAsync();
+        Task<ServerResponse<List<TagResponse>>> GetTagsAsync();
 
-        Task<AOResult> CreateTagAsync(TagRequest tagRequest);
+        Task<ServerResponse<bool>> CreateTagAsync(TagRequest tagRequest);
     }
 }

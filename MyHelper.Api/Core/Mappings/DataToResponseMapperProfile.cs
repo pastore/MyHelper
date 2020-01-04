@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyHelper.Api.DAL.Entities;
+using MyHelper.Api.Models.Feed;
 using MyHelper.Api.Models.Friend;
 using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Response;
@@ -8,7 +9,6 @@ using MyHelper.Api.Models.Task;
 using MyHelper.Api.Models.User;
 using Newtonsoft.Json;
 using System.Linq;
-using MyHelper.Api.Models.Feed;
 
 namespace MyHelper.Api.Core.Mappings
 {

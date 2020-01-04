@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyHelper.Api.Models.Response;
-using MyHelper.Api.Services.Friends;
-using System.Threading.Tasks;
 using MyHelper.Api.Core;
 using MyHelper.Api.Models.Friend;
 using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Response;
+using MyHelper.Api.Services.Friends;
 using MyHelper.Api.Services.Token;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
 {
@@ -24,52 +24,45 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpGet("search")]
-        [ProducesResponseType(typeof(ServerResponse<List<FriendViewModel>>), 200)]
-        public async Task<ServerResponse<List<FriendViewModel>>> GetSeacrhFriendsAsync(FriendFilterRequest friendFilterRequest)
+        public async Task<ServerResponse<List<FriendViewModel>>> GetSearchFriendsAsync(FriendFilterRequest friendFilterRequest)
         {
-            return AOResultToServerResponse(await _friendService.GetSearchFriendsAsync(AccountId, friendFilterRequest));
+            return await _friendService.GetSearchFriendsAsync(AccountId, friendFilterRequest);
         }
 
         [HttpGet("my")]
-        [ProducesResponseType(typeof(ServerResponse<List<FriendViewModel>>), 200)]
         public async Task<ServerResponse<List<FriendViewModel>>> GetMyFriendsAsync(FriendFilterRequest friendFilterRequest)
         {
-            return AOResultToServerResponse(await _friendService.GetFriendsByRequestFlag(AccountId, EFriendRequestFlag.Approved, friendFilterRequest));
+            return await _friendService.GetFriendsByRequestFlag(AccountId, EFriendRequestFlag.Approved, friendFilterRequest);
         }
 
         [HttpGet("requests")]
-        [ProducesResponseType(typeof(ServerResponse<List<FriendViewModel>>), 200)]
         public async Task<ServerResponse<List<FriendViewModel>>> GetRequestsFriendsAsync(FriendFilterRequest friendFilterRequest)
         {
-            return AOResultToServerResponse(await _friendService.GetFriendsByRequestFlag(AccountId, EFriendRequestFlag.None, friendFilterRequest));
+            return await _friendService.GetFriendsByRequestFlag(AccountId, EFriendRequestFlag.None, friendFilterRequest);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> InviteFriendAsync([FromBody]int personId)
+        public async Task<ServerResponse<bool>> InviteFriendAsync([FromBody]int personId)
         {
-            return AOResultToServerResponse(await _friendService.InviteFriendAsync(AccountId, personId));
+            return await _friendService.InviteFriendAsync(AccountId, personId);
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> CancelFriendAsync([FromBody]int personId)
+        public async Task<ServerResponse<bool>> CancelFriendAsync([FromBody]int personId)
         {
-            return AOResultToServerResponse(await _friendService.CancelFriendAsync(AccountId, personId));
+            return await _friendService.CancelFriendAsync(AccountId, personId);
         }
 
         [HttpPatch("{personId}")]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> UpdateFriendRequestAsync(int personId, [FromBody] EFriendRequestFlag eFriendRequestFlag)
+        public async Task<ServerResponse<bool>> UpdateFriendRequestAsync(int personId, [FromBody] EFriendRequestFlag eFriendRequestFlag)
         {
-            return AOResultToServerResponse(await _friendService.UpdateFriendRequestAsync(AccountId, personId, eFriendRequestFlag));
+            return await _friendService.UpdateFriendRequestAsync(AccountId, personId, eFriendRequestFlag);
         }
 
         [HttpDelete]
-        [ProducesResponseType(typeof(ServerResponse), 200)]
-        public async Task<ServerResponse> DeleteFriendAsync(int personId)
+        public async Task<ServerResponse<bool>> DeleteFriendAsync(int personId)
         {
-            return AOResultToServerResponse(await _friendService.DeleteFriendAsync(AccountId, personId));
+            return await _friendService.DeleteFriendAsync(AccountId, personId);
         }
     }
 }

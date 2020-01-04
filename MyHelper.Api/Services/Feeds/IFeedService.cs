@@ -7,8 +7,8 @@ namespace MyHelper.Api.Services.Feeds
 {
     public interface IFeedService
     {
-        Task<AOResult<List<FeedResponse>>> GetFeedsAsync(int accountId);
+        Task<ServerResponse<List<FeedResponse>>> GetFeedsAsync(int accountId);
 
-        Task<AOResult<long>> CreateFeedAsync(FeedMessage feedMessage);
+        Task<ServerResponse<long>> CreateFeedAsync(FeedMessage feedMessage);
     }
 }

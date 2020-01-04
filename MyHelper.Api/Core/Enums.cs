@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyHelper.Api.Core
+﻿namespace MyHelper.Api.Core
 {
     public enum EUserRole
     {
