@@ -22,7 +22,8 @@ import {
   MatSelectModule,
   MatProgressBarModule,
   MatTabsModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 @NgModule({
@@ -48,7 +49,8 @@ import {
     MatSelectModule,
     MatProgressBarModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatPaginatorModule
   ],
   exports: [
     MatInputModule,
@@ -72,7 +74,8 @@ import {
     MatSelectModule,
     MatProgressBarModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatPaginatorModule
   ]
 })
 export class MhMaterialModule {}

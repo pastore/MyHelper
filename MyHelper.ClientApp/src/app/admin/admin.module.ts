@@ -8,11 +8,13 @@ import { CoreModule } from '../shared/modules/core.module';
 import { AdminHeaderComponent } from './shared/components/admin-header/admin-header.component';
 import { AdminSidebarComponent } from './shared/components/admin-sidebar/admin-sidebar.component';
 import { SharedModule } from '../shared/modules/shared.module';
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
     imports: [
         CoreModule,
         CommonModule,
+        MatTableModule,
         RouterModule.forChild([
             {
                 path: '', component: AdminComponent, children: [
