@@ -13,4 +13,7 @@ export class ApiRoute {
   public static SearchFriends = 'friends/search';
   public static Tags = 'tags';
   public static AppUsers = 'users';
+
+  public static AdminTags = 'admin/tags';
+  public static AdminUsers = 'admin/users';
 }

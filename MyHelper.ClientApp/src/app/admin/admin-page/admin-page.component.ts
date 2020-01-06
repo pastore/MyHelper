@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CoreModule } from '../../shared/modules/core.module';
+
 
 @Component({
   selector: 'mh-admin-page',

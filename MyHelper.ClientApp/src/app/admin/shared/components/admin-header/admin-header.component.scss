@@ -1,0 +1,23 @@
+@import '../../../../../styles/_variables.scss';
+
+.mat-toolbar{
+  margin-bottom: 10px;
+}
+
+.username{
+  margin-right: 12px;
+}
+.user_button{
+  min-width: 64px;
+  height: 64px;
+  margin-left: auto;
+  img{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+  }
+  .mat-icon{
+    color: lighten($color: $color-font-primary, $amount: 50%)
+  }
+}

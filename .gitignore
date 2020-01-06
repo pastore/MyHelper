@@ -12,6 +12,7 @@
 
 ssh/
 ssl/
+dist/
 
 # Build results
 [Dd]ebug/

@@ -1,0 +1,15 @@
+
+<div class="admin_conatainer">
+  <mh-admin-header></mh-admin-header>
+
+  <div class="admin_body">
+    <mat-sidenav-container>
+        <mat-sidenav class="admin_sidenav">
+            <mh-admin-sidebar></mh-admin-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content>
+          <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>

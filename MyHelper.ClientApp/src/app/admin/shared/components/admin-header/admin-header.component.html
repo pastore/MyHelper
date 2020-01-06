@@ -1,0 +1,20 @@
+<mat-toolbar>
+  <div class="admin_header" fxLayout="row" fxLayoutAlign=" center">
+    <img class="myhelper_logo" src="/assets/mh_small_logo.png">
+    
+    <button mat-button [matMenuTriggerFor]="menuRef" class="user_button">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <img src="/assets/profile.jpg" alt="">
+          <span class="username">{{ 'temp_admin' }}</span>
+          <mat-icon class="mi-16 mat-icon material-icons">keyboard_arrow_down</mat-icon>
+        </div>
+    </button>
+    
+    <mat-menu #menuRef="matMenu" x-position="below" y-position="below"  [overlapTrigger]="false">
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon class="mat-icon material-icons">exit_to_app</mat-icon>
+          <span>Log out</span>
+        </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

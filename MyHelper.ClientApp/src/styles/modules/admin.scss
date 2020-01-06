@@ -1,0 +1,32 @@
+@import '../_mixins.scss';
+
+:host::ng-deep {
+
+  .admin_container{
+    height: 100%;
+    overflow-y: hidden;
+  }
+
+  .admin_header{
+    @include boxed();
+  }
+
+  .admin_sidenav{
+    background: transparent;
+  }
+
+  .admin_body{
+    @include boxed();
+    overflow: hidden;
+    height: calc(100vh - 74px);
+
+    .mat-sidenav-content{
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+      height: calc(100vh - 74px);
+    }
+  }
+}
+

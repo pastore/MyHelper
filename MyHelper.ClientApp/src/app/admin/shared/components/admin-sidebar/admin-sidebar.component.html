@@ -1,0 +1,13 @@
+<div class="admin_sidenav_wrapepr">
+  <mat-nav-list dense>
+      <mat-list-item
+        *ngFor="let link of sidebarLinks"
+        class="admin_sidenav_item"
+        [routerLinkActive]="['active']">
+          <a class="admin_sidenav_link" mat-line [routerLink]="['/' + link.name]" >
+            <i class="material-icons admin_sidenav_link__icon">{{ link.icon }}</i>
+            {{ link.name.slice('admin/'.length).capitalize() }}
+          </a>
+      </mat-list-item>
+  </mat-nav-list>
+</div>
