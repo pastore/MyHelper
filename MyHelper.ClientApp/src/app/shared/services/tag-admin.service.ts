@@ -2,22 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IServerResponse } from '../models/base/server-response.model';
-import { TagRequest } from '../models/tags/tag-request.model';
-import { TagViewModel } from '../models/tags/tag-view.model';
 import { ApiRoute } from '../utilities/api-route';
 import { AuthenticationService } from './authentication.service';
 import { DataAPIService } from './data-api.service';
 import { TagAdminModel } from '../models/tags/tag-admin.model';
 
 @Injectable()
-export class TagService extends DataAPIService<TagViewModel> {
+export class TagAdminService extends DataAPIService<TagAdminModel> {
 
-  get tags(): Observable<TagViewModel[]> {
+  get tags(): Observable<TagAdminModel[]> {
     return this.data;
   }
 
   protected get apiUrl(): string {
-    return ApiRoute.Tags;
+    return ApiRoute.AdminTags;
   }
 
   constructor(
@@ -27,11 +25,7 @@ export class TagService extends DataAPIService<TagViewModel> {
     super(httpClient, authService);
   }
 
-  createTag(tagRequest: TagRequest) {
-    return this.post(tagRequest);
-  }
-
-  protected handleData(response: IServerResponse): TagViewModel[] {
-    return response.result as TagViewModel[];
+  protected handleData(response: IServerResponse): TagAdminModel[] {
+    return response.result as TagAdminModel[];
   }
 }

@@ -1,19 +1,19 @@
 <div class="mat-elevation-z8" >
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="modifiedTags">
 
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef>No.</th>
-      <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Tag Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="TagName">
-      <th mat-header-cell *matHeaderCellDef>TagName</th>
-      <td mat-cell *matCellDef="let element">{{ element.TagName }}</td>
+    <ng-container matColumnDef="notes">
+      <th mat-header-cell *matHeaderCellDef>Related Notes</th>
+      <td mat-cell *matCellDef="let element">{{ element.notes }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="BelongsTo">
-      <th mat-header-cell *matHeaderCellDef>BelongsTo</th>
-      <td mat-cell *matCellDef="let element">{{ element.BelongsTo }}</td>
+    <ng-container matColumnDef="tasks">
+      <th mat-header-cell *matHeaderCellDef>Related Tasks</th>
+      <td mat-cell *matCellDef="let element">{{ element.tasks }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

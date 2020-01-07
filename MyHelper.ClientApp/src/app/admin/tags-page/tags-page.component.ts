@@ -1,7 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import { TagAdminService } from '../../shared/services/tag-admin.service';
+import { TagAdminModel } from '../../shared/models/tags/tag-admin.model';
 
+export interface TagAdminModelModified
+{
+  name: string,
+  notes: string,
+  tasks: string
+}
 
 @Component({
   selector: 'mh-tags-page',
@@ -10,43 +18,31 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 
 export class TagsPageComponent implements OnInit {
+  
+  tags: TagAdminModel[];
+  displayedColumns: string[] = ['name', 'notes', 'tasks'];
+  modifiedTags : TagAdminModelModified[]
 
-  displayedColumns: string[] = ['position', 'TagName', 'BelongsTo'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
+  dataSource = new MatTableDataSource<TagAdminModelModified>(this.modifiedTags);
+   
    @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
+    this._tagAdminService.tags.subscribe(tags => {
+      this.tags = tags;
+      this.modifiedTags = this.tags.map(tag => {
+        return {
+          name: tag.name, 
+          notes: JSON.stringify(tag.notes), 
+          tasks: JSON.stringify(tag.tasks)
+        }
+      })
+    }),
+    
     this.dataSource.paginator = this.paginator;
   }
 
+  constructor(private _tagAdminService: TagAdminService){}
+
 }
 
-export interface PeriodicElement {
-  TagName: string;
-  position: number;
-  BelongsTo: number;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, TagName: 'Hydrogen', BelongsTo: 1.0079},
-  {position: 2, TagName: 'Helium', BelongsTo: 4.0026},
-  {position: 3, TagName: 'Lithium', BelongsTo: 6.941},
-  {position: 4, TagName: 'Beryllium', BelongsTo: 9.0122},
-  {position: 5, TagName: 'Boron', BelongsTo: 10.811},
-  {position: 6, TagName: 'Hydrogen', BelongsTo: 1.0079},
-  {position: 7, TagName: 'Helium', BelongsTo: 4.0026},
-  {position: 8, TagName: 'Lithium', BelongsTo: 6.941},
-  {position: 9, TagName: 'Beryllium', BelongsTo: 9.0122},
-  {position: 10, TagName: 'Boron', BelongsTo: 10.811},
-  {position: 11, TagName: 'Hydrogen', BelongsTo: 1.0079},
-  {position: 12, TagName: 'Helium', BelongsTo: 4.0026},
-  {position: 13, TagName: 'Lithium', BelongsTo: 6.941},
-  {position: 14, TagName: 'Beryllium', BelongsTo: 9.0122},
-  {position: 15, TagName: 'Boron', BelongsTo: 10.811},
-  {position: 16, TagName: 'Hydrogen', BelongsTo: 1.0079},
-  {position: 17, TagName: 'Helium', BelongsTo: 4.0026},
-  {position: 18, TagName: 'Lithium', BelongsTo: 6.941},
-  {position: 19, TagName: 'Beryllium', BelongsTo: 9.0122},
-  {position: 20, TagName: 'Boron', BelongsTo: 10.811}
-];
