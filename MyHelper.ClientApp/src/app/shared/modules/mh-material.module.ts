@@ -23,6 +23,7 @@ import {
   MatProgressBarModule,
   MatTabsModule,
   MatSnackBarModule,
+  MatTableModule,
   MatPaginatorModule
 } from '@angular/material';
 
@@ -50,6 +51,7 @@ import {
     MatProgressBarModule,
     MatTabsModule,
     MatSnackBarModule,
+    MatTableModule,
     MatPaginatorModule
   ],
   exports: [
@@ -75,6 +77,7 @@ import {
     MatProgressBarModule,
     MatTabsModule,
     MatSnackBarModule,
+    MatTableModule,
     MatPaginatorModule
   ]
 })

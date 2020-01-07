@@ -1,8 +1,9 @@
 @import '../_mixins.scss';
 
 :host::ng-deep {
+  @import './../components/_rich-editor.scss';
 
-  .admin_container{
+  .admin_conatainer{
     height: 100%;
     overflow-y: hidden;
   }
@@ -28,4 +29,5 @@
     }
   }
 }
+
 
