@@ -1,8 +1,7 @@
-@import '../_mixins.scss';
 
 :host::ng-deep {
   @import './../components/_rich-editor.scss';
-
+  @import './../variables.scss';
   .admin_conatainer{
     height: 100%;
     overflow-y: hidden;
@@ -26,7 +25,23 @@
       flex: 1;
       overflow: hidden;
       height: calc(100vh - 74px);
+      margin-right: 10px;    
     }
+  }
+
+  .admin_panel {
+    margin: auto;
+    color: grey;
+    font-size: 3vw;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+
+  .admin_button{
+    background-color: $color-accent;
+    color: white;
+    font-weight: 400;
+    font-size: inherit;
   }
 }
 

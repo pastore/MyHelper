@@ -3,6 +3,7 @@ import { CoreModule } from '../../shared/modules/core.module';
 import { TagsPageComponent } from './tags-page.component';
 import { MhMaterialModule } from '../../shared/modules/mh-material.module';
 import { TagService } from '../../shared/services/tag.service';
+import { TagsDetailsComponent } from './shared/tags-details/tags-details.component';
 
 @NgModule({
   imports: [
@@ -10,7 +11,8 @@ import { TagService } from '../../shared/services/tag.service';
     MhMaterialModule
   ],
   exports: [],
-  declarations: [TagsPageComponent],
+  declarations: [TagsPageComponent,  TagsDetailsComponent],
+  entryComponents: [TagsDetailsComponent],
   providers: [TagService],
 })
 export class TagsModule { }

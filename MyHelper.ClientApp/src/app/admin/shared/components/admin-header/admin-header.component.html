@@ -1,11 +1,13 @@
 <mat-toolbar>
   <div class="admin_header" fxLayout="row" fxLayoutAlign=" center">
     <img class="myhelper_logo" src="/assets/mh_small_logo.png">
-    
+    <div class="admin_panel">
+      <span >Admin Panel</span>
+    </div>
     <button mat-button [matMenuTriggerFor]="menuRef" class="user_button">
         <div fxLayout="row" fxLayoutAlign="center center">
           <img src="/assets/profile.jpg" alt="">
-          <span class="username">{{ 'temp_admin' }}</span>
+          <span class="username">{{ user.userName }}</span>
           <mat-icon class="mi-16 mat-icon material-icons">keyboard_arrow_down</mat-icon>
         </div>
     </button>

@@ -8,6 +8,7 @@ import { AdminSidebarComponent } from './shared/components/admin-sidebar/admin-s
 import { TagsModule } from './tags-page/tags.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { TagAdminService } from '../shared/services/tag-admin.service';
+import { TagsDetailsComponent } from './tags-page/shared/tags-details/tags-details.component';
 
 @NgModule({
     imports: [
@@ -22,6 +23,7 @@ import { TagAdminService } from '../shared/services/tag-admin.service';
         AdminComponent,
         AdminSidebarComponent,
         AdminHeaderComponent
+
     ],
     providers: [TagAdminService]
 })

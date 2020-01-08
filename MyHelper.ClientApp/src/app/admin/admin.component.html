@@ -3,7 +3,7 @@
 
   <div class="admin_body">
     <mat-sidenav-container>
-      <mat-sidenav class="admin_sidenav">
+      <mat-sidenav class="admin_sidenav"  #start [opened]="true" [mode]="'side'">
         <mh-admin-sidebar></mh-admin-sidebar>
       </mat-sidenav>
       <mat-sidenav-content class="mat-sidenav-content">
