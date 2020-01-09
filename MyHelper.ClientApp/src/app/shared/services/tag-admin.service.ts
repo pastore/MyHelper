@@ -1,17 +1,22 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Injectable, OnInit } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
 import { IServerResponse } from '../models/base/server-response.model';
 import { ApiRoute } from '../utilities/api-route';
 import { AuthenticationService } from './authentication.service';
 import { DataAPIService } from './data-api.service';
 import { TagAdminModel } from '../models/tags/tag-admin.model';
+import { RequestMethod } from '../utilities/enums';
+import { catchError, map } from 'rxjs/operators';
+import { BaseService } from './base.service';
 
 @Injectable()
-export class TagAdminService extends DataAPIService<TagAdminModel> {
+export class TagAdminService extends BaseService{
 
-  get tags(): Observable<TagAdminModel[]> {
-    return this.data;
+  private headers: HttpHeaders;
+  
+  getTags() : Observable<TagAdminModel[]> {
+    return this.sendRequest<TagAdminModel[]>(RequestMethod.Get, ApiRoute.AdminTags, null, this.headers);
   }
 
   protected get apiUrl(): string {
@@ -22,10 +27,22 @@ export class TagAdminService extends DataAPIService<TagAdminModel> {
       protected httpClient: HttpClient,
       protected authService: AuthenticationService
     ) {
-    super(httpClient, authService);
+    super(httpClient);
+    this._generateAuthHeaders(); 
+  }
+
+  deleteTag(id: number): Observable<boolean> {
+    return this.sendRequest<boolean>(RequestMethod.Delete, ApiRoute.AdminTags + '/' + id, null, this.headers);
   }
 
   protected handleData(response: IServerResponse): TagAdminModel[] {
     return response.result as TagAdminModel[];
   }
+
+  private _generateAuthHeaders() {
+    const token = this.authService.currentUser ? this.authService.token : '';
+    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
+  }
+
 }
+

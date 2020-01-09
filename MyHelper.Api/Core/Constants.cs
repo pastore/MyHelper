@@ -25,6 +25,9 @@ namespace MyHelper.Api.Core
             // Note
             public const string NoteNotExists = "Note doesn't exist";
 
+            // Tag
+            public const string TagNotExists = "Tag doesn't exist";
+
             // Friend
             public const string FriendNotExists = "Friend doesn't exist";
             public const string FriendNotApproved = "Friend not approved";

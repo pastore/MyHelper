@@ -7,13 +7,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   templateUrl: './tags-details.component.html',
   styleUrls: ['./tags-details.component.scss']
 })
-export class TagsDetailsComponent implements OnInit {
+export class TagsDetailsComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<TagsDetailsComponent>) { }
-
-  ngOnInit() {
-    console.log("details:" + JSON.stringify( this.data))
-  }
 
   close() {
     this.dialogRef.close();

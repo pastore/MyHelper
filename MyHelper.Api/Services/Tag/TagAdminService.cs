@@ -19,6 +19,7 @@ namespace MyHelper.Api.Services.Tag
             {
                 var query = _myHelperDbContext.Tags.Select(x => new TagAdmin()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Notes = x.NoteTags.Select(y => y.Note.Name).ToArray(),
                     Tasks = x.MhTaskTags.Select(z => z.MhTask.Name).ToArray()

@@ -54,7 +54,7 @@ export class BaseService {
     return any ? new HttpParams({fromObject: filter as any }) : null;
   }
 
-  private _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
+  protected _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
     return this._domain + '/' + this._routePrefix + '/' + apiVersion + '/' + route;
   }
 }
