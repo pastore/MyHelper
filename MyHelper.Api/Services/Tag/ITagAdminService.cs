@@ -7,5 +7,6 @@ namespace MyHelper.Api.Services.Tag
     public interface ITagAdminService
     {
         Task<ServerResponse<List<TagAdminResponse>>> GetAdminTagsAsync();
+        Task<ServerResponse<bool>> DeleteTagAsync(long id);
     }
 }

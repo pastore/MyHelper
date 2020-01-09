@@ -16,6 +16,7 @@ export class TagAdminService extends BaseService{
   private headers: HttpHeaders;
   
   getTags() : Observable<TagAdminModel[]> {
+    console.log(this._generateUrl(ApiRoute.AdminTags))
     return this.sendRequest<TagAdminModel[]>(RequestMethod.Get, ApiRoute.AdminTags, null, this.headers);
   }
 

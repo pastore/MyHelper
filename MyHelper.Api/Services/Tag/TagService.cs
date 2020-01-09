@@ -40,21 +40,5 @@ namespace MyHelper.Api.Services.Tag
                 return ServerResponseBuilder.Build(true);
             }, tagRequest);
         }
-
-        public async Task<ServerResponse<bool>> DeleteTagAsync(long id)
-        {
-            return await BaseInvokeAsync(async () =>
-            {
-                var tag = await _myHelperDbContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
-
-                if (tag == null)
-                    throw new NotFoundException(Constants.Errors.TagNotExists);
-
-                _myHelperDbContext.Tags.Remove(tag);
-                await _myHelperDbContext.SaveChangesAsync();
-
-                return ServerResponseBuilder.Build(true);
-            });
-        }
     }
 }

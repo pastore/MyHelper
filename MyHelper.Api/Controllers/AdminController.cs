@@ -26,5 +26,12 @@ namespace MyHelper.Api.Controllers
         {
             return await _tagAdminService.GetAdminTagsAsync();
         }
+
+        [Route("tags/{id}")]
+        [HttpDelete]
+        public async Task<ServerResponse<bool>> DeleteTagAsync(long id)
+        {
+            return await _tagAdminService.DeleteTagAsync(id);
+        }
     }
 }

@@ -38,21 +38,13 @@
   }
 
   .admin_button{
-    background-color: lighten($color-accent, 30%);
     margin-right: 5px;
     font-weight: bold;
     font-family: sans-serif;
     font-size: inherit;
   }
 
-  .mat-cell{
-    button:hover {
-      background-color: $color-accent
-    }
-  }
-
-  .tag-dialog {
-    background-color: lighten($color-accent, 70%) ;
+   .tag-dialog {
     padding-left: auto;
   }
 

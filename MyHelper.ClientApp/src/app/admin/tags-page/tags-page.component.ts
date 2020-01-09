@@ -16,7 +16,7 @@ import { TagAdminViewModel } from '../../shared/models/tags/tag-admin-view.model
 export class TagsPageComponent implements OnInit {
 
   tags: TagAdminModel[];
-  viewTags: TagAdminViewModel[] = [{ id: 1, name: 'tag1', actions: '' }, { id: 2, name: 'tag2', actions: '' }]
+  viewTags: TagAdminViewModel[]; 
   displayedColumns: string[] = ['id', 'name', 'actions'];
 
   dataSource = new MatTableDataSource<TagAdminViewModel>(this.viewTags);
@@ -27,8 +27,9 @@ export class TagsPageComponent implements OnInit {
     this._tagAdminService.getTags().subscribe(
       tags => {
         this.tags = tags;
+        this.viewTags = this.tags.map(t => new TagAdminViewModel(t.id, t.name, null));
       })
-    console.log(JSON.stringify(this.tags));
+    
     this.dataSource.paginator = this.paginator;
   }
 
@@ -40,14 +41,19 @@ export class TagsPageComponent implements OnInit {
     dialogConfig.height = '500px';
     dialogConfig.width = '500px';
     dialogConfig.data = this.tags;
-    this.viewTags = this.tags.map(t => new TagAdminViewModel(t.id, t.name, null));
-    console.log(JSON.stringify(this.tags));
+    
+    console.log(JSON.stringify(this.viewTags));
     this.dialog.open(TagsDetailsComponent, dialogConfig);
   }
 
   deleteTag(id: number) {
-    this._tagAdminService.deleteTag(id);
+    this._tagAdminService.deleteTag(id).subscribe();
+    this.refresh();
   }
+
+  private refresh(): void {
+    window.location.reload();
+}
 
 }
 
