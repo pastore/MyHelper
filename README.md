@@ -1,10 +1,9 @@
 # MyHelper
 
-*What is MyHelper?*
-----------------
-
 The open source project built in order to help people organize and plan their affairs and tasks.
 In future plan to make social network from one.
+
+[![Build Status](https://dev.azure.com/PavloHrudiev/MyHelper/_apis/build/status/pastore.MyHelper?branchName=master)](https://dev.azure.com/PavloHrudiev/MyHelper/_build/latest?definitionId=1&branchName=master)
 
 **Live demo**
 ----------------
@@ -44,7 +43,7 @@ In future plan to make social network from one.
         - dotnet ef database update
     7. In cmd type => dotnet run 
 
-    **Angular 5**
+    **Angular 7**
 
     1. Make sure that you in **MyHelper.ClientApp** folder
     2. Open cmd and type => npm install
