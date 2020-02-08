@@ -30,10 +30,11 @@ stages:
 
     # Test
     - task: DotNetCoreCLI@2
+      displayName: Test
       inputs:
         command: test
         projects: '**/MyHelper.Tests.Unit/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
+        arguments: '--configuration $(buildConfiguration) --logger trx --results-directory $(Agent.TempDirectory)'
 
      # Publish tests 
     - task: PublishTestResults@2
@@ -41,4 +42,4 @@ stages:
       condition: succeededOrFailed()
       inputs:
         testRunner: VSTest
-        testResultsFiles: '**/MyHelper.Tests.Unit/results/*.trx'
+        testResultsFiles: '**/*.trx'
