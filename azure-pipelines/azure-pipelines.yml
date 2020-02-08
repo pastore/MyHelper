@@ -15,17 +15,11 @@ stages:
 
     # Install dotnet sdk
     - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
+      displayName: 'Install .NET Core sdk'
       inputs:
         packageType: sdk
         version: 2.1.301
         installationPath: $(Agent.ToolsDirectory)/dotnet
-
-    # Restore
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: 'restore'
 
     # Build
     - task: DotNetCoreCLI@2
@@ -35,25 +29,13 @@ stages:
         arguments: '--configuration $(buildConfiguration)'
 
     # Test
-    - task: DotNetCoreCLI@2
-      displayName: Run Tests
-      inputs:
-        command: 'test'
-        arguments: -c $(BuildConfiguration) --settings $(System.DefaultWorkingDirectory)/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
-        projects: '**/MyHelper.Tests.Unit/*.csproj'
+    - script: dotnet test **/MyHelper.Tests.Unit/*.csproj --logger trx
+      displayName: Test
 
-    - task: DotNetCoreCLI@2
-      displayName: Install ReportGenerator tool
+     # Publish tests 
+    - task: PublishTestResults@2
+      displayName: Publish tests
+      condition: succeededOrFailed()
       inputs:
-        command: custom
-        custom: tool
-        arguments: install --tool-path . dotnet-reportgenerator-globaltool
-      
-    - script: ./reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
-      displayName: Create reports
-      
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Publish code coverage'
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml 
+        testRunner: VSTest
+        testResultsFiles: '**/MyHelper.Tests.Unit/results/*.trx'
