@@ -29,8 +29,11 @@ stages:
         arguments: '--configuration $(buildConfiguration)'
 
     # Test
-    - script: dotnet test **/MyHelper.Tests.Unit/*.csproj --logger trx
-      displayName: Test
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: '**/MyHelper.Tests.Unit/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
 
      # Publish tests 
     - task: PublishTestResults@2
