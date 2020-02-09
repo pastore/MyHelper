@@ -60,3 +60,11 @@ stages:
           command: custom
           customCommand: run test -- --watch=false
           workingDir: 'MyHelper.ClientApp'
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Angular test results'
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: VSTest
+          testRunTitle: Angular
+          testResultsFiles: '$(Agent.TempDirectory)/*.trx'
