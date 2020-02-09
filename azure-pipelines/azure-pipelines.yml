@@ -13,7 +13,6 @@ stages:
   - job: API
     steps:
 
-    # Install dotnet sdk
     - task: UseDotNet@2
       displayName: 'Install .NET Core sdk'
       inputs:
@@ -21,14 +20,12 @@ stages:
         version: 2.1.301
         installationPath: $(Agent.ToolsDirectory)/dotnet
 
-    # Build
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
         command: 'build'
         arguments: '--configuration $(buildConfiguration)'
 
-    # Test
     - task: DotNetCoreCLI@2
       displayName: Test
       inputs:
@@ -36,10 +33,37 @@ stages:
         projects: '**/MyHelper.Tests.Unit/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
 
-     # Publish tests 
     - task: PublishTestResults@2
       displayName: Publish tests
       condition: succeededOrFailed()
       inputs:
         testRunner: VSTest
         testResultsFiles: '$(Agent.TempDirectory)/*.trx'
+  
+  - job: ClientApp
+    steps:
+
+      - task: NodeTool@0
+        displayName: 'Install Node.js'
+        inputs:
+          versionSpec: '10.15.1'
+
+      - task: Npm@1
+        displayName: 'Npm install'
+        inputs:
+          command: install
+          workingDir: '**/MyHelper.ClientApp'
+
+      - task: Npm@1
+        displayName: 'Build Angular'
+        inputs:
+          command: custom
+          customCommand: run build
+          workingDir: '**/MyHelper.ClientApp'
+
+      - task: Npm@1
+        displayName: 'Test Angular'
+        inputs:
+          command: custom
+          customCommand: run test -- --watch=false
+          workingDir: '**/MyHelper.ClientApp'
