@@ -65,6 +65,6 @@ stages:
         displayName: 'Publish Angular test results'
         condition: succeededOrFailed()
         inputs:
-          testRunner: VSTest
-          testRunTitle: Angular
-          testResultsFiles: '$(Agent.TempDirectory)/*.trx'
+          testResultsFormat: 'JUnit'
+          testResultsFiles: 'MyHelper.ClientApp/junit-tests'
+          testRunTitle: 'Angular'
