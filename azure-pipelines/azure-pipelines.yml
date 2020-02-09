@@ -52,18 +52,18 @@ stages:
         displayName: 'Npm install'
         inputs:
           command: install
-          workingDir: '**/MyHelper.ClientApp'
+          workingDir: 'MyHelper.ClientApp'
 
       - task: Npm@1
         displayName: 'Build Angular'
         inputs:
           command: custom
           customCommand: run build
-          workingDir: '**/MyHelper.ClientApp'
+          workingDir: 'MyHelper.ClientApp'
 
       - task: Npm@1
         displayName: 'Test Angular'
         inputs:
           command: custom
           customCommand: run test -- --watch=false
-          workingDir: '**/MyHelper.ClientApp'
+          workingDir: 'MyHelper.ClientApp'
