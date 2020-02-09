@@ -32,13 +32,6 @@ stages:
         command: test
         projects: '**/MyHelper.Tests.Unit/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
-
-    - task: PublishTestResults@2
-      displayName: Publish tests
-      condition: succeededOrFailed()
-      inputs:
-        testRunner: VSTest
-        testResultsFiles: '$(Agent.TempDirectory)/*.trx'
   
   - job: ClientApp
     steps:
