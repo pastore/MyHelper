@@ -292,7 +292,7 @@ __pycache__/
 /connect.lock
 /coverage
 /libpeerconnection.log
-/junit-tests
+junit/
 npm-debug.log
 testem.log
 /typings
