@@ -9,6 +9,7 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-mocha-reporter'),
+      require('karma-junit-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
@@ -19,8 +20,12 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, 'coverage'), reports: [ 'html', 'lcovonly' ],
       fixWebpackSourcePaths: true
     },
-
-    reporters: ['mocha'],
+    junitReporter: {
+      outputDir: 'junit-tests',
+      useBrowserName: false,
+      outputFile: 'test-report.xml'
+    },
+    reporters: ['junit', 'mocha'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
