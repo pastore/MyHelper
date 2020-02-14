@@ -90,7 +90,7 @@ namespace MyHelper.Api
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IFeedService, FeedService>();
-
+            services.AddScoped<ITagAdminService, TagAdminService>();
             #endregion
 
             #region -- Authentication --

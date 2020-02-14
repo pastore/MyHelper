@@ -1,0 +1,25 @@
+@import '../../../../../styles/_variables.scss';
+
+.admin_sidenav_wrapepr{
+  width: 170px;
+  background: $color-primary;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.admin_sidenav_item{
+  color: #fff;
+  &.active{
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.admin_sidenav_link{
+  display: flex !important;
+  align-items: center;
+}
+
+.admin_sidenav_link__icon{
+  margin-right: 10px;
+}
+

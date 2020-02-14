@@ -35,7 +35,8 @@ namespace MyHelper.Api.Core.Mappings
                     }
                 }));
 
-            CreateMap<Tag, TagViewModel>();
+            CreateMap<TagAdmin, TagAdminResponse>();
+            CreateMap<Tag, TagResponse>();
 
             CreateMap<ScheduleMhTask, ScheduleMhTaskViewModel>();
 

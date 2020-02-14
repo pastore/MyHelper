@@ -1,0 +1,17 @@
+
+  <mat-dialog-content >
+    <h1>Related Notes:</h1>
+    <div *ngFor="let item of data">
+      <p *ngFor="let note of item.notes">{{note}}</p>
+    </div>
+
+    <h1>Related Tasks:</h1>
+    <div *ngFor="let item of data">
+      <p *ngFor="let task of item.tasks">{{task}}</p>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">Close</button>
+  </mat-dialog-actions>

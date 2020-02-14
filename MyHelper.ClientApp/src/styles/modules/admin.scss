@@ -1,0 +1,53 @@
+
+:host::ng-deep {
+  @import './../components/_rich-editor.scss';
+  @import './../variables.scss';
+  .admin_conatainer{
+    height: 100%;
+    overflow-y: hidden;
+  }
+
+  .admin_header{
+    width: 100%;
+  }
+
+  .admin_sidenav{
+    background: transparent;
+  }
+
+  .admin_body{
+    overflow: hidden;
+    height: calc(100vh - 74px);
+
+    .mat-sidenav-content{
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+      height: calc(100vh - 74px);
+      margin-right: 10px;    
+    }
+  }
+
+  .admin_panel {
+    margin: auto;
+    color: grey;
+    font-size: 3vw;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+
+  .admin_button{
+    margin-right: 5px;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: inherit;
+  }
+
+   .tag-dialog {
+    padding-left: auto;
+  }
+
+}
+
+

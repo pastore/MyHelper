@@ -9,6 +9,7 @@ import { SystemModule } from './system/system.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { AdminModule } from './admin/admin.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AppComponent } from './app.component';
     SharedModule.forRoot(),
     SystemModule,
     AuthModule,
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]
