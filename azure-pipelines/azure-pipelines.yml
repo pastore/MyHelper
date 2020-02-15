@@ -25,6 +25,17 @@ stages:
       inputs:
         command: 'build'
         arguments: '--configuration $(buildConfiguration)'
+    
+    - task: SonarCloudPrepare@1
+      displayName: Prepare Sonar Cloud
+      inputs:
+        SonarCloud: 'myhelper'
+        organization: 'pastore'
+        scannerMode: 'CLI'
+        configMode: 'file'
+
+    - task: SonarCloudAnalyze@1
+      displayName: Run Code Analyzer
 
     - task: DotNetCoreCLI@2
       displayName: Test
