@@ -21,6 +21,12 @@ stages:
         installationPath: $(Agent.ToolsDirectory)/dotnet
 
     - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
+
+    - task: DotNetCoreCLI@2
       displayName: Build by MsBuild
       inputs:
         command: 'custom'
