@@ -47,7 +47,8 @@ export enum Icons {
   Note = 'note',
   Schedule = 'schedule',
   People = 'people',
-  Domain = 'domain'
+  Label = 'label',
+  DynamicFeed = 'dynamic_feed'
 }
 
 export enum MhTaskStatus {

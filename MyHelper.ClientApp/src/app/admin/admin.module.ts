@@ -1,14 +1,12 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AdminComponent } from './admin.component';
 import { CoreModule } from '../shared/modules/core.module';
+import { TagAdminService } from '../shared/services/tag-admin.service';
+import { AdminRoutingModule } from './admin-routing.module';
+import { AdminComponent } from './admin.component';
 import { AdminHeaderComponent } from './shared/components/admin-header/admin-header.component';
 import { AdminSidebarComponent } from './shared/components/admin-sidebar/admin-sidebar.component';
 import { TagsModule } from './tags-page/tags.module';
-import { AdminRoutingModule } from './admin-routing.module';
-import { TagAdminService } from '../shared/services/tag-admin.service';
-import { TagsDetailsComponent } from './tags-page/shared/tags-details/tags-details.component';
 
 @NgModule({
     imports: [
@@ -23,9 +21,8 @@ import { TagsDetailsComponent } from './tags-page/shared/tags-details/tags-detai
         AdminComponent,
         AdminSidebarComponent,
         AdminHeaderComponent
-
     ],
     providers: [TagAdminService]
 })
 
-export class AdminModule{}
+export class AdminModule { }

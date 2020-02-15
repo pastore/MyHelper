@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>MyHelper.Api.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>MyHelper.Api.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>  
 
   <ItemGroup>

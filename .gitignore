@@ -14,6 +14,10 @@ ssh/
 ssl/
 dist/
 
+# sonar
+.sonarlint/
+.scannerwork
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

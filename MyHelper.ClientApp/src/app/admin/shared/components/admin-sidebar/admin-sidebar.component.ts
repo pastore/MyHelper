@@ -20,7 +20,7 @@ export class AdminSidebarComponent implements OnInit {
   }
 
   private _initSidebarLinks() {
-    const adminTags = new SidebarLink(ApiRoute.AdminTags, Icons.Note);
+    const adminTags = new SidebarLink(ApiRoute.AdminTags, Icons.Label);
     const adminUsers = new SidebarLink(ApiRoute.AdminUsers, Icons.People);
 
     this.sidebarLinks.push(... [adminTags, adminUsers]);
