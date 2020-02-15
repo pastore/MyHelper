@@ -20,11 +20,12 @@ stages:
         version: 2.1.301
         installationPath: $(Agent.ToolsDirectory)/dotnet
 
-    - task: MSBuild@1
+    - task: DotNetCoreCLI@2
       displayName: Build by MsBuild
       inputs:
-        solution: '**/*.sln'
-        msbuildArchitecture: 'x64'
+        command: 'custom'
+        custom: 'msbuild'
+        arguments: '-property:Configuration=$(buildConfiguration)'
 
     - task: DotNetCoreCLI@2
       displayName: Build
