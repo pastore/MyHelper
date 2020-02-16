@@ -19,12 +19,30 @@ stages:
         packageType: sdk
         version: 2.1.301
         installationPath: $(Agent.ToolsDirectory)/dotnet
+        
+    - task: SonarCloudPrepare@1
+      displayName: Prepare Sonar Cloud
+      inputs:
+        SonarCloud: 'myhelper'
+        organization: 'pastore'
+        scannerMode: 'MSBuild'
+        projectKey: 'pastore_MyHelper'
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
 
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
-        command: 'build'
-        arguments: '--configuration $(buildConfiguration)'
+        command: 'custom'
+        custom: 'msbuild'
+        arguments: '-property:Configuration=$(buildConfiguration)'
+
+    - task: SonarCloudAnalyze@1
+      displayName: Run Code Analyzer
 
     - task: DotNetCoreCLI@2
       displayName: Test
