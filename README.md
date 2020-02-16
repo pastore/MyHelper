@@ -3,7 +3,7 @@
 The open source project built in order to help people organize and plan their affairs and tasks.
 In future plan to make social network from one.
 
-[![Build Status](https://dev.azure.com/PavloHrudiev/MyHelper/_apis/build/status/pastore.MyHelper?branchName=master)](https://dev.azure.com/PavloHrudiev/MyHelper/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/PavloHrudiev/MyHelper/_apis/build/status/pastore.MyHelper?branchName=master)](https://dev.azure.com/PavloHrudiev/MyHelper/_build/latest?definitionId=1&branchName=master) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pastore_MyHelper&metric=alert_status)](https://sonarcloud.io/dashboard?id=pastore_MyHelper)
 
 **Live demo**
 ----------------
@@ -12,7 +12,7 @@ In future plan to make social network from one.
 **Technologies**
 ----------------
 1. ASP.NET Core 2
-2. Angular 5
+2. Angular 7
 3. Angular Material
 4. Postgres 10
 5. Nginx
