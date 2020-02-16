@@ -6,7 +6,6 @@ import { IServerResponse } from '../models/base/server-response.model';
 import { AuthenticationService } from './authentication.service';
 
 export abstract class DataAPIService<T> {
-
   protected abstract get apiUrl(): string;
   private cache: ReplaySubject<T[]>;
   private isPristine = true;

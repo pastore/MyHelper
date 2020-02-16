@@ -4,7 +4,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MhMaterialModule } from '../../../../shared/modules/mh-material.module';
 import { NoteCardComponent } from './note-card.component';
-import { MatDialogMock } from '../../../../system/shared/mock.spec';
+import { MatDialogMock } from '../../../../shared/mock.spec';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { CardType } from '../../../../shared/utilities/enums';
 import { EMPTY } from 'rxjs';

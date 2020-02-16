@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MhTaskResponse } from '../../../../shared/models/tasks/mh-task-response.model';
 import { MhMaterialModule } from '../../../../shared/modules/mh-material.module';
 import { CardType } from '../../../../shared/utilities/enums';
-import { MatDialogMock } from '../../../../system/shared/mock.spec';
+import { MatDialogMock } from '../../../../shared/mock.spec';
 import { TaskCardComponent } from './task-card.component';
 
 describe('TaskCardComponent', () => {

@@ -14,14 +14,16 @@ import { TagAdminViewModel } from '../../shared/models/tags/tag-admin-view.model
 })
 
 export class TagsPageComponent implements OnInit {
-
   tags: TagAdminModel[];
   viewTags: TagAdminViewModel[];
   displayedColumns: string[] = ['id', 'name', 'actions'];
-
   dataSource = new MatTableDataSource<TagAdminViewModel>(this.viewTags);
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(
+    private _tagAdminService: TagAdminService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this._tagAdminService.getTags().subscribe(
@@ -32,15 +34,12 @@ export class TagsPageComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  constructor(private _tagAdminService: TagAdminService, public dialog: MatDialog) { }
-
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.height = '500px';
     dialogConfig.width = '500px';
     dialogConfig.data = this.tags;
 
-    console.log(JSON.stringify(this.viewTags));
     this.dialog.open(TagsDetailsComponent, dialogConfig);
   }
 

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MhMaterialModule } from '../../../../shared/modules/mh-material.module';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { SnackBarService } from '../../../../shared/snackbar/snackbar.service';
-import { mockAuthenticationService, mockRouter, mockSnackBarService } from '../../mock.spec';
+import { mockAuthenticationService, mockRouter, mockSnackBarService } from '../../../../shared/mock.spec';
 import { SystemHeaderComponent } from './system-header.component';
 
 describe('SystemHeaderComponent', () => {

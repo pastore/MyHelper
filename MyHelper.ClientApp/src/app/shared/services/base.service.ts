@@ -9,14 +9,13 @@ import { RequestMethod } from '../utilities/enums';
 
 @Injectable()
 export class BaseService {
-
   private _domain = environment.domain;
   private _routePrefix = 'api';
-  private defaultApiVersion = 'v1';
+  private _defaultApiVersion = 'v1';
 
   constructor(
     protected httpClient: HttpClient
-  ) {}
+  ) { }
 
   protected sendRequest<T>(
     method: RequestMethod,
@@ -54,7 +53,7 @@ export class BaseService {
     return any ? new HttpParams({fromObject: filter as any }) : null;
   }
 
-  protected _generateUrl(route: string, apiVersion: string = this.defaultApiVersion): string {
+  private _generateUrl(route: string, apiVersion: string = this._defaultApiVersion): string {
     return this._domain + '/' + this._routePrefix + '/' + apiVersion + '/' + route;
   }
 }

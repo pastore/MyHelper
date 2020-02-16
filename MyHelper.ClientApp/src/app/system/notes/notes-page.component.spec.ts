@@ -9,7 +9,7 @@ import { NoteResponse } from '../../shared/models/notes/note-response.model';
 import { NoteService } from '../../shared/services/note.service';
 import { Constants } from '../../shared/utilities/constants';
 import { CardType, FilterType } from '../../shared/utilities/enums';
-import { mockLoaderService, mockNoteResponses, mockNoteService } from '../shared/mock.spec';
+import { mockLoaderService, mockNoteResponses, mockNoteService } from '../../shared/mock.spec';
 import { NotesPageComponent } from './notes-page.component';
 
 describe('NotesPageComponent', () => {

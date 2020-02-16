@@ -2,7 +2,7 @@ import { ChangeDetectorRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoaderService } from '../../shared/loader/loader.service';
 import { FeedService } from '../../shared/services/feed.service';
-import { mockFeedService, mockLoaderService } from '../shared/mock.spec';
+import { mockFeedService, mockLoaderService } from '../../shared/mock.spec';
 import { FeedsPageComponent } from './feeds-page.component';
 
 describe('FeedsPageComponent', () => {

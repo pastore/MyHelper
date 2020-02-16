@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TaskEditCardComponent } from './task-edit-card.component';
-import { mockAuthenticationService, mockTaskService, mockTagService } from '../../../../system/shared/mock.spec';
+import { mockAuthenticationService, mockTaskService, mockTagService } from '../../../../shared/mock.spec';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TaskService } from '../../../../shared/services/task.service';
 import { TagService } from '../../../../shared/services/tag.service';

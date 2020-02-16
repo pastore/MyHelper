@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TasksPageComponent } from './tasks-page.component';
 import { TaskService } from '../../shared/services/task.service';
-import { mockTaskService, mockLoaderService } from '../shared/mock.spec';
+import { mockTaskService, mockLoaderService } from '../../shared/mock.spec';
 import { LoaderService } from '../../shared/loader/loader.service';
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA } from '@angular/core';
 

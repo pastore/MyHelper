@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { SnackBarService } from './snackbar.service';
 import { MatSnackBar } from '@angular/material';
-import { mockMatSnackBar } from '../../system/shared/mock.spec';
+import { mockMatSnackBar } from '../mock.spec';
 
 describe('SnackBarService', () => {
   beforeEach(() => {

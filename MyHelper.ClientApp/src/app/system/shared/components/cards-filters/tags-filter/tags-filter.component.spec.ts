@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MhMaterialModule } from '../../../../../shared/modules/mh-material.module';
 import { TagService } from '../../../../../shared/services/tag.service';
-import { mockTagService } from '../../../mock.spec';
+import { mockTagService } from '../../../../../shared/mock.spec';
 import { TagsFilterComponent } from './tags-filter.component';
 
 describe('TagsFilterComponent', () => {

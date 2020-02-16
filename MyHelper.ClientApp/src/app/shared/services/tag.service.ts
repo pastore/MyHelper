@@ -11,7 +11,6 @@ import { TagAdminModel } from '../models/tags/tag-admin.model';
 
 @Injectable()
 export class TagService extends DataAPIService<TagViewModel> {
-
   get tags(): Observable<TagViewModel[]> {
     return this.data;
   }

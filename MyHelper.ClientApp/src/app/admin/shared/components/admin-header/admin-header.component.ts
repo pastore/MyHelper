@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { AppUserViewModel } from '../../../../shared/models/user/app-user-view.model';
+import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { SnackBarService } from '../../../../shared/snackbar/snackbar.service';
 import { ApiRoute } from '../../../../shared/utilities/api-route';
-import { AuthenticationService } from '../../../../shared/services/authentication.service'; 
-import { AppUserViewModel } from '../../../../shared/models/user/app-user-view.model';
 
 @Component({
   selector: 'mh-admin-header',
@@ -30,5 +29,4 @@ export class AdminHeaderComponent implements OnInit {
     this.authService.logout();
     this.router.navigateByUrl('/' + ApiRoute.Login);
   }
-
 }

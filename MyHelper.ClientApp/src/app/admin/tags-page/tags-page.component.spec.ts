@@ -1,5 +1,10 @@
-/* tslint:disable:no-unused-variable */
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogMock, mockTagAdminService } from '../../shared/mock.spec';
+import { MhMaterialModule } from '../../shared/modules/mh-material.module';
+import { TagAdminService } from '../../shared/services/tag-admin.service';
 import { TagsPageComponent } from './tags-page.component';
 
 describe('TagsPageComponent', () => {
@@ -8,16 +13,23 @@ describe('TagsPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TagsPageComponent ]
+      declarations: [ TagsPageComponent ],
+      imports: [
+        NoopAnimationsModule,
+        MhMaterialModule
+      ],
+      providers: [
+        {provide: MatDialog, useClass: MatDialogMock },
+        {provide: TagAdminService, useValue: mockTagAdminService }
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
-    .compileComponents();
+    .compileComponents().then(() => {
+      fixture = TestBed.createComponent(TagsPageComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TagsPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

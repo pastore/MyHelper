@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { MhMaterialModule } from '../../shared/modules/mh-material.module';
 import { AuthenticationService } from '../../shared/services/authentication.service';
-import { mockAuthenticationService, mockRouter, mockSnackBarService } from '../../system/shared/mock.spec';
+import { mockAuthenticationService, mockRouter, mockSnackBarService } from '../../shared/mock.spec';
 import { LoginComponent } from './login.component';
 import { SnackBarService } from '../../shared/snackbar/snackbar.service';
 

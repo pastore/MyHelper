@@ -11,7 +11,7 @@ import {
   mockAuthenticationService,
   createMockNoteResponce,
   mockTags,
-  MatChipInputEventMock } from '../../../shared/mock.spec';
+  MatChipInputEventMock } from '../../../../shared/mock.spec';
 import { TagService } from '../../../../shared/services/tag.service';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { NgxWigModule } from 'ngx-wig';
