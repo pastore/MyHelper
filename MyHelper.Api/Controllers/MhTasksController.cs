@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Messanging;
-using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
-using MyHelper.Api.Services.MHTask;
+using MyHelper.Api.Models.Tasks;
+using MyHelper.Api.Services.MHTasks;
 using MyHelper.Api.Services.Token;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Messanging;
-using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Notes;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Notes;
 using MyHelper.Api.Services.Token;

@@ -4,7 +4,7 @@ import { CardDeleteModel } from '../../../../shared/models/base/card-delete.mode
 import { ICard } from '../../../../shared/models/base/i-card.model';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { CardType } from '../../../../shared/utilities/enums';
-import { CardsDeleteModalComponent } from '../../../shared/components/cards-delete-modal/cards-delete-modal.component';
+import { CardsDeleteModalComponent } from '../../../shared/components/cards-delete-dialog/cards-delete-dialog.component';
 
 @Component({
   selector: 'mh-note-card',

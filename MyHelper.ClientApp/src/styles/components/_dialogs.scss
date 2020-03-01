@@ -1,5 +1,5 @@
 // delete dialog
-.dialog_delete_wrapper {
+.cards_delete_dialog_wrapper {
   min-width: 320px;
   box-sizing:border-box;
   padding:65px 80px;
@@ -8,18 +8,67 @@
   align-items:center;
 }
 
-.dialog_delete_title{
+.cards_delete_dialog_title {
   font-size: 16px;
   margin-bottom: 15px;
 }
 
-.dialog_delete_content{
+.cards_delete_dialog_content {
   font-size: 20px;
 }
 
-.dialog_buttons{
+.cards_delete_dialog_buttons {
   margin-top: 25px;
-  .dialog_delete_button_cancel{
+  .cards_delete_dialog_button_cancel{
     margin-right: 35px;
   }
 }
+
+.tags_dialog_wrapper {
+  min-width: 320px;
+  padding:30px;
+}
+
+.tags_dialog_title {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.tags_dialog_content {
+  margin-bottom: 30px;
+
+  .content_view {
+    display: flex;
+  }
+
+  .content_view__item{
+    flex: 1 1 170px;
+  }
+
+  .content_view__item_title{
+    font-weight: 500;
+    font-size: 18px;;
+  }
+
+  .content_delete_name{
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+
+  .empty_list {
+    font-style: italic;
+  }
+}
+
+.tags_dialog_buttons {
+  button {
+    min-width: 45px;
+    box-sizing: content-box;
+  }
+
+  .tags_dialog_button_cancel{
+    margin-right: 20px;
+  }
+}
+

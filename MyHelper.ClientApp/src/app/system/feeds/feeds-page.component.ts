@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
-import { timer } from 'rxjs';
+import { ChangeDetectorRef, Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { timer, Subscription } from 'rxjs';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 import { LoaderService } from '../../shared/loader/loader.service';
 import { ICard } from '../../shared/models/base/i-card.model';
@@ -14,10 +14,11 @@ import { BaseCardsComponent } from '../shared/components/base/base-cards.compone
 })
 export class FeedsPageComponent
 extends BaseCardsComponent<ICard<FeedResponse>, null>
- implements OnInit {
+ implements OnInit, OnDestroy {
   screenWidth: number;
   firstLoadDate: Date;
   newCards: ICard<FeedResponse>[];
+  timerSubscription: Subscription;
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -40,7 +41,7 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
-    timer(60000).subscribe(() => {
+    this.timerSubscription = timer(60000).subscribe(() => {
       this._feedService.getFeeds().subscribe((feeds: FeedResponse[]) => {
         const items = feeds
         .filter((x) => {
@@ -52,6 +53,10 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
         this.newCards = items.concat(...this.newCards);
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.timerSubscription.unsubscribe();
   }
 
   showNewFeeds() {

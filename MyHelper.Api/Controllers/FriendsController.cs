@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Core;
-using MyHelper.Api.Models.Friend;
-using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Friends;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Friends;
 using MyHelper.Api.Services.Token;

@@ -1,5 +1,5 @@
 ﻿using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Models.Friend;
+using MyHelper.Api.Models.Friends;
 using System.Collections.Generic;
 using System.Linq;
 

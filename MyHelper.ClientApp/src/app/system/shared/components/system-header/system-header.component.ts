@@ -26,7 +26,7 @@ export class SystemHeaderComponent implements OnInit {
 
   logOut() {
     this.snackBarService.close();
-    this.authService.logout();
-    this.router.navigateByUrl('/' + ApiRoute.Login);
+    this.authService.clearCredentials();
+    this.router.navigateByUrl(ApiRoute.Default + ApiRoute.Login);
   }
 }

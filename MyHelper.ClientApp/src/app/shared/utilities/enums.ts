@@ -79,3 +79,19 @@ export enum FeedType {
   CreateNote = 1,
   CreateMhTask = 2
 }
+
+export enum AdminDialogType {
+  View = 1,
+  Edit = 2,
+  Delete = 3
+}
+
+export enum HttpErrorStatus {
+  Unauthorized = 401,
+  Forbidden = 403
+}
+
+export enum SortDirection {
+  Asc,
+  Desc
+}

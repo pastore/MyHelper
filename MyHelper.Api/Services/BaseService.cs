@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MyHelper.Api.Core;
 using MyHelper.Api.Core.Exceptions;
+using MyHelper.Api.Core.Extensions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
@@ -37,12 +39,27 @@ namespace MyHelper.Api.Services
             {
                 query = query.Skip(fetchRequest.Offset.Value);
             }
+
             if (fetchRequest.Limit.HasValue)
             {
                 query = query.Take(fetchRequest.Limit.Value);
             }
 
             return query;
+        }
+
+        protected IQueryable<T> SortItems<T, TFr>(IQueryable<T> query, TFr sortRequest)
+            where TFr : ISortRequest
+        {
+            var prop = typeof(T).GetProperty(sortRequest.SortColumn);
+
+            var sortingDictionary = new Dictionary<string, IQueryable<T>>
+            {
+                { SortDirection.Asc.GetName().ToLower(), query.OrderBy(x => prop.GetValue(x, null)) },
+                { SortDirection.Desc.GetName().ToLower(), query.OrderByDescending(x => prop.GetValue(x, null)) }
+            };
+
+            return sortingDictionary[sortRequest.SortDirection];
         }
 
         private void CheckModel(object request)

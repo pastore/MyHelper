@@ -1,4 +1,5 @@
 export class ApiRoute {
+  public static Default = '/';
   public static Login = 'login';
   public static Logout = 'logout';
   public static Registration = 'registration';
@@ -14,6 +15,7 @@ export class ApiRoute {
   public static Tags = 'tags';
   public static AppUsers = 'users';
 
+  public static Admin = 'admin';
   public static AdminTags = 'admin/tags';
   public static AdminUsers = 'admin/users';
 }

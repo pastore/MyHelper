@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { IServerResponse } from '../models/base/server-response.model';
 import { RequestMethod } from '../utilities/enums';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class BaseService {
@@ -14,7 +15,8 @@ export class BaseService {
   private _defaultApiVersion = 'v1';
 
   constructor(
-    protected httpClient: HttpClient
+    protected httpClient: HttpClient,
+    protected authService: AuthenticationService,
   ) { }
 
   protected sendRequest<T>(
@@ -22,8 +24,7 @@ export class BaseService {
     route: string,
     data?: any,
     headers?: HttpHeaders,
-    params?: HttpParams,
-    handleResponse?: (res: IServerResponse) => T
+    params?: HttpParams
   ): Observable<T> {
     return this.httpClient.request<IServerResponse>(
       method,
@@ -31,7 +32,7 @@ export class BaseService {
       { body: data, headers: headers, params: params }
     ).pipe(
       map((response: IServerResponse) => {
-        return handleResponse ? handleResponse(response) : response.result;
+        return response.result;
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(error.message);
@@ -51,6 +52,11 @@ export class BaseService {
     }
 
     return any ? new HttpParams({fromObject: filter as any }) : null;
+  }
+
+  protected generateAuthHeaders(): HttpHeaders {
+    const token = this.authService.isLoggedIn() ? this.authService.token : '';
+    return new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 
   private _generateUrl(route: string, apiVersion: string = this._defaultApiVersion): string {

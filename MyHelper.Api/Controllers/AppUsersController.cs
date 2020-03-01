@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
-using MyHelper.Api.Models.User;
+using MyHelper.Api.Models.Users;
 using MyHelper.Api.Services.Token;
-using MyHelper.Api.Services.User;
-using System.Collections.Generic;
+using MyHelper.Api.Services.Users;
 using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
@@ -22,10 +21,12 @@ namespace MyHelper.Api.Controllers
             _appUserService = appUserService;
         }
 
+        [Authorize(Policy = "Admin")]
+        [Route("admin")]
         [HttpGet]
-        public async Task<ServerResponse<List<AppUserViewModel>>> GetAppUsersAsync(AppUserFilterRequest appUserFilterRequest)
+        public async Task<ServerResponse<PageResult<AppUserViewModel>>> GetAdminTagsByPageAsync(AdminTableFilterRequest adminTableFilterRequest)
         {
-            return await _appUserService.GetAppUsersAsync(AccountId, appUserFilterRequest);
+            return await _appUserService.GetAdminUsersByPageAsync(adminTableFilterRequest);
         }
     }
 }

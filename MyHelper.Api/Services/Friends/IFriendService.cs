@@ -1,6 +1,5 @@
 ﻿using MyHelper.Api.Core;
-using MyHelper.Api.Models.Friend;
-using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Friends;
 using MyHelper.Api.Models.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;

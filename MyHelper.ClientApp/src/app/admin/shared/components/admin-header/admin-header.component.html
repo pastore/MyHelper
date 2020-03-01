@@ -1,8 +1,10 @@
 <mat-toolbar>
   <div class="admin_header" fxLayout="row" fxLayoutAlign=" center">
-    <img class="myhelper_logo" src="/assets/mh_small_logo.png">
+    <a mat-button href="/">
+      <img class="myhelper_logo" src="/assets/mh_small_logo.png">
+    </a>
     <div class="admin_panel">
-      <span >Admin Panel</span>
+      Admin Panel
     </div>
     <button mat-button [matMenuTriggerFor]="menuRef" class="user_button">
         <div fxLayout="row" fxLayoutAlign="center center">
@@ -11,7 +13,7 @@
           <mat-icon class="mi-16 mat-icon material-icons">keyboard_arrow_down</mat-icon>
         </div>
     </button>
-    
+
     <mat-menu #menuRef="matMenu" x-position="below" y-position="below"  [overlapTrigger]="false">
         <button mat-menu-item (click)="logOut()">
           <mat-icon class="mat-icon material-icons">exit_to_app</mat-icon>

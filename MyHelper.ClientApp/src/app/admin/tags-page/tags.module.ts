@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CoreModule } from '../../shared/modules/core.module';
-import { MhMaterialModule } from '../../shared/modules/mh-material.module';
-import { TagService } from '../../shared/services/tag.service';
-import { TagsDetailsComponent } from './shared/tags-details/tags-details.component';
+import { AdminTableFilterModule } from '../shared/modules/admin-table-filter.module';
+import { TagsDetailsComponent } from './shared/tags-dialog/tags-dialog.component';
 import { TagsPageComponent } from './tags-page.component';
 
 @NgModule({
   imports: [
     CoreModule,
-    MhMaterialModule
+    AdminTableFilterModule
   ],
-  exports: [],
-  declarations: [TagsPageComponent,  TagsDetailsComponent],
-  entryComponents: [TagsDetailsComponent],
-  providers: [TagService],
+  declarations: [
+    TagsPageComponent,
+    TagsDetailsComponent
+  ],
+  entryComponents: [TagsDetailsComponent]
 })
 
 export class TagsModule { }

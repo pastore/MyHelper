@@ -11,7 +11,6 @@ import { ApiRoute } from '../../../../shared/utilities/api-route';
   styleUrls: ['./admin-header.component.scss']
 })
 export class AdminHeaderComponent implements OnInit {
-
   user: AppUserViewModel;
 
   constructor(
@@ -26,7 +25,7 @@ export class AdminHeaderComponent implements OnInit {
 
   logOut() {
     this.snackBarService.close();
-    this.authService.logout();
-    this.router.navigateByUrl('/' + ApiRoute.Login);
+    this.authService.clearCredentials();
+    this.router.navigateByUrl(ApiRoute.Default + ApiRoute.Login);
   }
 }

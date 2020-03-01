@@ -54,4 +54,10 @@
         CreateNote = 1,
         CreateMhTask = 2
     }
+
+    public enum SortDirection
+    {
+        Asc,
+        Desc
+    }
 }

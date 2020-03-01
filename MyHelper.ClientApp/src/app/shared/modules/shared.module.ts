@@ -2,6 +2,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ErrorHandlerInterceptor } from '../http-interceptors/error-handler.interceptor';
 import { LoaderService } from '../loader/loader.service';
+import { AccountService } from '../services/account.servise';
 import { AppUserService } from '../services/app-user.service';
 import { AuthGuard } from '../services/authentication.guard';
 import { AuthenticationService } from '../services/authentication.service';
@@ -21,6 +22,7 @@ export class SharedModule {
             ngModule: SharedModule,
             providers: [
               AuthenticationService,
+              AccountService,
               AuthGuard,
               LoaderService,
               SnackBarService,

@@ -4,8 +4,7 @@
     {
         public static ServerResponse<T> Build<T>(T result)
         {
-            var serverResponse = new ServerResponse<T>();
-            serverResponse.Result = result;
+            var serverResponse = new ServerResponse<T> {Result = result};
 
             return serverResponse;
         }

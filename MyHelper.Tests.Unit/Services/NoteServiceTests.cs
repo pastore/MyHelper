@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using MyHelper.Api.DAL.Context;
-using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Notes;
 using MyHelper.Api.Services.Notes;
 using MyHelper.Tests.Unit.Seed;
 using NUnit.Framework;
@@ -64,7 +64,7 @@ namespace MyHelper.Tests.Unit.Services
         public void GetNotesAsyncTest_FiltersTagIdsFieldEqualsToNotesTagsIds_WorkProperly()
         {
             noteFilterRequest = new NoteFilterRequest();
-            (noteFilterRequest.TagIds as List<long>).AddRange(new long[] { 1, 2, 3 }); 
+            (noteFilterRequest.TagIds as List<long>)?.AddRange(new long[] { 1, 2, 3 }); 
 
             Assert.That(_noteService.GetNotesAsync(1, noteFilterRequest).Result.Result.Count, Is.EqualTo(3));
         }

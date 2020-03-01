@@ -2,6 +2,7 @@
 using MyHelper.Api.Models.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MyHelper.Api.Models.Feeds;
 
 namespace MyHelper.Api.Services.Feeds
 {

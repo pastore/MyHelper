@@ -1,12 +1,12 @@
+import { MatChipInputEvent } from '@angular/material';
 import { of } from 'rxjs';
+import { ILoaderState } from './loader/i-loader-state.model';
+import { NoteResponse } from './models/notes/note-response.model';
+import { TagAdminModel } from './models/tags/tag-admin.model';
+import { TagViewModel } from './models/tags/tag-view.model';
+import { MhTaskResponse } from './models/tasks/mh-task-response.model';
 import { AppUserViewModel } from './models/user/app-user-view.model';
 import { UserRole } from './utilities/enums';
-import { TagViewModel } from './models/tags/tag-view.model';
-import { NoteResponse } from './models/notes/note-response.model';
-import { MatChipInputEvent } from '@angular/material';
-import { ILoaderState } from './loader/i-loader-state.model';
-import { MhTaskResponse } from './models/tasks/mh-task-response.model';
-import { TagAdminModel } from './models/tags/tag-admin.model';
 
 const mockAppUserViewModel: AppUserViewModel = {
   id: 1,
@@ -109,8 +109,11 @@ export let mockTagService = {
 };
 
 export let mockAuthenticationService = {
-  currentUser: mockAppUserViewModel
+  currentUser: mockAppUserViewModel,
+  isLoggedIn: () => true
 };
+
+export let mockAccountService = {};
 
 export class MatChipInputEventMock implements MatChipInputEvent {
   input: HTMLInputElement;
@@ -129,6 +132,12 @@ export let mockRouter = {
   navigate: jasmine.createSpy('navigate')
 };
 
+export let mockActivatedRoute = {
+  snapshot: {
+    queryParams: {}
+  }
+};
+
 export let mockSnackBarService = { };
 
 export let mockMatSnackBar = {};
@@ -140,5 +149,10 @@ export let mockAdminTags = [
 
 export let mockTagAdminService = {
   getTags: () => of(mockAdminTags),
-  deleteTag: () => of(true)
+  deleteTag: () => of(true),
+  getTagsByPage: () => of([])
+};
+
+export let mockAppUserService = {
+  getUsersByPage: () => of([])
 };

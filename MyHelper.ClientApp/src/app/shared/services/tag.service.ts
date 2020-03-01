@@ -7,7 +7,6 @@ import { TagViewModel } from '../models/tags/tag-view.model';
 import { ApiRoute } from '../utilities/api-route';
 import { AuthenticationService } from './authentication.service';
 import { DataAPIService } from './data-api.service';
-import { TagAdminModel } from '../models/tags/tag-admin.model';
 
 @Injectable()
 export class TagService extends DataAPIService<TagViewModel> {

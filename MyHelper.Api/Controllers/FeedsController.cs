@@ -5,6 +5,7 @@ using MyHelper.Api.Services.Feeds;
 using MyHelper.Api.Services.Token;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MyHelper.Api.Models.Feeds;
 
 namespace MyHelper.Api.Controllers
 {

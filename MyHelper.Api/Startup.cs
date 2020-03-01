@@ -4,11 +4,12 @@ using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyHelper.Api.Core;
+using MyHelper.Api.Core.Extensions;
 using MyHelper.Api.Core.Mappings;
 using MyHelper.Api.Core.Messanging;
 using MyHelper.Api.Core.Messanging.Consumers;
@@ -18,16 +19,16 @@ using MyHelper.Api.DAL;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Options;
-using MyHelper.Api.Services.Account;
+using MyHelper.Api.Services.Accounts;
 using MyHelper.Api.Services.Feeds;
 using MyHelper.Api.Services.Friends;
-using MyHelper.Api.Services.MHTask;
+using MyHelper.Api.Services.MHTasks;
 using MyHelper.Api.Services.Notes;
-using MyHelper.Api.Services.Tag;
+using MyHelper.Api.Services.Tags;
 using MyHelper.Api.Services.Token;
-using MyHelper.Api.Services.User;
+using MyHelper.Api.Services.Users;
 using System;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using System.Security.Claims;
 
 namespace MyHelper.Api
 {
@@ -51,7 +52,11 @@ namespace MyHelper.Api
 
             services.AddMvcCore()
                 .AddApiExplorer()
-                .AddAuthorization()
+                .AddAuthorization(options =>
+                    {
+                        options.AddPolicy("Admin",
+                            builder => { builder.RequireClaim(ClaimTypes.Role, EUserRole.Admin.GetName()); });
+                    })
                 .AddFormatterMappings()
                 .AddDataAnnotations()
                 .AddJsonFormatters()
@@ -90,7 +95,6 @@ namespace MyHelper.Api
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IFeedService, FeedService>();
-            services.AddScoped<ITagAdminService, TagAdminService>();
             #endregion
 
             #region -- Authentication --
@@ -100,7 +104,6 @@ namespace MyHelper.Api
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-
                     options.TokenValidationParameters = tokenService.GetTokenValidationParameters();
                 });
 
@@ -176,7 +179,7 @@ namespace MyHelper.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DbSeeder seeder)
+        public void Configure(IApplicationBuilder app, DbSeeder seeder)
         {
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseAuthentication();

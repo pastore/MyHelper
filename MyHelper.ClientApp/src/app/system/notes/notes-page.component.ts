@@ -18,6 +18,7 @@ export class NotesPageComponent
   extends BaseEditCardsComponent<ICard<NoteResponse>, NoteFilterRequest>
   implements OnInit, OnDestroy {
   subscription = new Subscription();
+
   constructor(
     private _noteService: NoteService,
     private _loaderService: LoaderService,

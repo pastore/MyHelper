@@ -8,7 +8,7 @@ import { FeedsModule } from './feeds/feeds.module';
 import { SystemComponent } from './system.component';
 import { SystemSidebarComponent } from './shared/components/system-sidebar/system-sidebar.component';
 import { SystemHeaderComponent } from './shared/components/system-header/system-header.component';
-import { CardsDeleteModalComponent } from './shared/components/cards-delete-modal/cards-delete-modal.component';
+import { CardsDeleteModalComponent } from './shared/components/cards-delete-dialog/cards-delete-dialog.component';
 
 @NgModule({
   imports: [

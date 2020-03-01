@@ -1,0 +1,11 @@
+<mat-card>
+  <mat-form-field>
+    <mat-label>{{ label }}</mat-label>
+    <input matInput
+      [placeholder]="placeholder"
+      autocomplete="off"
+      [(ngModel)]="query"
+      (change)="onInputChange($event)"
+    >
+  </mat-form-field>
+</mat-card>

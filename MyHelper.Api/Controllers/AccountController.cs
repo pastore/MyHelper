@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Authentication;
 using MyHelper.Api.Models.Response;
-using MyHelper.Api.Services.Account;
+using MyHelper.Api.Services.Accounts;
 using MyHelper.Api.Services.Token;
 using System.Threading.Tasks;
 

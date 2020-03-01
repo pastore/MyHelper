@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using MyHelper.Api.Models.Token;
+using MyHelper.Api.Models.Authentication;
 using System.Collections.Generic;
 using System.Security.Claims;
 

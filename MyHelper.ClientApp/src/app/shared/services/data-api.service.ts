@@ -68,7 +68,7 @@ export abstract class DataAPIService<T> {
   }
 
   private _generateAuthHeaders() {
-    const token = this.authService.currentUser ? this.authService.token : '';
+    const token = this.authService.isLoggedIn() ? this.authService.token : '';
     this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
   }
 }

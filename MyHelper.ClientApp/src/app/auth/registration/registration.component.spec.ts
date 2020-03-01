@@ -3,11 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
+import { mockAccountService, mockAuthenticationService, mockRouter, mockSnackBarService } from '../../shared/mock.spec';
 import { MhMaterialModule } from '../../shared/modules/mh-material.module';
+import { AccountService } from '../../shared/services/account.servise';
 import { AuthenticationService } from '../../shared/services/authentication.service';
-import { mockAuthenticationService, mockRouter, mockSnackBarService } from '../../shared/mock.spec';
-import { RegistrationComponent } from './registration.component';
 import { SnackBarService } from '../../shared/snackbar/snackbar.service';
+import { RegistrationComponent } from './registration.component';
 
 describe('RegistrationComponent', () => {
   let component: RegistrationComponent;
@@ -24,6 +25,7 @@ describe('RegistrationComponent', () => {
       declarations: [ RegistrationComponent ],
       providers: [
         {provide: Router, useValue: mockRouter },
+        {provide: AccountService, useValue: mockAccountService},
         {provide: AuthenticationService, useValue: mockAuthenticationService},
         {provide: SnackBarService, useValue: mockSnackBarService}
       ],

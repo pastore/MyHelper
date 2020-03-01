@@ -1,42 +1,30 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { BaseService } from './base.service';
-import { AuthenticationService } from './authentication.service';
+import { Observable, of } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
+import { AdminTableFilterRequest } from '../models/base/admin-table-filter-request.model';
+import { IPageResult } from '../models/base/i-page-result.model';
 import { AppUserViewModel } from '../models/user/app-user-view.model';
-import { RequestMethod } from '../utilities/enums';
 import { ApiRoute } from '../utilities/api-route';
-import { AppUserFilterRequest } from '../models/user/app-user-filter-request.model';
+import { RequestMethod } from '../utilities/enums';
+import { AuthenticationService } from './authentication.service';
+import { BaseService } from './base.service';
 
 @Injectable()
 export class AppUserService extends BaseService {
 
   constructor(
     protected httpClient: HttpClient,
-    protected _authService: AuthenticationService,
+    protected authService: AuthenticationService,
     private _loaderService: LoaderService
   ) {
-    super(httpClient);
+    super(httpClient, authService);
   }
 
-  getAppUsers(appUserFilterRequest?: AppUserFilterRequest, isLoader = true): Observable<AppUserViewModel[]> {
-    const searchParams = this.generateSearchParams(appUserFilterRequest);
-    const headers = this._generateAuthHeaders();
-    if (isLoader) {
-      this._loaderService.show();
-    }
-    return this.sendRequest<AppUserViewModel[]>(RequestMethod.Get, ApiRoute.AppUsers, null, headers, searchParams)
-    .pipe(finalize(() => {
-      if (isLoader) {
-        this._loaderService.hide();
-      }
-    }));
-  }
-
-  private _generateAuthHeaders(): HttpHeaders {
-    const token = this._authService.currentUser ? this._authService.token : '';
-    return new HttpHeaders({'Authorization': 'Bearer ' + token});
+  getUsersByPage(adminTableFilterRequest: AdminTableFilterRequest): Observable<IPageResult<AppUserViewModel>> {
+    const searchParams = this.generateSearchParams(adminTableFilterRequest);
+    const headers = this.generateAuthHeaders();
+    return this.sendRequest<IPageResult<AppUserViewModel>>(
+      RequestMethod.Get, ApiRoute.AppUsers + '/' + ApiRoute.Admin, null, headers, searchParams);
   }
 }

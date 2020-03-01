@@ -2,8 +2,8 @@
 using Microsoft.IdentityModel.Tokens;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Exceptions;
+using MyHelper.Api.Models.Authentication;
 using MyHelper.Api.Models.Options;
-using MyHelper.Api.Models.Token;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;

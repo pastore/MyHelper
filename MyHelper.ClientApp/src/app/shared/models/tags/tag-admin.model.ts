@@ -4,6 +4,6 @@ export class TagAdminModel  {
     public name: string
   ) { }
 
-  notes: string[];
-  tasks: string[];
+  notes: string[]= [];
+  tasks: string[] = [];
 }

@@ -1,0 +1,55 @@
+  <div class="tags_dialog_wrapper">
+    <div class="tags_dialog_title">
+      {{ dialogType[data.dialogType] }} <span *ngIf="data.dialogType === dialogType.View">({{ data.name }})</span>
+    </div>
+    <div class="tags_dialog_content">
+      <ng-container [ngSwitch]="data.dialogType">
+        <div *ngSwitchCase="dialogType.View" class="content_view" >
+          <div class="content_view__item">
+            <div class="content_view__item_title">Notes</div>
+            <ng-container *ngIf="data.notes.length > 0; else noitems">
+              <div *ngFor="let note of data.notes">
+                {{note}}
+              </div>
+            </ng-container>
+          </div>
+          <div class="content_view__item">
+            <div class="content_view__item_title">Tasks</div>
+            <ng-container *ngIf="data.tasks.length > 0; else noitems">
+              <div *ngFor="let task of data.tasks">
+                {{task}}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div *ngSwitchCase="dialogType.Edit">
+          <mat-form-field>
+            <mat-label>Tag name</mat-label>
+            <input matInput [(ngModel)]="data.name">
+          </mat-form-field>
+        </div>
+
+        <div *ngSwitchCase="dialogType.Delete" class="content_delete">
+          Are you sure to delete this tag?
+          <div class="content_delete_name">
+            {{ data.name }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="tags_dialog_buttons">
+      <button class="tags_dialog_button_cancel" type="button" mat-raised-button mat-dialog-close>Cancel</button>
+      <button *ngIf="data.dialogType === dialogType.Edit || data.dialogType === dialogType.Delete"
+        class="mat-primary"
+        mat-raised-button
+        type="button"
+        (click)="closeDialog()">
+        Ok
+      </button>
+    </div>
+  </div>
+
+  <ng-template #noitems>
+    <div class="empty_list">empty list</div>
+  </ng-template>

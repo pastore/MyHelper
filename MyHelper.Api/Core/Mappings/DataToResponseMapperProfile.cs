@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Models.Feed;
-using MyHelper.Api.Models.Friend;
+using MyHelper.Api.Models.Feeds;
+using MyHelper.Api.Models.Friends;
 using MyHelper.Api.Models.Messanging;
-using MyHelper.Api.Models.Response;
-using MyHelper.Api.Models.Tag;
-using MyHelper.Api.Models.Task;
-using MyHelper.Api.Models.User;
+using MyHelper.Api.Models.Notes;
+using MyHelper.Api.Models.Tags;
+using MyHelper.Api.Models.Tasks;
+using MyHelper.Api.Models.Users;
 using Newtonsoft.Json;
 using System.Linq;
 

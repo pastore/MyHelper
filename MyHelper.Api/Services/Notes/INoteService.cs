@@ -1,5 +1,5 @@
 ﻿using MyHelper.Api.Models.Messanging;
-using MyHelper.Api.Models.Request;
+using MyHelper.Api.Models.Notes;
 using MyHelper.Api.Models.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
