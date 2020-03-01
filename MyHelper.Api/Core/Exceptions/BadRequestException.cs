@@ -2,7 +2,7 @@
 
 namespace MyHelper.Api.Core.Exceptions
 {
-    public class BadRequestException: Exception
+    public class BadRequestException : Exception
     {
         public BadRequestException() { }
 

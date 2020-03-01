@@ -29,7 +29,7 @@ namespace MyHelper.Api.Services.Users
 
                 var pageResult = new PageResult<AppUserViewModel>
                 {
-                    Items = query.Select(x => new AppUserViewModel()
+                    Items = query.Select(x => new AppUserViewModel
                     {
                         Id = x.Id,
                         UserName = x.Username,

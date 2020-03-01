@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyHelper.Api.Models.Feeds;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Feeds;
-using MyHelper.Api.Services.Token;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyHelper.Api.Models.Feeds;
 
 namespace MyHelper.Api.Controllers
 {
@@ -17,7 +16,6 @@ namespace MyHelper.Api.Controllers
         private readonly IFeedService _feedService;
 
         public FeedsController(
-            ITokenService tokenService,
             IFeedService feedService)
         {
             _feedService = feedService;

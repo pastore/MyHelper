@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using System;
 
 namespace MyHelper.Api
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
