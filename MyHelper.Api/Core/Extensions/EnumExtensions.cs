@@ -19,7 +19,7 @@ namespace MyHelper.Api.Core.Extensions
 
         public static TEnum GetEnumValue<TEnum>(this string enumStr) where TEnum : struct
         {
-            return Enum.TryParse<TEnum>(enumStr, out var ret) ? ret : default;
+            return Enum.TryParse<TEnum>(enumStr, out var ret) ? ret : default(TEnum);
         }
     }
 }
