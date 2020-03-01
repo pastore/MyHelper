@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyHelper.Api.Core.Attributes
 {
-    public class CollectionHasElements: ValidationAttribute
+    public class CollectionHasElementsAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)
         {

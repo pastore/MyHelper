@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyHelper.Api.Models.Request;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Users;
-using MyHelper.Api.Services.Token;
 using MyHelper.Api.Services.Users;
 using System.Threading.Tasks;
 
@@ -16,7 +15,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly IAppUserService _appUserService;
 
-        public AppUsersController(IAppUserService appUserService, ITokenService tokenService) : base(tokenService)
+        public AppUsersController(IAppUserService appUserService)
         {
             _appUserService = appUserService;
         }

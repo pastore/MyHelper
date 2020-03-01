@@ -5,7 +5,6 @@ using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Tasks;
 using MyHelper.Api.Services.MHTasks;
-using MyHelper.Api.Services.Token;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,7 +18,10 @@ namespace MyHelper.Api.Controllers
         private readonly IMhTaskService _mhTaskService;
         private readonly IRequestClient<IFeedMessage> _requestClient;
 
-        public MhTasksController(IMhTaskService mhTaskService, ITokenService tokenService, IRequestClient<IFeedMessage> requestClient) : base(tokenService)
+        public MhTasksController(
+            IMhTaskService mhTaskService,
+            IRequestClient<IFeedMessage> requestClient
+            )
         {
             _mhTaskService = mhTaskService;
             _requestClient = requestClient;

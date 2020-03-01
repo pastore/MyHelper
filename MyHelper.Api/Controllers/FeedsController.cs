@@ -18,7 +18,7 @@ namespace MyHelper.Api.Controllers
 
         public FeedsController(
             ITokenService tokenService,
-            IFeedService feedService) : base(tokenService)
+            IFeedService feedService)
         {
             _feedService = feedService;
         }

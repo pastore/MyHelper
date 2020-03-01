@@ -2,7 +2,6 @@
 using MyHelper.Api.Models.Authentication;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Accounts;
-using MyHelper.Api.Services.Token;
 using System.Threading.Tasks;
 
 namespace MyHelper.Api.Controllers
@@ -13,7 +12,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly IAccountService _accountService;
 
-        public AccountController(IAccountService appUserService, ITokenService tokenService) : base(tokenService)
+        public AccountController(IAccountService appUserService)
         {
             _accountService = appUserService;
         }

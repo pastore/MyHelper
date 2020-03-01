@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace MyHelper.Api.Core.Scheduler
 {
@@ -32,7 +32,7 @@ namespace MyHelper.Api.Core.Scheduler
 
                     if (!(parentMhTask.Children?.Count < scheduleMhTask.MaxCount)) continue;
 
-                    var mhTask = CreateMhTask(dbContext, parentMhTask, scheduleMhTask);
+                    var mhTask = CreateMhTask(parentMhTask, scheduleMhTask);
 
                     CreateMhTaskTags(dbContext, parentMhTask, mhTask);
 
@@ -53,12 +53,10 @@ namespace MyHelper.Api.Core.Scheduler
 
         #region -- Private methods --
 
-        private MhTask CreateMhTask(MyHelperContext dbContext, MhTask parentMhTask, ScheduleMhTask scheduleMhTask)
+        private MhTask CreateMhTask(MhTask parentMhTask, ScheduleMhTask scheduleMhTask)
         {
-            var startDate = parentMhTask.Children.Any() 
-                ? (parentMhTask.Children.Last().StartDate < parentMhTask.StartDate 
-                    ? parentMhTask.StartDate 
-                    : parentMhTask.Children.Last().StartDate)
+            var startDate = parentMhTask.Children.Any() && parentMhTask.Children.Last().StartDate >= parentMhTask.StartDate
+                ? parentMhTask.Children.Last().StartDate
                 : parentMhTask.StartDate;
 
             var mhTask = new MhTask

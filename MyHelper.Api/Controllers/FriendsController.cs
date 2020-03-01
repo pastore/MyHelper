@@ -4,7 +4,6 @@ using MyHelper.Api.Core;
 using MyHelper.Api.Models.Friends;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Friends;
-using MyHelper.Api.Services.Token;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ namespace MyHelper.Api.Controllers
     {
         private readonly IFriendService _friendService;
 
-        public FriendsController(IFriendService friendService, ITokenService tokenService) : base(tokenService)
+        public FriendsController(IFriendService friendService)
         {
             _friendService = friendService;
         }

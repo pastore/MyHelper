@@ -1,7 +1,6 @@
-﻿using System;
+﻿using MyHelper.Api.Core;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using MyHelper.Api.Core;
 
 namespace MyHelper.Api.DAL.Entities
 {

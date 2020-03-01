@@ -5,7 +5,6 @@ using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Notes;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Notes;
-using MyHelper.Api.Services.Token;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,8 +20,7 @@ namespace MyHelper.Api.Controllers
 
         public NotesController(
             INoteService noteService,
-            ITokenService tokenService,
-            IRequestClient<IFeedMessage> requestClient) : base(tokenService)
+            IRequestClient<IFeedMessage> requestClient)
         {
             _noteService = noteService;
             _requestClient = requestClient;
