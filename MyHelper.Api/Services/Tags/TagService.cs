@@ -21,7 +21,9 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.Tags.Select(x => _mapper.Map<Tag, TagResponse>(x));
+                var query = _myHelperDbContext.Tags
+                    .AsQueryable()
+                    .Select(x => _mapper.Map<Tag, TagResponse>(x));
 
                 return ServerResponseBuilder.Build(await query.ToListAsync());
             });
@@ -77,7 +79,9 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var tag = await _myHelperDbContext.Tags.FirstOrDefaultAsync(x => x.Id == tagRequest.Id);
+                var tag = await _myHelperDbContext.Tags
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == tagRequest.Id);
 
                 if (tag == null)
                     throw new NotFoundException(Constants.Errors.TagNotExists);
@@ -95,7 +99,9 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var tag = await _myHelperDbContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
+                var tag = await _myHelperDbContext.Tags
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (tag == null)
                     throw new NotFoundException(Constants.Errors.TagNotExists);

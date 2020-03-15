@@ -15,6 +15,7 @@ import {
 import { TagService } from '../../../../shared/services/tag.service';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { NgxWigModule } from 'ngx-wig';
+import { of } from 'rxjs';
 
 describe('NoteEditCardComponent', () => {
   let component: NoteEditCardComponent;
@@ -37,13 +38,12 @@ describe('NoteEditCardComponent', () => {
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
-    .compileComponents();
+    .compileComponents()
+    .then(() => {
+      fixture = TestBed.createComponent(NoteEditCardComponent);
+      component = fixture.componentInstance;
+    });
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(NoteEditCardComponent);
-    component = fixture.componentInstance;
-  });
 
   it('should create component', () => {
     expect(component).toBeTruthy();
@@ -149,7 +149,7 @@ describe('NoteEditCardComponent', () => {
 
     it('should add tag', () => {
       mockTags.push({id: 12, name: tagName});
-      spyOn(mockTagService, 'createTag').and.returnValues(mockTags);
+      spyOn(mockTagService, 'createTag').and.callFake(() => of(mockTags));
 
       component.addTag(event);
       expect(component.tags.map(x => x.name)).toContain(tagName);

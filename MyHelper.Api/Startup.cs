@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Extensions;
 using MyHelper.Api.Core.Mappings;
@@ -29,6 +30,7 @@ using MyHelper.Api.Services.Token;
 using MyHelper.Api.Services.Users;
 using System;
 using System.Security.Claims;
+using System.Text;
 
 namespace MyHelper.Api
 {
@@ -59,7 +61,7 @@ namespace MyHelper.Api
                     })
                 .AddFormatterMappings()
                 .AddDataAnnotations()
-                .AddJsonFormatters()
+                .AddJsonOptions(options => { })
                 .AddCors(builder =>
                 {
                     builder.AddPolicy("AllowAll", policy =>
@@ -74,7 +76,6 @@ namespace MyHelper.Api
             #region -- App settings --
 
             services.Configure<AuthOptions>(Configuration.GetSection("Auth"));
-            services.Configure<AuthOptions>(Configuration.GetSection("RabitMQ"));
 
             #endregion
 
@@ -99,12 +100,19 @@ namespace MyHelper.Api
 
             #region -- Authentication --
 
-            var sp = services.BuildServiceProvider();
-            var tokenService = sp.GetService<ITokenService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.TokenValidationParameters = tokenService.GetTokenValidationParameters();
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Auth:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Auth:Audience"],
+                        ValidateLifetime = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Auth:Key"])),
+                        ValidateIssuerSigningKey = true,
+                    };
                 });
 
             #endregion
@@ -182,9 +190,15 @@ namespace MyHelper.Api
         public void Configure(IApplicationBuilder app, DbSeeder seeder)
         {
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            app.UseAuthentication();
+            app.UseRouting();
             app.UseCors("AllowAll");
-            app.UseMvc();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
 
             seeder.SeedDb();
         }

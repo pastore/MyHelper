@@ -8,7 +8,7 @@ import { startWith, map } from 'rxjs/operators';
 import { MhTaskRequest } from '../../../../shared/models/tasks/mh-task-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 import { ScheduleMhTaskType, MhTaskVisibleType } from '../../../../shared/utilities/enums';

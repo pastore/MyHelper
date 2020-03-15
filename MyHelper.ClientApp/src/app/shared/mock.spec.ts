@@ -1,4 +1,4 @@
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { of } from 'rxjs';
 import { ILoaderState } from './loader/i-loader-state.model';
 import { NoteResponse } from './models/notes/note-response.model';

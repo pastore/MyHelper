@@ -1,5 +1,5 @@
-import { AfterViewChecked, AfterViewInit, HostListener, OnInit } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { AfterViewChecked, AfterViewInit, HostListener, OnInit, Directive } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { timer } from 'rxjs';
 import { Entity } from '../../../../shared/models/base/entity.model';
 import { FilterItem } from '../../../../shared/models/base/filter-item.model';

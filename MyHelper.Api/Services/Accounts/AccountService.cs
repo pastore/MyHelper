@@ -32,6 +32,7 @@ namespace MyHelper.Api.Services.Accounts
             return await BaseInvokeAsync(async () =>
             {
                 var appUser = await _myHelperDbContext.AppUsers
+                    .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Username == request.UserName);
 
                 if (appUser == null)

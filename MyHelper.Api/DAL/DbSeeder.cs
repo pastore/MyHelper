@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using MyHelper.Api.Core;
 using MyHelper.Api.Core.Helpers;
 using MyHelper.Api.DAL.Context;
@@ -11,9 +12,9 @@ namespace MyHelper.Api.DAL
     public class DbSeeder
     {
         private readonly MyHelperContext _myHelperDbContext;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public DbSeeder(MyHelperContext dbContext, IHostingEnvironment hostingEnvironment)
+        public DbSeeder(MyHelperContext dbContext, IWebHostEnvironment hostingEnvironment)
         {
             _myHelperDbContext = dbContext;
             _hostingEnvironment = hostingEnvironment;
@@ -26,55 +27,53 @@ namespace MyHelper.Api.DAL
                 _myHelperDbContext.Database.EnsureCreated();
             }
 
-            using (var transaction = _myHelperDbContext.Database.BeginTransaction())
+            using var transaction = _myHelperDbContext.Database.BeginTransaction();
+            try
             {
-                try
+                if (!_myHelperDbContext.AppUsers.Any(x => x.UserRole == EUserRole.Admin))
                 {
-                    if (!_myHelperDbContext.AppUsers.Any(x => x.UserRole == EUserRole.Admin))
+                    var user = new AppUser
                     {
-                        var user = new AppUser
-                        {
-                            Email = "admin@admin.com",
-                            Username = "admin",
-                            Password = HashPasswordHelper.Hash("admin"),
-                            UserRole = EUserRole.Admin,
-                            CreatedDate = DateTime.Now
-                        };
+                        Email = "admin@admin.com",
+                        Username = "admin",
+                        Password = HashPasswordHelper.Hash("admin"),
+                        UserRole = EUserRole.Admin,
+                        CreatedDate = DateTime.Now
+                    };
 
-                        _myHelperDbContext.AppUsers.Add(user);
-                        _myHelperDbContext.SaveChanges();
-                    }
-
-                    if (!_myHelperDbContext.Tags.Any() && !_myHelperDbContext.Notes.Any() && !_myHelperDbContext.NoteTags.Any())
-                    {
-                        var note = new Note
-                        {
-                            Name = "Ef Core Migrations",
-                            Description = "1. dotnet ef migrations add name 2. dotnet ef database update",
-                            CreateDate = DateTime.Now,
-                            UpdateDate = DateTime.Now,
-                            AppUser = _myHelperDbContext.AppUsers.FirstOrDefault()
-                        };
-
-                        var tags = new Tag[]
-                        {
-                            new Tag { Name = "entity framework" },
-                            new Tag { Name = "migrations" }
-                        };
-
-                        _myHelperDbContext.AddRange(
-                           new NoteTag { Note = note, Tag = tags[0] },
-                           new NoteTag { Note = note, Tag = tags[1] }
-                        );
-                        _myHelperDbContext.SaveChanges();
-                    }
-
-                    transaction.Commit();
+                    _myHelperDbContext.AppUsers.Add(user);
+                    _myHelperDbContext.SaveChanges();
                 }
-                catch
+
+                if (!_myHelperDbContext.Tags.Any() && !_myHelperDbContext.Notes.Any() && !_myHelperDbContext.NoteTags.Any())
                 {
-                    transaction.Rollback();
+                    var note = new Note
+                    {
+                        Name = "Ef Core Migrations",
+                        Description = "1. dotnet ef migrations add name 2. dotnet ef database update",
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        AppUser = _myHelperDbContext.AppUsers.FirstOrDefault()
+                    };
+
+                    var tags = new Tag[]
+                    {
+                        new Tag { Name = "entity framework" },
+                        new Tag { Name = "migrations" }
+                    };
+
+                    _myHelperDbContext.AddRange(
+                        new NoteTag { Note = note, Tag = tags[0] },
+                        new NoteTag { Note = note, Tag = tags[1] }
+                    );
+                    _myHelperDbContext.SaveChanges();
                 }
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
             }
         }
     }

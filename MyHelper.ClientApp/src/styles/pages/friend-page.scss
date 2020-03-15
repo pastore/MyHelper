@@ -2,4 +2,11 @@
   &.active{
     background: rgba(0, 0, 0, 0.1);
   }
+
+  .friens_nav_item--link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
 }

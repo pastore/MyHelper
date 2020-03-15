@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
@@ -51,15 +52,27 @@ namespace MyHelper.Api.Services
         protected IQueryable<T> SortItems<T, TFr>(IQueryable<T> query, TFr sortRequest)
             where TFr : ISortRequest
         {
-            var prop = typeof(T).GetProperty(sortRequest.SortColumn);
+            var type = typeof(T);
+            var prop = type.GetProperty(sortRequest.SortColumn);
+            var param = Expression.Parameter(type);
 
-            var sortingDictionary = new Dictionary<string, IQueryable<T>>
+            if (prop != null)
             {
-                { SortDirection.Asc.GetName().ToLower(), query.OrderBy(x => prop.GetValue(x, null)) },
-                { SortDirection.Desc.GetName().ToLower(), query.OrderByDescending(x => prop.GetValue(x, null)) }
-            };
+                var expr = Expression.Lambda<Func<T, object>>(
+                    Expression.Convert(Expression.Property(param, prop), typeof(object)),
+                    param
+                );
 
-            return sortingDictionary[sortRequest.SortDirection];
+                var sortingDictionary = new Dictionary<string, IQueryable<T>>
+                {
+                    { SortDirection.Asc.GetName().ToLower(), query.OrderBy(expr) },
+                    { SortDirection.Desc.GetName().ToLower(), query.OrderByDescending(expr) }
+                };
+
+                return sortingDictionary[sortRequest.SortDirection];
+            }
+
+            return query;
         }
 
         private void CheckModel(object request)

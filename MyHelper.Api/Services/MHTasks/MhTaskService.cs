@@ -25,11 +25,11 @@ namespace MyHelper.Api.Services.MHTasks
             return await BaseInvokeAsync(async () =>
             {
                 var query = _myHelperDbContext.MhTasks
-                .Include(x => x.ScheduleMhTask)
-                .Include(x => x.MhTaskTags)
-                .ThenInclude(e => e.Tag)
-                .Where(x => x.MhTaskState != EMhTaskState.Delete && x.AppUserId == accountId)
-                .AsQueryable();
+                    .AsQueryable()
+                    .Include(x => x.ScheduleMhTask)
+                    .Include(x => x.MhTaskTags)
+                    .ThenInclude(e => e.Tag)
+                    .Where(x => x.MhTaskState != EMhTaskState.Delete && x.AppUserId == accountId);
 
                 query = FilterMhTasks(query, mhTaskFilterRequest);
 
@@ -37,7 +37,8 @@ namespace MyHelper.Api.Services.MHTasks
 
                 query = FetchItems(query, mhTaskFilterRequest);
 
-                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable().Select(x => _mapper.Map<MhTask, MhTaskResponse>(x)).ToList());
+                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable()
+                    .Select(x => _mapper.Map<MhTask, MhTaskResponse>(x)).ToListAsync());
             });
         }
 
@@ -45,7 +46,9 @@ namespace MyHelper.Api.Services.MHTasks
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id && x.AppUserId == accountId);
+                var mhTask = await _myHelperDbContext.MhTasks
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == id && x.AppUserId == accountId);
 
                 if (mhTask == null)
                     throw new NotFoundException(Constants.Errors.TaskNotExists);
@@ -120,7 +123,9 @@ namespace MyHelper.Api.Services.MHTasks
                 }
                 else
                 {
-                    mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == mhTaskRequest.Id);
+                    mhTask = await _myHelperDbContext.MhTasks
+                        .AsQueryable()
+                        .FirstOrDefaultAsync(x => x.Id == mhTaskRequest.Id);
                 }
 
                 if (mhTask == null)
@@ -148,7 +153,9 @@ namespace MyHelper.Api.Services.MHTasks
 
                 _myHelperDbContext.MhTasks.Update(mhTask);
                 
-                var mhTaskTags = await _myHelperDbContext.MhTaskTags.Where(x => x.MhTaskId == mhTask.Id).ToListAsync();
+                var mhTaskTags = await _myHelperDbContext.MhTaskTags
+                    .AsQueryable()
+                    .Where(x => x.MhTaskId == mhTask.Id).ToListAsync();
                 _myHelperDbContext.MhTaskTags.RemoveRange(mhTaskTags.Where(x => !mhTaskRequest.TagIds.Contains(x.TagId)));
 
                 await _myHelperDbContext.MhTaskTags.AddRangeAsync(
@@ -168,7 +175,9 @@ namespace MyHelper.Api.Services.MHTasks
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id);
+                var mhTask = await _myHelperDbContext.MhTasks
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (mhTask == null)
                     throw new NotFoundException(Constants.Errors.TaskNotExists);
@@ -189,7 +198,9 @@ namespace MyHelper.Api.Services.MHTasks
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks.FirstOrDefaultAsync(x => x.Id == id);
+                var mhTask = await _myHelperDbContext.MhTasks
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (mhTask == null)
                     throw new NotFoundException(Constants.Errors.TaskNotExists);

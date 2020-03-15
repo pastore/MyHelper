@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MyHelper.Api.Core;
-using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.Models.Authentication;
 using MyHelper.Api.Models.Options;
 using System;
@@ -16,30 +14,19 @@ namespace MyHelper.Api.Services.Token
     public class TokenService : ITokenService
     {
         private readonly IOptions<AuthOptions> _authOptions;
-        private readonly TokenValidationParameters _tokenValidationParameters;
 
         public TokenService(IOptions<AuthOptions> authOptions)
         {
             _authOptions = authOptions;
-            _tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = _authOptions.Value.Issuer,
-                ValidateAudience = true,
-                ValidAudience = _authOptions.Value.Audience,
-                ValidateLifetime = true,
-                IssuerSigningKey = GetSymmetricSecurityKey(),
-                ValidateIssuerSigningKey = true,
-            };
         }
 
         public TokenInfo CreateToken(IEnumerable<KeyValuePair<object, object>> claims)
         {
             var keyValuePairs = claims as KeyValuePair<object, object>[] ?? claims.ToArray();
-            IEnumerable<KeyValuePair<object, object>> filteredClaims = keyValuePairs.Where(x => x.Key != null && x.Value != null);
+            var filteredClaims = keyValuePairs.Where(x => x.Key != null && x.Value != null);
 
-            DateTime now = DateTime.Now;
-            DateTime expires = now.Add(TimeSpan.FromMinutes(_authOptions.Value.MinutesLifetime));
+            var now = DateTime.Now;
+            var expires = now.Add(TimeSpan.FromMinutes(_authOptions.Value.MinutesLifetime));
 
             var jwtSecurityToken = new JwtSecurityToken(
                 _authOptions.Value.Issuer,
@@ -52,34 +39,7 @@ namespace MyHelper.Api.Services.Token
             return new TokenInfo() { Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken), ExpiredDate = expires };
         }
 
-        public IEnumerable<Claim> GetClaims(string token)
-        {
-            if (token == null || !IsTokenValid(token.Replace("Bearer ", string.Empty)))
-                throw new UnauthorizedException(Constants.Errors.TokenIsInvalid);
-
-            var handler = new JwtSecurityTokenHandler();
-
-            if (!(handler.ReadToken(token.Replace("Bearer ", string.Empty)) is JwtSecurityToken jwtSecurityToken))
-                return Enumerable.Empty<Claim>();
-
-            return jwtSecurityToken.Claims;
-        }
-
-        public TokenValidationParameters GetTokenValidationParameters()
-        {
-            return _tokenValidationParameters;
-        }
-
-        private bool IsTokenValid(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-
-            handler.ValidateToken(token, _tokenValidationParameters, out SecurityToken securityKey);
-
-            return securityKey != null;
-        }
-
-        private  SymmetricSecurityKey GetSymmetricSecurityKey()
+        private SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_authOptions.Value.Key));
         }

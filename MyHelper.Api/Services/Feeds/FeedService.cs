@@ -37,12 +37,12 @@ namespace MyHelper.Api.Services.Feeds
                         .Select(x => x.RequestedToId));
 
                 var query = _myHelperDbContext.Feeds
+                    .AsQueryable()
                     .Where(x => friendIds.Contains(x.AppUserId))
-                    .OrderByDescending(x => x.CreateDate)
-                    .AsQueryable();
+                    .OrderByDescending(x => x.CreateDate);
 
                 return ServerResponseBuilder.Build(await query.ToAsyncEnumerable()
-                    .Select(x => _mapper.Map<Feed, FeedResponse>(x)).ToList());
+                    .Select(x => _mapper.Map<Feed, FeedResponse>(x)).ToListAsync());
             });
         }
 

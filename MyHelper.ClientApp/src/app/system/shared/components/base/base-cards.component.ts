@@ -1,5 +1,5 @@
-import { AfterViewChecked, AfterViewInit, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { AfterViewChecked, AfterViewInit, ElementRef, OnInit, ViewChild, Directive } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Constants } from '../../../../shared/utilities/constants';
@@ -9,7 +9,7 @@ export abstract class BaseCardsComponent<T_Card, T_Filter> implements OnInit, Af
   cardsFilterModel: T_Filter;
   isLoading = false;
   isScroll = true;
-  @ViewChild('cardList', { read: ElementRef }) public cardList: ElementRef;
+  @ViewChild('cardList', { read: ElementRef, static: true }) public cardList: ElementRef;
 
   ngOnInit() {
     this.cardsFilterModel = {} as T_Filter;

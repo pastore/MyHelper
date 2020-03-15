@@ -3,9 +3,16 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "module": "es2015",
+    "module": "esnext",
     "types": []
   },
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

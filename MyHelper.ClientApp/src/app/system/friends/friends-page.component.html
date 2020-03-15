@@ -3,15 +3,15 @@
       <div class="cards_page_sidenav_wrapper">
         <mat-nav-list dense>
           <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
-              <a mat-line [routerLink]="['/friends/my']" >My</a>
+            <a class="friens_nav_item--link" [routerLink]="['/friends/my']" >My</a>
           </mat-list-item>
           <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
-            <a mat-line [routerLink]="['/friends/requests']" >Requests</a>
-        </mat-list-item>
-        <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
-          <a mat-line [routerLink]="['/friends/search']" >Search</a>
-      </mat-list-item>
-      </mat-nav-list>
+            <a class="friens_nav_item--link" [routerLink]="['/friends/requests']" >Requests</a>
+          </mat-list-item>
+          <mat-list-item class="friens_nav_item" [routerLinkActive]="['active']">
+            <a class="friens_nav_item--link" [routerLink]="['/friends/search']" >Search</a>
+          </mat-list-item>
+        </mat-nav-list>
       </div>
     </mat-sidenav>
     <mat-sidenav-content>

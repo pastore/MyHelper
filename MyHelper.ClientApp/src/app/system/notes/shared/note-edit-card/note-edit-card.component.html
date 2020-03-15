@@ -19,7 +19,6 @@
         name="description"
         mhNoWhiteSpace
         #description="ngModel"
-        [isSourceModeAllowed]="true"
         [placeholder]="'Enter description here'">
       </ngx-wig>
       <mat-hint *ngIf="editCardForm.submitted && (!description.pristine || !description.valid)">

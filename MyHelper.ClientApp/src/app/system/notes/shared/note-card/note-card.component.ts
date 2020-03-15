@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { CardDeleteModel } from '../../../../shared/models/base/card-delete.model';
 import { ICard } from '../../../../shared/models/base/i-card.model';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';

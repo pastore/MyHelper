@@ -17,7 +17,7 @@ import { SnackBarService } from '../snackbar/snackbar.service';
   declarations: []
 })
 export class SharedModule {
-    static forRoot(): ModuleWithProviders {
+    static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,
             providers: [

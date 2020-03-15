@@ -23,10 +23,13 @@ namespace MyHelper.Api.Services.Friends
             return await BaseInvokeAsync(async () =>
             {
                 var friends = _myHelperDbContext.Friends
+                    .AsQueryable()
                     .Where(x => x.RequestedById == accountId || x.RequestedToId == accountId)
                     .Select(x => x.RequestedById == accountId ? x.RequestedToId : x.RequestedById);
 
-                var searchFriends = _myHelperDbContext.AppUsers.Where(x => !friends.Contains(x.Id) && x.Id != accountId);
+                var searchFriends = _myHelperDbContext.AppUsers
+                    .AsQueryable()
+                    .Where(x => !friends.Contains(x.Id) && x.Id != accountId);
 
                 searchFriends = FilterSearchFriends(searchFriends, friendFilterRequest);
 
@@ -34,7 +37,8 @@ namespace MyHelper.Api.Services.Friends
 
                 searchFriends = FetchItems(searchFriends, friendFilterRequest);
 
-                return ServerResponseBuilder.Build(await searchFriends.ToAsyncEnumerable().Select(x => _mapper.Map<AppUser, FriendViewModel>(x)).ToList());
+                return ServerResponseBuilder.Build(await searchFriends.ToAsyncEnumerable()
+                    .Select(x => _mapper.Map<AppUser, FriendViewModel>(x)).ToListAsync());
             });
         }
 
@@ -137,8 +141,9 @@ namespace MyHelper.Api.Services.Friends
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friends = _myHelperDbContext.Friends.Where(x =>
-                    (x.RequestedById == accountId && x.RequestedToId == personId)
+                var friends = _myHelperDbContext.Friends
+                    .AsQueryable()
+                    .Where(x => (x.RequestedById == accountId && x.RequestedToId == personId)
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
                 if (!friends.Any())

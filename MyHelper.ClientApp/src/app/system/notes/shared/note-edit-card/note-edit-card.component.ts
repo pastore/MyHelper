@@ -8,7 +8,7 @@ import { startWith, map } from 'rxjs/operators';
 import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
 import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 import { isNotNullOrEmpty } from '../../../../shared/utilities/tools';
@@ -80,18 +80,18 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
     if (isNotNullOrEmpty(tagName) && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
       && !this.isTagsSelected) {
       const sub = this._tagService.createTag(new TagRequest(tagName))
-      .subscribe(tags => {
-        this.tags = tags;
+        .subscribe(tags => {
+          this.tags = tags;
 
-        const tag = this.tags.find(x => x.name === tagName);
-        if (tag) {
-          this.editCardModel.tags.push(tag);
-          this.tagCtrl = new FormControl(this.editCardModel.tags, [], asyncRequiredTagsValidator.bind(this));
-        }
+          const tag = this.tags.find(x => x.name === tagName);
+          if (tag) {
+            this.editCardModel.tags.push(tag);
+            this.tagCtrl = new FormControl(this.editCardModel.tags, [], asyncRequiredTagsValidator.bind(this));
+          }
 
-        this._filteredTags();
-        this._subscribeChangeTags();
-      });
+          this._filteredTags();
+          this._subscribeChangeTags();
+        });
       this.subs.add(sub);
     }
 

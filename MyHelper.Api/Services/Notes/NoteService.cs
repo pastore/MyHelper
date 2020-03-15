@@ -25,10 +25,10 @@ namespace MyHelper.Api.Services.Notes
             return await BaseInvokeAsync(async () =>
             {
                 var query = _myHelperDbContext.Notes
+                    .AsQueryable()
                     .Include(x => x.NoteTags)
                     .ThenInclude(e => e.Tag)
-                    .Where(x => x.AppUserId == accountId)
-                    .AsQueryable();
+                    .Where(x => x.AppUserId == accountId);
 
                 query = FilterNotes(query, noteFilterRequest);
 
@@ -36,7 +36,8 @@ namespace MyHelper.Api.Services.Notes
 
                 query = FetchItems(query, noteFilterRequest);
 
-                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable().Select(x => _mapper.Map<Note, NoteResponse>(x)).ToList());
+                return ServerResponseBuilder.Build(await query.ToAsyncEnumerable()
+                    .Select(x => _mapper.Map<Note, NoteResponse>(x)).ToListAsync());
             });
         }
 
@@ -44,7 +45,9 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id  && x.AppUserId == accountId);
+                var note = await _myHelperDbContext.Notes
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == id  && x.AppUserId == accountId);
 
                 if (note == null)
                     throw new NotFoundException(Constants.Errors.NoteNotExists);
@@ -90,7 +93,9 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                Note note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
+                Note note = await _myHelperDbContext.Notes
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
 
                 if (note == null)
                     throw new NotFoundException(Constants.Errors.NoteNotExists);
@@ -101,8 +106,11 @@ namespace MyHelper.Api.Services.Notes
 
                 _myHelperDbContext.Notes.Update(note);
 
-                var noteTags = await _myHelperDbContext.NoteTags.Where(x => x.NoteId == note.Id).ToListAsync();
-                _myHelperDbContext.NoteTags.RemoveRange(noteTags.Where(x => !noteRequest.TagIds.Contains(x.TagId)));
+                var noteTags = await _myHelperDbContext.NoteTags
+                    .AsQueryable()
+                    .Where(x => x.NoteId == note.Id).ToListAsync();
+                _myHelperDbContext.NoteTags
+                    .RemoveRange(noteTags.Where(x => !noteRequest.TagIds.Contains(x.TagId)));
 
                 await _myHelperDbContext.NoteTags.AddRangeAsync(
                     noteRequest.TagIds
@@ -120,7 +128,9 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = await _myHelperDbContext.Notes.FirstOrDefaultAsync(x => x.Id == id);
+                var note = await _myHelperDbContext.Notes
+                    .AsQueryable()
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (note == null)
                     throw new NotFoundException(Constants.Errors.NoteNotExists);

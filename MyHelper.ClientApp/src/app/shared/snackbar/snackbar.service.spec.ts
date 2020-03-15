@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { SnackBarService } from './snackbar.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { mockMatSnackBar } from '../mock.spec';
 
 describe('SnackBarService', () => {
