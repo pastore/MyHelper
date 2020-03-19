@@ -11,8 +11,8 @@ In future plan to make social network from one.
 
 **Technologies**
 ----------------
-1. ASP.NET Core 2
-2. Angular 7
+1. ASP.NET Core 3.1
+2. Angular 9
 3. Angular Material
 4. Postgres 10
 5. Nginx
@@ -34,7 +34,7 @@ In future plan to make social network from one.
 
     **ASP.NET Core**
 
-    1. Make sure that **ASP Core 2** is installed 
+    1. Make sure that **ASP Core 3.1** is installed 
     2. Make sure that **Postresql 10** is installed 
     3. Clone or fork repository
     4. Make sure that you in **MyHelper.API** folder
@@ -43,7 +43,7 @@ In future plan to make social network from one.
         - dotnet ef database update
     7. In cmd type => dotnet run 
 
-    **Angular 7**
+    **Angular 9**
 
     1. Make sure that you in **MyHelper.ClientApp** folder
     2. Open cmd and type => npm install
