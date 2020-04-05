@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   
 stages:
-- stage: QA
+- stage: Build, UT and  analyze on SonarCloud
   jobs:
   - job: API
     steps:
@@ -20,13 +20,13 @@ stages:
         version: 3.1.102
         installationPath: $(Agent.ToolsDirectory)/dotnet
         
-    - task: SonarCloudPrepare@1
-      displayName: Prepare Sonar Cloud
-      inputs:
-        SonarCloud: 'myhelper'
-        organization: 'pastore'
-        scannerMode: 'MSBuild'
-        projectKey: 'pastore_MyHelper'
+#    - task: SonarCloudPrepare@1
+ #     displayName: Prepare Sonar Cloud
+  #    inputs:
+   #     SonarCloud: 'myhelper'
+    #    organization: 'pastore'
+     #   scannerMode: 'MSBuild'
+      #  projectKey: 'pastore_MyHelper'
 
     - task: DotNetCoreCLI@2
       displayName: Restore
@@ -41,8 +41,8 @@ stages:
         custom: 'msbuild'
         arguments: '-property:Configuration=$(buildConfiguration)'
 
-    - task: SonarCloudAnalyze@1
-      displayName: Run Code Analyzer
+#    - task: SonarCloudAnalyze@1
+#      displayName: Run Code Analyzer
 
     - task: DotNetCoreCLI@2
       displayName: Test
