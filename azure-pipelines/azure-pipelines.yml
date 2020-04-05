@@ -21,12 +21,12 @@ stages:
         installationPath: $(Agent.ToolsDirectory)/dotnet
         
 #    - task: SonarCloudPrepare@1
- #     displayName: Prepare Sonar Cloud
-  #    inputs:
-   #     SonarCloud: 'myhelper'
-    #    organization: 'pastore'
-     #   scannerMode: 'MSBuild'
-      #  projectKey: 'pastore_MyHelper'
+#      displayName: Prepare Sonar Cloud
+#      inputs:
+#        SonarCloud: 'myhelper'
+#        organization: 'pastore'
+#        scannerMode: 'MSBuild'
+#        projectKey: 'pastore_MyHelper'
 
     - task: DotNetCoreCLI@2
       displayName: Restore
