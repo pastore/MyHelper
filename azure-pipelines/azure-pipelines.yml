@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   
 stages:
-- stage: Build, UT and  analyze on SonarCloud
+- stage: QA
   jobs:
   - job: API
     steps:
