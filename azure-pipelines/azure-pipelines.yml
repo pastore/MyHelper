@@ -77,9 +77,9 @@ stages:
           targetType: 'inline'
           script: |
             git commit -m 'Update version of the build [ci skip]'
-            
-            git push origin
-
+            git push https://%TOKEN%@github.com/pastore/MyHelper.git
+        env:
+          TOKEN: $(PAT)
       - task: Npm@1
         displayName: 'Build Angular'
         inputs:
