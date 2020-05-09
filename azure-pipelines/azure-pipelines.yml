@@ -79,8 +79,8 @@ stages:
           script: |
             git checkout master
             git commit -m 'Update version of the build [ci skip]'
-            echo https://${TOKEN}@github.com/pastore/MyHelper.git
-            git push https://${TOKEN}@github.com/pastore/MyHelper.git
+            echo https://${PAT}@github.com/pastore/MyHelper.git
+            git push https://${PAT}@github.com/pastore/MyHelper.git
         env:
           TOKEN: $(PAT)
       - task: Npm@1
