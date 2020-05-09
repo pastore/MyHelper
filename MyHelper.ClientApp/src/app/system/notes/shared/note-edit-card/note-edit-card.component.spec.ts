@@ -137,7 +137,7 @@ describe('NoteEditCardComponent', () => {
   });
 
   describe('addTag', () => {
-    let event, tagName;
+    let event, tagName, tags;
 
     beforeEach(function() {
       fixture.detectChanges();
@@ -145,12 +145,13 @@ describe('NoteEditCardComponent', () => {
       tagName = 'newTag';
       event = new MatChipInputEventMock();
       event.value = tagName;
+
+      tags = mockTags;
+      tags.push({id: 12, name: tagName});
+      spyOn(mockTagService, 'createTag').and.callFake(() => of(tags));
     });
 
     it('should add tag', () => {
-      mockTags.push({id: 12, name: tagName});
-      spyOn(mockTagService, 'createTag').and.callFake(() => of(mockTags));
-
       component.addTag(event);
       expect(component.tags.map(x => x.name)).toContain(tagName);
     });

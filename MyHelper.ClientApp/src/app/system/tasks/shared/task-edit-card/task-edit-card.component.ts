@@ -89,20 +89,20 @@ export class TaskEditCardComponent implements OnInit {
     if (isNotNullOrEmpty(tagName) && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
       && !this.isTagsSelected) {
       const sub = this._tagService.createTag(new TagRequest(tagName))
-      .subscribe(tags => {
-        this.tags = tags;
+        .subscribe(tags => {
+          this.tags = tags;
 
-        const tag = this.tags.find(x => x.name === tagName);
-        if (tag) {
-          this.editCardModel.tags.push(tag);
-          this.tagCtrl = new FormControl(this.editCardModel.tags, [], asyncRequiredTagsValidator.bind(this));
-        }
+          const tag = this.tags.find(x => x.name === tagName);
+          if (tag) {
+            this.editCardModel.tags.push(tag);
+            this.tagCtrl = new FormControl(this.editCardModel.tags, [], asyncRequiredTagsValidator.bind(this));
+          }
 
-        this._filteredTags();
-        this._subscribeChangeTags();
+          this._filteredTags();
+          this._subscribeChangeTags();
 
-        sub.unsubscribe();
-      });
+          sub.unsubscribe();
+        });
     }
     if (input) {
       input.value = '';

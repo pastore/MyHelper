@@ -1,12 +1,15 @@
 {
   "name": "my-helper.client-app",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "open": "ng serve --o --ssl true",
     "docker": "ng serve --configuration=docker --ssl true",
+    "build-version:patch": "npm version patch && node ./replace.build.js",
+    "build-version:minor": "npm version minor && node ./replace.build.js",
+    "build-version:major": "npm version major && node ./replace.build.js",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
@@ -57,6 +60,7 @@
     "karma-junit-reporter": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "protractor": "^5.4.3",
+    "replace-in-file": "^6.0.0",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
     "typescript": "3.7.5"

@@ -10,10 +10,12 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { AdminModule } from './admin/admin.module';
+import { CopyrightComponent } from './shared/components/copyright/copyright.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CopyrightComponent
   ],
   imports: [
     BrowserModule,

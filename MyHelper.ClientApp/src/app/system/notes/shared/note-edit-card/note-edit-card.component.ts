@@ -4,7 +4,7 @@ import { NoteService } from '../../../../shared/services/note.service';
 import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, take } from 'rxjs/operators';
 import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
@@ -77,9 +77,11 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
     const value = event.value;
     const tagName: string = (value || '').trim();
 
-    if (isNotNullOrEmpty(tagName) && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
+    if (isNotNullOrEmpty(tagName)
+      && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
       && !this.isTagsSelected) {
       const sub = this._tagService.createTag(new TagRequest(tagName))
+        .pipe(take(1))
         .subscribe(tags => {
           this.tags = tags;
 
@@ -92,6 +94,7 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
           this._filteredTags();
           this._subscribeChangeTags();
         });
+
       this.subs.add(sub);
     }
 

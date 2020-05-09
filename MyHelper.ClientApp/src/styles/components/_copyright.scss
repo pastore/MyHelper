@@ -1,0 +1,15 @@
+
+
+.copyright {
+  @media  (min-width: 960px) {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    a {
+      text-decoration: underline;
+      margin-left: 5px;
+    }
+  }
+}
