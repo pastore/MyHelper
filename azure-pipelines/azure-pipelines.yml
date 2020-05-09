@@ -66,6 +66,13 @@ stages:
           workingDir: 'MyHelper.ClientApp'
 
       - task: Npm@1
+        displayName: 'Set version of the build'
+        inputs:
+          command: custom
+          customCommand: run build-version:patch
+          workingDir: 'MyHelper.ClientApp'
+
+      - task: Npm@1
         displayName: 'Build Angular'
         inputs:
           command: custom
