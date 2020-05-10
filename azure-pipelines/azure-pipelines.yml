@@ -82,6 +82,15 @@ stages:
         customCommand: run test -- --watch=false
         workingDir: 'MyHelper.ClientApp'
 
+    - task: PublishTestResults@2
+      displayName: 'Publish Angular test results'
+      condition: succeededOrFailed()
+      inputs:
+        searchFolder: $(System.DefaultWorkingDirectory)/MyHelper.ClientApp/junit
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/tests.xml'
+        testRunTitle: 'Angular'
+
     - task: Npm@1
       displayName: 'Set version of the build'
       inputs:
@@ -100,12 +109,3 @@ stages:
           git checkout master 
           git commit -a -m 'Update version of app by build #$(Build.BuildNumber) - $(Build.Reason) [ci skip]' 
           git push 'https://$(GITUSERNAME):$(GITPASSWORD)@github.com/pastore/MyHelper.git'
-
-    - task: PublishTestResults@2
-      displayName: 'Publish Angular test results'
-      condition: succeededOrFailed()
-      inputs:
-        searchFolder: $(System.DefaultWorkingDirectory)/MyHelper.ClientApp/junit
-        testResultsFormat: 'JUnit'
-        testResultsFiles: '**/tests.xml'
-        testRunTitle: 'Angular'
