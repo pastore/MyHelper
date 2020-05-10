@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   'domain': '',
-  version: '1.0.2'
+  version: '1.0.3'
 };
