@@ -67,6 +67,20 @@ stages:
       inputs:
         command: install
         workingDir: 'MyHelper.ClientApp'
+        
+    - task: Npm@1
+      displayName: 'Build Angular'
+      inputs:
+        command: custom
+        customCommand: run build
+        workingDir: 'MyHelper.ClientApp'
+
+    - task: Npm@1
+      displayName: 'Test Angular'
+      inputs:
+        command: custom
+        customCommand: run test -- --watch=false
+        workingDir: 'MyHelper.ClientApp'
 
     - task: Npm@1
       displayName: 'Set version of the build'
@@ -84,22 +98,8 @@ stages:
           git config --global user.name $(GITUSERNAME)
           git config --global user.password $(GITPASSWORD)
           git checkout master 
-          git commit -a -m 'Update version of app by build #$(Build.BuildNumber) $(Build.Reason) [ci skip]' 
+          git commit -a -m 'Update version of app by build #$(Build.BuildNumber) - $(Build.Reason) [ci skip]' 
           git push 'https://$(GITUSERNAME):$(GITPASSWORD)@github.com/pastore/MyHelper.git'
-        
-    - task: Npm@1
-      displayName: 'Build Angular'
-      inputs:
-        command: custom
-        customCommand: run build
-        workingDir: 'MyHelper.ClientApp'
-
-    - task: Npm@1
-      displayName: 'Test Angular'
-      inputs:
-        command: custom
-        customCommand: run test -- --watch=false
-        workingDir: 'MyHelper.ClientApp'
 
     - task: PublishTestResults@2
       displayName: 'Publish Angular test results'
