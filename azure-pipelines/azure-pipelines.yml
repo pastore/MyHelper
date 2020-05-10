@@ -13,6 +13,7 @@ stages:
   - job: API
     steps:
     - checkout: self
+      submodules: true
       persistCredentials: true
       
     - task: UseDotNet@2
