@@ -80,9 +80,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          git config --global user.email 'pastorednepr@gmail.com'
-          git config --global user.name 'pastore'
-          git config --global user.password $GIT_PASSWORD
           git checkout master 
           git commit -a -m 'Update version of the build [ci skip]' 
           git push 'https://pastore:$(GITPASSWORD)@github.com/pastore/MyHelper.git'
