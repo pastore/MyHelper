@@ -12,9 +12,6 @@ stages:
   jobs:
   - job: API
     steps:
-    - checkout: self
-      submodules: true
-      persistCredentials: true
       
     - task: UseDotNet@2
       displayName: 'Install .NET Core sdk'
@@ -56,58 +53,61 @@ stages:
   
   - job: ClientApp
     steps:
+    - checkout: self
+      submodules: true
+      persistCredentials: true
 
-      - task: NodeTool@0
-        displayName: 'Install Node.js'
-        inputs:
-          versionSpec: '10.15.1'
+    - task: NodeTool@0
+      displayName: 'Install Node.js'
+      inputs:
+        versionSpec: '10.15.1'
 
-      - task: Npm@1
-        displayName: 'Npm install'
-        inputs:
-          command: install
-          workingDir: 'MyHelper.ClientApp'
+    - task: Npm@1
+      displayName: 'Npm install'
+      inputs:
+        command: install
+        workingDir: 'MyHelper.ClientApp'
 
-      - task: Npm@1
-        displayName: 'Set version of the build'
-        inputs:
-          command: custom
-          customCommand: run build-version:patch
-          workingDir: 'MyHelper.ClientApp'
+    - task: Npm@1
+      displayName: 'Set version of the build'
+      inputs:
+        command: custom
+        customCommand: run build-version:patch
+        workingDir: 'MyHelper.ClientApp'
 
-      - task: Bash@3
-        displayName: 'Push to GitHub'
-        inputs:
-          targetType: 'inline'
-          script: |
-            git config --global user.email "pastorednepr@gmail.com"
-            git config --global user.name "pastore" 
-            git checkout master
-            git commit -a -m 'Update version of the build [ci skip]'
-            git push 'https://$SYSTEM_ACCESSTOKEN@github.com/pastore/MyHelper.git'
-        env:
-          TOKEN: $(PAT)
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-          
-      - task: Npm@1
-        displayName: 'Build Angular'
-        inputs:
-          command: custom
-          customCommand: run build
-          workingDir: 'MyHelper.ClientApp'
+    - task: Bash@3
+      displayName: 'Push to GitHub'
+      inputs:
+        targetType: 'inline'
+        script: 
+#          git config --global user.email "pastorednepr@gmail.com"
+#          git config --global user.name "pastore" 
+          git checkout master
+          git commit -a -m 'Update version of the build [ci skip]'
+          git push 'https://$SYSTEM_ACCESSTOKEN@github.com/pastore/MyHelper.git'
+      env:
+        TOKEN: $(PAT)
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        
+    - task: Npm@1
+      displayName: 'Build Angular'
+      inputs:
+        command: custom
+        customCommand: run build
+        workingDir: 'MyHelper.ClientApp'
 
-      - task: Npm@1
-        displayName: 'Test Angular'
-        inputs:
-          command: custom
-          customCommand: run test -- --watch=false
-          workingDir: 'MyHelper.ClientApp'
+    - task: Npm@1
+      displayName: 'Test Angular'
+      inputs:
+        command: custom
+        customCommand: run test -- --watch=false
+        workingDir: 'MyHelper.ClientApp'
 
-      - task: PublishTestResults@2
-        displayName: 'Publish Angular test results'
-        condition: succeededOrFailed()
-        inputs:
-          searchFolder: $(System.DefaultWorkingDirectory)/MyHelper.ClientApp/junit
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '**/tests.xml'
-          testRunTitle: 'Angular'
+    - task: PublishTestResults@2
+      displayName: 'Publish Angular test results'
+      condition: succeededOrFailed()
+      inputs:
+        searchFolder: $(System.DefaultWorkingDirectory)/MyHelper.ClientApp/junit
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/tests.xml'
+        testRunTitle: 'Angular'
