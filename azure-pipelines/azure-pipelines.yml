@@ -81,7 +81,10 @@ stages:
           script: |
             git checkout master
             git commit -m 'Update version of the build [ci skip]'
-            git -c http.extraheader="AUTHORIZATION: bearer $ACCESSTOKEN" push origin
+            git config gc.auto 0
+            git config --get-all http.https://github.com/pastore/MyHelper.extraheader
+            git config --get-all http.proxy
+            git -c http.extraheader="AUTHORIZATION: basic $ACCESSTOKEN" push origin
 #            git push https://$TOKEN@github.com/pastore/MyHelper.git
         env:
           TOKEN: $(PAT)
