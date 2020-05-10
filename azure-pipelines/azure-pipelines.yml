@@ -80,9 +80,12 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          git config --global user.email $(GITEMAIL)
+          git config --global user.name $(GITUSERNAME)
+          git config --global user.password $(GITPASSWORD)
           git checkout master 
           git commit -a -m 'Update version of app by build #$(Build.BuildNumber) $(Build.Reason) [ci skip]' 
-          git push 'https://pastore:$(GITPASSWORD)@github.com/pastore/MyHelper.git'
+          git push 'https://$(GITUSERNAME):$(GITPASSWORD)@github.com/pastore/MyHelper.git'
         
     - task: Npm@1
       displayName: 'Build Angular'
