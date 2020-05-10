@@ -84,7 +84,7 @@ stages:
             git config gc.auto 0
             git config --get-all http.https://github.com/pastore/MyHelper.extraheader
             git config --get-all http.proxy
-            git -c http.extraheader="AUTHORIZATION: basic $ACCESSTOKEN" push origin
+            git -c http.extraheader="AUTHORIZATION: basic $TOKEN" push origin
 #            git push https://$TOKEN@github.com/pastore/MyHelper.git
         env:
           TOKEN: $(PAT)
