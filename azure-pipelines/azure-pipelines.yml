@@ -84,10 +84,10 @@ stages:
             git config --global user.name "pastore" 
             git checkout master
             git commit -a -m 'Update version of the build [ci skip]'
-            git push 'https://bs3h6s6l7mn4bkcjvw4eqk2qc7ch2i36hzo7ttw3mmct342f3soq@github.com/pastore/MyHelper.git'
+            git push 'https://$SYSTEM_ACCESSTOKEN@github.com/pastore/MyHelper.git'
         env:
           TOKEN: $(PAT)
-          ACCESSTOKEN: $(System.AccessToken)
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
           
       - task: Npm@1
         displayName: 'Build Angular'
