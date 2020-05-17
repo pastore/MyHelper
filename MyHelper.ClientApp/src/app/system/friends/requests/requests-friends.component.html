@@ -1,62 +1,63 @@
 <div class="cards_page_content" #cardList>
-    <mat-tab-group>
-        <mat-tab label="By me">
-          <ng-container *ngIf="!isLoading">
-            <ng-container *ngIf="requestsByMes.length > 0; else nocards">
-              <mh-person-card
-                *ngFor="let card of requestsByMes"
-                [card]="card">
-                  <button
-                    mat-menu-item
-                    [disabled]="card.disabled"
-                    (click)="deleteFriend(card)">
-                      Delete
-                  </button>
-                </mh-person-card>
-            </ng-container>
-          </ng-container>
-        </mat-tab>
-        <mat-tab label="To me">
-          <ng-container *ngIf="!isLoading">
-            <ng-container *ngIf="requestsToMes.length > 0; else nocards">
-              <mh-person-card
-                *ngFor="let card of requestsToMes"
-                [card]="card">
-                  <button
+  <mat-tab-group>
+      <mat-tab label="By me">
+        <ng-container *ngIf="!isLoading">
+          <ng-container *ngIf="requestsByMes.length > 0; else nocards">
+            <mh-person-card
+              *ngFor="let card of requestsByMes"
+              [card]="card">
+                <button
                   mat-menu-item
-                    *ngIf="!card.disabled"
-                    (click)="updateRequestFriend(card, FriendRequestFlag.Approved)">
-                      Approved
-                  </button>
-                  <button
-                    mat-menu-item
-                    *ngIf="!card.disabled"
-                    (click)="updateRequestFriend(card, FriendRequestFlag.Rejected)">
-                      Rejected
-                  </button>
-                  <button
-                    mat-menu-item
-                    *ngIf="!card.disabled"
-                    (click)="updateRequestFriend(card, FriendRequestFlag.Blocked)">
-                      Blocked
-                  </button>
-                  <button
-                    mat-menu-item
-                    *ngIf="!card.disabled"
-                    (click)="updateRequestFriend(card, FriendRequestFlag.Spam)">
-                      Spam
-                  </button>
-                  <button
-                    mat-menu-item
-                    *ngIf="card.disabled"
-                    (click)="updateRequestFriend(card, FriendRequestFlag.None)">
-                      Cancel
-                  </button>
-                </mh-person-card>
-              </ng-container>
+                  [disabled]="card.disabled"
+                  (click)="deleteFriend(card)">
+                    Delete
+                </button>
+              </mh-person-card>
           </ng-container>
-        </mat-tab>
-      </mat-tab-group>
+        </ng-container>
+      </mat-tab>
+      <mat-tab label="To me">
+        <ng-container *ngIf="!isLoading">
+          <ng-container *ngIf="requestsToMes.length > 0; else nocards">
+            <mh-person-card
+              *ngFor="let card of requestsToMes"
+              [card]="card">
+                <button
+                mat-menu-item
+                  *ngIf="!card.disabled"
+                  (click)="updateRequestFriend(card, FriendRequestFlag.Approved)">
+                    Approved
+                </button>
+                <button
+                  mat-menu-item
+                  *ngIf="!card.disabled"
+                  (click)="updateRequestFriend(card, FriendRequestFlag.Rejected)">
+                    Rejected
+                </button>
+                <button
+                  mat-menu-item
+                  *ngIf="!card.disabled"
+                  (click)="updateRequestFriend(card, FriendRequestFlag.Blocked)">
+                    Blocked
+                </button>
+                <button
+                  mat-menu-item
+                  *ngIf="!card.disabled"
+                  (click)="updateRequestFriend(card, FriendRequestFlag.Spam)">
+                    Spam
+                </button>
+                <button
+                  mat-menu-item
+                  *ngIf="card.disabled"
+                  (click)="updateRequestFriend(card, FriendRequestFlag.None)">
+                    Cancel
+                </button>
+              </mh-person-card>
+            </ng-container>
+        </ng-container>
+      </mat-tab>
+    </mat-tab-group>
+    <mh-cards-top-scroll [cardList]="cardList"></mh-cards-top-scroll>
 </div>
 
 <ng-template #nocards>

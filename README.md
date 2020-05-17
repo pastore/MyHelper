@@ -17,7 +17,7 @@ In future plan to make social network from one.
 4. Postgres 10
 5. Nginx
 6. Linux
-7. Entty Framework Core
+7. Entity Framework Core
 8. RabbitMQ and MassTransit
 9. Docker
 

@@ -28,7 +28,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
       this.authService.clearCredentials();
       this.router.navigate([ApiRoute.Default + ApiRoute.Login], { queryParams: { returnUrl: location.pathname }});
     } else {
-      const errorMessage = (!!response && !!response.error) ? response.error.message : 'Server error';
+      const errorMessage =
+        (!!response && !!response.error && !!response.error.message) ? response.error.message : 'Server error';
       this.snackBarService.showError(errorMessage);
     }
 
