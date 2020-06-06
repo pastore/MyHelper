@@ -87,7 +87,7 @@ namespace MyHelper.Api
 
             services.AddDbContext<MyHelperContext>(options =>
                 options.UseNpgsql(
-                    "User ID=postgres;Password=t906090;Host=localhost;Port=5433;Database=myhelper;Pooling=true;"));
+                    "User ID=postgres;Password=t906090;Host=localhost;Port=5432;Database=myhelper;Pooling=true;"));
 
             #endregion
 
