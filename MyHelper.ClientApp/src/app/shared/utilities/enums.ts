@@ -56,7 +56,7 @@ export enum MhTaskStatus {
   Done = 1
 }
 
-export enum MhTaskVisibleType {
+export enum VisibleType {
   Public = 1,
   Friend = 2,
   Private = 3

@@ -1,20 +1,22 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatAutocomplete } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { Entity } from '../../../../shared/models/base/entity.model';
+import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
+import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
+import { MhTaskRequest } from '../../../../shared/models/tasks/mh-task-request.model';
+import { MhTaskResponse } from '../../../../shared/models/tasks/mh-task-response.model';
+import { ScheduleMhTaskViewModel } from '../../../../shared/models/tasks/schedule-mh-task-view.model';
+import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { TagService } from '../../../../shared/services/tag.service';
 import { TaskService } from '../../../../shared/services/task.service';
-import { MhTaskResponse } from '../../../../shared/models/tasks/mh-task-response.model';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
-import { MhTaskRequest } from '../../../../shared/models/tasks/mh-task-request.model';
-import { AuthenticationService } from '../../../../shared/services/authentication.service';
-import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
-import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
-import { ScheduleMhTaskType, MhTaskVisibleType } from '../../../../shared/utilities/enums';
-import { ScheduleMhTaskViewModel } from '../../../../shared/models/tasks/schedule-mh-task-view.model';
+import { ScheduleMhTaskType, VisibleType } from '../../../../shared/utilities/enums';
 import { arrayFromEnum, isNotNullOrEmpty } from '../../../../shared/utilities/tools';
-import { Entity } from '../../../../shared/models/base/entity.model';
+import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 
 @Component({
   selector: 'mh-task-edit-card',
@@ -22,16 +24,18 @@ import { Entity } from '../../../../shared/models/base/entity.model';
 })
 export class TaskEditCardComponent implements OnInit {
   removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;
   filteredTags: TagViewModel[];
   scheduleMhTaskTypes: any[] = [];
-  mhTaskVisibleTypes: any[] = [];
+  visibleTypes: any[] = [];
   tagCtrl: FormControl;
   editCardModel: MhTaskResponse;
-  isTagsSelected = false;
   @Input() originalEditCardModel: MhTaskResponse;
   @Output() closeEditCard = new EventEmitter<Entity>();
+  @ViewChild('tagsInput') tagsInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(
     private _taskService: TaskService,
@@ -52,7 +56,7 @@ export class TaskEditCardComponent implements OnInit {
     });
 
     this.scheduleMhTaskTypes = [... arrayFromEnum<ScheduleMhTaskType>(ScheduleMhTaskType)].filter((x) => x.id !== 0);
-    this.mhTaskVisibleTypes = [... arrayFromEnum<MhTaskVisibleType>(MhTaskVisibleType)];
+    this.visibleTypes = [... arrayFromEnum<VisibleType>(VisibleType)];
   }
 
   onCancel() {
@@ -68,7 +72,7 @@ export class TaskEditCardComponent implements OnInit {
       mhTaskRequest.appUserId = this._authService.currentUser.id;
       mhTaskRequest.tagIds = this.editCardModel.tags.map(x => x.id);
       mhTaskRequest.startDate = this.editCardModel.startDate;
-      mhTaskRequest.mhTaskVisibleType = this.editCardModel.mhTaskVisibleType;
+      mhTaskRequest.visibleType = this.editCardModel.visibleType;
       mhTaskRequest.isRecurring = this.editCardModel.isRecurring;
       mhTaskRequest.scheduleMhTaskViewModel = this.editCardModel.scheduleMhTaskViewModel;
 
@@ -86,8 +90,10 @@ export class TaskEditCardComponent implements OnInit {
     const value = event.value;
     const tagName: string = (value || '').trim();
 
-    if (isNotNullOrEmpty(tagName) && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
-      && !this.isTagsSelected) {
+    if (isNotNullOrEmpty(tagName)
+      && !this.matAutocomplete.isOpen
+      && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
+      ) {
       const sub = this._tagService.createTag(new TagRequest(tagName))
         .subscribe(tags => {
           this.tags = tags;
@@ -107,7 +113,6 @@ export class TaskEditCardComponent implements OnInit {
     if (input) {
       input.value = '';
     }
-    this.isTagsSelected = false;
   }
 
   removeTag(tag: TagViewModel) {
@@ -128,9 +133,9 @@ export class TaskEditCardComponent implements OnInit {
       this.filteredTags.splice(index, 1);
     }
 
+    this.tagsInput.nativeElement.value = '';
     this.tagCtrl.reset();
     this._subscribeChangeTags();
-    this.isTagsSelected = true;
   }
 
   private _filteredTags() {

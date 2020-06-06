@@ -18,7 +18,7 @@ namespace MyHelper.Api.DAL.Entities
 
         public DateTime? FinishDate { get; set; }
 
-        public EMhTaskVisibleType MhTaskVisibleType { get; set; } = EMhTaskVisibleType.Public;
+        public EVisibleType VisibleType { get; set; } = EVisibleType.Private;
 
         public EMhTaskStatus MhTaskStatus { get; set; } = EMhTaskStatus.None;
 

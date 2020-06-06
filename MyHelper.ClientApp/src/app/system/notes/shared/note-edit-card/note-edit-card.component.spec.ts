@@ -16,6 +16,7 @@ import { TagService } from '../../../../shared/services/tag.service';
 import { AuthenticationService } from '../../../../shared/services/authentication.service';
 import { NgxWigModule } from 'ngx-wig';
 import { of } from 'rxjs';
+import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
 
 describe('NoteEditCardComponent', () => {
   let component: NoteEditCardComponent;
@@ -146,8 +147,8 @@ describe('NoteEditCardComponent', () => {
       event = new MatChipInputEventMock();
       event.value = tagName;
 
-      tags = mockTags;
-      tags.push({id: 12, name: tagName});
+      tags = mockTags.slice(0);
+      tags.push(new TagViewModel(12, tagName));
       spyOn(mockTagService, 'createTag').and.callFake(() => of(tags));
     });
 

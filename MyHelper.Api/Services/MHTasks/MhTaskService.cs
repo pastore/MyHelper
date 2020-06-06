@@ -67,7 +67,7 @@ namespace MyHelper.Api.Services.MHTasks
                     Description = mhTaskRequest.Description,
                     StartDate = mhTaskRequest.StartDate >= DateTime.Now ? mhTaskRequest.StartDate : DateTime.Now,
                     IsRecurring = mhTaskRequest.IsRecurring,
-                    MhTaskVisibleType = mhTaskRequest.MhTaskVisibleType,
+                    VisibleType = mhTaskRequest.VisibleType,
                     AppUserId = mhTaskRequest.AppUserId
                 };
 
@@ -138,7 +138,7 @@ namespace MyHelper.Api.Services.MHTasks
                 mhTask.Description = mhTaskRequest.Description;
                 mhTask.StartDate = mhTaskRequest.StartDate;
                 mhTask.IsRecurring = mhTaskRequest.IsRecurring;
-                mhTask.MhTaskVisibleType = mhTaskRequest.MhTaskVisibleType;
+                mhTask.VisibleType = mhTaskRequest.VisibleType;
 
                 if (mhTaskRequest.IsRecurring)
                 {

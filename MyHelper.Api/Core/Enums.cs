@@ -27,7 +27,7 @@
         Done,
     }
 
-    public enum EMhTaskVisibleType
+    public enum EVisibleType
     {
         Public = 1,
         Friend = 2,

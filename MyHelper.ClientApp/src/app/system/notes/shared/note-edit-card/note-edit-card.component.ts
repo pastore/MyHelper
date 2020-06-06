@@ -1,18 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { TagService } from '../../../../shared/services/tag.service';
-import { NoteService } from '../../../../shared/services/note.service';
-import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { startWith, map, take } from 'rxjs/operators';
-import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
-import { AuthenticationService } from '../../../../shared/services/authentication.service';
-import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
-import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
-import { isNotNullOrEmpty } from '../../../../shared/utilities/tools';
+import { Observable, Subscription } from 'rxjs';
+import { map, startWith, take } from 'rxjs/operators';
 import { Entity } from '../../../../shared/models/base/entity.model';
+import { NoteRequest } from '../../../../shared/models/notes/note-request.model';
+import { NoteResponse } from '../../../../shared/models/notes/note-response.model';
+import { TagRequest } from '../../../../shared/models/tags/tag-request.model';
+import { TagViewModel } from '../../../../shared/models/tags/tag-view.model';
+import { AuthenticationService } from '../../../../shared/services/authentication.service';
+import { NoteService } from '../../../../shared/services/note.service';
+import { TagService } from '../../../../shared/services/tag.service';
+import { VisibleType } from '../../../../shared/utilities/enums';
+import { arrayFromEnum, isNotNullOrEmpty } from '../../../../shared/utilities/tools';
+import { asyncRequiredTagsValidator } from '../../../../shared/validators/required-tags.validator';
 
 @Component({
   selector: 'mh-note-edit-card',
@@ -20,15 +23,18 @@ import { Entity } from '../../../../shared/models/base/entity.model';
 })
 export class NoteEditCardComponent implements OnInit, OnDestroy {
   removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   tags: TagViewModel[];
   reactiveTags: Observable<TagViewModel[]>;
   filteredTags: TagViewModel[];
+  visibleTypes: any[] = [];
   tagCtrl: FormControl;
   editCardModel: NoteResponse;
-  isTagsSelected = false;
   subs = new Subscription();
   @Input() originalEditCardModel: NoteResponse;
   @Output() closeEditCard = new EventEmitter<Entity>();
+  @ViewChild('tagsInput') tagsInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(
     private _noteService: NoteService,
@@ -44,6 +50,8 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
       this._filteredTags();
       this._subscribeChangeTags();
     });
+
+    this.visibleTypes = [... arrayFromEnum<VisibleType>(VisibleType)];
   }
 
   ngOnDestroy() {
@@ -60,6 +68,7 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
       noteRequest.id = this.editCardModel.id;
       noteRequest.name = this.editCardModel.name;
       noteRequest.description = this.editCardModel.description;
+      noteRequest.visibleType = this.editCardModel.visibleType;
       noteRequest.appUserId = this._authService.currentUser.id;
       noteRequest.tagIds = this.editCardModel.tags.map(x => x.id);
 
@@ -78,8 +87,10 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
     const tagName: string = (value || '').trim();
 
     if (isNotNullOrEmpty(tagName)
+      && !this.matAutocomplete.isOpen
+      && !this.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
       && !this.editCardModel.tags.some(x => x.name.toLowerCase() === tagName.toLowerCase())
-      && !this.isTagsSelected) {
+      ) {
       const sub = this._tagService.createTag(new TagRequest(tagName))
         .pipe(take(1))
         .subscribe(tags => {
@@ -101,7 +112,6 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
     if (input) {
       input.value = '';
     }
-    this.isTagsSelected = false;
   }
 
   removeTag(tag: TagViewModel) {
@@ -122,10 +132,9 @@ export class NoteEditCardComponent implements OnInit, OnDestroy {
       this.filteredTags.splice(index, 1);
     }
 
+    this.tagsInput.nativeElement.value = '';
     this.tagCtrl.reset();
     this._subscribeChangeTags();
-
-    this.isTagsSelected = true;
   }
 
   private _filteredTags() {

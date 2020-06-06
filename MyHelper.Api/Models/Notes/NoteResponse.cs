@@ -1,4 +1,5 @@
-﻿using MyHelper.Api.Models.Tags;
+﻿using MyHelper.Api.Core;
+using MyHelper.Api.Models.Tags;
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +12,8 @@ namespace MyHelper.Api.Models.Notes
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public EVisibleType VisibleType { get; set; }
 
         public DateTime UpdateDate { get; set; }
 

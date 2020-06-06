@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿#region -- Usings -- 
+
+using AutoMapper;
 using GreenPipes;
 using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
@@ -32,6 +34,8 @@ using System;
 using System.Security.Claims;
 using System.Text;
 
+#endregion
+
 namespace MyHelper.Api
 {
     public class Startup
@@ -40,7 +44,7 @@ namespace MyHelper.Api
         {
             Configuration = configuration;
         }
-
+        
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -81,8 +85,9 @@ namespace MyHelper.Api
 
             #region -- Ef Core --
 
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<MyHelperContext>(options => options.UseNpgsql(Configuration["ConnectionStrings:Postgresql"]));
+            services.AddDbContext<MyHelperContext>(options =>
+                options.UseNpgsql(
+                    "User ID=postgres;Password=t906090;Host=localhost;Port=5433;Database=myhelper;Pooling=true;"));
 
             #endregion
 

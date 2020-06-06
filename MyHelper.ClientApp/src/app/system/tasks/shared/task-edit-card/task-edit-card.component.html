@@ -56,8 +56,10 @@
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
             <input placeholder="Tags"
+              #tagsInput
               [matChipInputFor]="chipList"
               (matChipInputTokenEnd)="addTag($event)"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [matAutocomplete]="auto"
               [formControl]="tagCtrl"
             />
@@ -76,9 +78,9 @@
       <mat-form-field>
         <mat-select
           placeholder="Visible type"
-          [(ngModel)]="editCardModel.mhTaskVisibleType"
-          name="mhTaskVisibleType">
-          <mat-option *ngFor="let type of mhTaskVisibleTypes" [value]="type.id">
+          [(ngModel)]="editCardModel.visibleType"
+          name="visibleType">
+          <mat-option *ngFor="let type of visibleTypes" [value]="type.id">
             {{ type.name }}
           </mat-option>
         </mat-select>

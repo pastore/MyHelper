@@ -66,7 +66,7 @@ namespace MyHelper.Api.Core.Scheduler
                 StartDate = startDate.AddDays((double)scheduleMhTask.ScheduleMhTaskType),
                 AppUserId = parentMhTask.AppUserId,
                 MhTaskState = EMhTaskState.ReSchedule,
-                MhTaskVisibleType = parentMhTask.MhTaskVisibleType,
+                VisibleType = parentMhTask.VisibleType,
                 Parent = parentMhTask
             };
 

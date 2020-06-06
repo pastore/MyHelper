@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyHelper.Api.Core;
+using System;
 using System.Collections.Generic;
 
 namespace MyHelper.Api.DAL.Entities
@@ -10,6 +11,8 @@ namespace MyHelper.Api.DAL.Entities
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public EVisibleType VisibleType { get; set; } = EVisibleType.Private;
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
 

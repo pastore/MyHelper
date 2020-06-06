@@ -1,4 +1,5 @@
-﻿using MyHelper.Api.Core.Attributes;
+﻿using MyHelper.Api.Core;
+using MyHelper.Api.Core.Attributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,6 +14,8 @@ namespace MyHelper.Api.Models.Notes
 
         [Required]
         public string Description { get; set; }
+
+        public EVisibleType VisibleType { get; set; }
 
         [Required]
         public int AppUserId { get; set; }

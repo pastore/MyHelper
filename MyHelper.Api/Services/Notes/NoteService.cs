@@ -64,6 +64,7 @@ namespace MyHelper.Api.Services.Notes
                 {
                     Name = noteRequest.Name,
                     Description = noteRequest.Description,
+                    VisibleType = noteRequest.VisibleType,
                     UpdateDate = DateTime.Now,
                     AppUserId = noteRequest.AppUserId
                 };
@@ -102,6 +103,7 @@ namespace MyHelper.Api.Services.Notes
 
                 note.Name = noteRequest.Name;
                 note.Description = noteRequest.Description;
+                note.VisibleType = noteRequest.VisibleType;
                 note.UpdateDate = DateTime.Now;
 
                 _myHelperDbContext.Notes.Update(note);

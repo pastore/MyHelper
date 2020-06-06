@@ -17,7 +17,7 @@ namespace MyHelper.Api.Models.Tasks
 
         public DateTime? FinishDate { get; set; }
 
-        public EMhTaskVisibleType MhTaskVisibleType { get; set; }
+        public EVisibleType VisibleType { get; set; }
 
         public EMhTaskStatus MhTaskStatus { get; set; } 
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyHelper.Api.DAL.Context;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyHelper.Api.Migrations
 {
     [DbContext(typeof(MyHelperContext))]
-    partial class MyHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20200601135942_AddVisibleTypeToNote")]
+    partial class AddVisibleTypeToNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,8 +143,7 @@ namespace MyHelper.Api.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("VisibleType")
-                        .HasColumnType("integer")
-                        .HasDefaultValue(3);
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -191,8 +192,7 @@ namespace MyHelper.Api.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("VisibleType")
-                        .HasColumnType("integer")
-                        .HasDefaultValue(3);
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
