@@ -42,6 +42,14 @@ body {
   background: $color-accent;
 }
 
+.mr-auto {
+  margin-right: auto;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
 @media (max-width: 959px){
   .mat-toolbar-row, .mat-toolbar-single-row{
     padding: 0 !important;

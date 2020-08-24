@@ -40,25 +40,25 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ServerResponse<bool>> InviteFriendAsync([FromBody]int personId)
+        public async Task<ServerResponse<bool>> InviteFriendAsync([FromBody]long personId)
         {
             return await _friendService.InviteFriendAsync(AccountId, personId);
         }
 
         [HttpPut]
-        public async Task<ServerResponse<bool>> CancelFriendAsync([FromBody]int personId)
+        public async Task<ServerResponse<bool>> CancelFriendAsync([FromBody]long personId)
         {
             return await _friendService.CancelFriendAsync(AccountId, personId);
         }
 
         [HttpPatch("{personId}")]
-        public async Task<ServerResponse<bool>> UpdateFriendRequestAsync(int personId, [FromBody] EFriendRequestFlag eFriendRequestFlag)
+        public async Task<ServerResponse<bool>> UpdateFriendRequestAsync(long personId, [FromBody] EFriendRequestFlag eFriendRequestFlag)
         {
             return await _friendService.UpdateFriendRequestAsync(AccountId, personId, eFriendRequestFlag);
         }
 
         [HttpDelete]
-        public async Task<ServerResponse<bool>> DeleteFriendAsync(int personId)
+        public async Task<ServerResponse<bool>> DeleteFriendAsync(long personId)
         {
             return await _friendService.DeleteFriendAsync(AccountId, personId);
         }

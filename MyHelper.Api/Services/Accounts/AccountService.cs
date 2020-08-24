@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Accounts
 {
-    public class AccountService : BaseService, IAccountService
+    public class AccountService : BaseService<MyHelperContext>, IAccountService
     {
         private readonly ITokenService _tokenService;
 
@@ -31,7 +31,7 @@ namespace MyHelper.Api.Services.Accounts
         {
             return await BaseInvokeAsync(async () =>
             {
-                var appUser = await _myHelperDbContext.AppUsers
+                var appUser = await DbContext.AppUsers
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Username == request.UserName);
 
@@ -46,7 +46,7 @@ namespace MyHelper.Api.Services.Accounts
                 {
                     Token = tokenInfo.Token,
                     ExpirationDate = tokenInfo.ExpiredDate,
-                    AppUserViewModel = _mapper.Map<AppUser, AppUserViewModel>(appUser)
+                    AppUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(appUser)
                 };
 
                 return ServerResponseBuilder.Build(authorizationTokenResponse);
@@ -57,7 +57,7 @@ namespace MyHelper.Api.Services.Accounts
         {
             return await BaseInvokeAsync(async () =>
             {
-                if (_myHelperDbContext.AppUsers.Any(x => x.Email == request.Email || x.Username == request.UserName))
+                if (DbContext.AppUsers.Any(x => x.Email == request.Email || x.Username == request.UserName))
                     throw new UnauthorizedException(Constants.Errors.UserAlreadyRegistered);
 
                 var appUser = new AppUser
@@ -69,8 +69,8 @@ namespace MyHelper.Api.Services.Accounts
                     CreatedDate = DateTime.Now
                 };
 
-                await _myHelperDbContext.AddAsync(appUser);
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.AddAsync(appUser);
+                await DbContext.SaveChangesAsync();
 
                 var tokenInfo = _tokenService.CreateToken(GetClaimsFromAppUser(appUser));
 
@@ -78,7 +78,7 @@ namespace MyHelper.Api.Services.Accounts
                 {
                     Token = tokenInfo.Token,
                     ExpirationDate = tokenInfo.ExpiredDate,
-                    AppUserViewModel = _mapper.Map<AppUser, AppUserViewModel>(appUser)
+                    AppUserViewModel = Mapper.Map<AppUser, AppUserViewModel>(appUser)
                 };
 
                 return ServerResponseBuilder.Build(authorizationTokenResponse);

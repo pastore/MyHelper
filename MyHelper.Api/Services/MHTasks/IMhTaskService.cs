@@ -1,4 +1,5 @@
-﻿using MyHelper.Api.DAL.Entities;
+﻿using MyHelper.Api.Core;
+using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Tasks;
@@ -9,9 +10,9 @@ namespace MyHelper.Api.Services.MHTasks
 {
     public interface IMhTaskService
     {
-        Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(int accountId, MhTaskFilterRequest mhTaskFilterRequest);
+        Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(long accountId, MhTaskFilterRequest mhTaskFilterRequest);
 
-        Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(int accountId, long id);
+        Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(long accountId, long id);
 
         Task<ServerResponse<long>> CreateMhTaskAsync(MhTaskRequest mhTaskRequest, MhTask parentMhTask = null);
 
@@ -21,6 +22,6 @@ namespace MyHelper.Api.Services.MHTasks
 
         Task<ServerResponse<bool>> DeleteMhTaskAsync(long id);
 
-        FeedMessage CreateMhTaskFeedMessage(MhTaskRequest noteRequest, long sourceId);
+        FeedMessage CreateFeedMessage<T>(T noteRequest, EFeedAction feedAction);
     }
 }

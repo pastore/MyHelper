@@ -1,6 +1,16 @@
 <mat-card class="card card--feed">
   <div fxLayout="row" fxLayoutAlign=" center">
     <div class="card_name">{{ card.data.appUserViewModel.userName }}</div>
+    <div class="card_feed_type mr-auto">
+      <ng-container [ngSwitch]="card.data.feedType">
+        <ng-container *ngSwitchCase="feedType.Note">
+          {{ feedType[feedType.Note] }}
+        </ng-container>
+        <ng-container *ngSwitchCase="feedType.Task">
+          {{ feedType[feedType.Task] }}
+        </ng-container>
+      </ng-container>
+    </div>
     <div class="card_buttons">
       <button mat-icon-button [matMenuTriggerFor]="menuRef">
         <mat-icon class="mat-icon material-icons" role="img" aria-hidden="true">more_vert</mat-icon>
@@ -13,21 +23,18 @@
       </mat-menu>
     </div>
   </div>
-  <div *ngIf="isExpandCard" class="card_name card_feed_name">{{ card.data.feedData.name }}</div>
-  <div *ngIf="isExpandCard" class="card_description rich_editor_wrapper" [innerHTML]="card.data.feedData.description">
+  <div *ngIf="isExpandCard" class="card_name card_name--feed">{{ card.data.feedData.name }}</div>
+  <div *ngIf="isExpandCard" class="card_description rich_editor_wrapper card_description--feed" [innerHTML]="card.data.feedData.description">
   </div>
   <div fxLayout="row">
-    <div class="card_feed_type">
-        <ng-container [ngSwitch]="card.data.feedType">
-            <ng-container *ngSwitchCase="feedType.CreateNote">
-              Create Note
-            </ng-container>
-            <ng-container *ngSwitchCase="feedType.CreateMhTask">
-              Create Task
-            </ng-container>
-        </ng-container>
+    <div>
+      <mat-chip-list>
+        <mat-chip class="mat-accent" selected="true" *ngFor="let tag of card.data.tags">
+            {{ tag.name }}
+        </mat-chip>
+    </mat-chip-list>
     </div>
-    <div class="card_date">{{  card.data.createDate | date: 'MM/dd/yyyy' }}</div>
+    <div class="card_date">{{  card.data.lastModifiedDate | date: 'MM/dd/yyyy' }}</div>
   </div>
 </mat-card>
 

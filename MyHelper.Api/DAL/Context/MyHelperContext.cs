@@ -5,11 +5,9 @@ namespace MyHelper.Api.DAL.Context
 {
     public class MyHelperContext: DbContext
     {
-        public MyHelperContext(DbContextOptions options) : base(options) { }
+        public MyHelperContext(DbContextOptions<MyHelperContext> options) : base(options) { }
 
         public DbSet<AppUser> AppUsers { get; set; }
-
-        public DbSet<Feed> Feeds { get; set; }
 
         public DbSet<Friend> Friends { get; set; }
 

@@ -8,7 +8,7 @@ namespace MyHelper.Api.Models.Tasks
 {
     public class MhTaskRequest
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -28,7 +28,7 @@ namespace MyHelper.Api.Models.Tasks
         public ScheduleMhTaskViewModel ScheduleMhTaskViewModel { get; set; }
 
         [Required]
-        public int AppUserId { get; set; }
+        public long AppUserId { get; set; }
 
         [CollectionHasElements(ErrorMessage = "Collection must contain an element.")]
         public ICollection<long> TagIds { get; set; } = new List<long>();

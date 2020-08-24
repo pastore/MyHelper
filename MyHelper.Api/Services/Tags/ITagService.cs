@@ -10,6 +10,8 @@ namespace MyHelper.Api.Services.Tags
     {
         Task<ServerResponse<List<TagResponse>>> GetTagsAsync();
 
+        Task<ServerResponse<List<TagResponse>>> GetTagsByIdsAsync(List<long> tagIds);
+
         Task<ServerResponse<bool>> CreateTagAsync(TagRequest tagRequest);
 
         Task<ServerResponse<PageResult<TagAdminResponse>>> GetAdminTagsByPageAsync(

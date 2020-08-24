@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyHelper.Api.Models.Messanging;
+using MyHelper.Api.Core;
 using MyHelper.Api.Models.Notes;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Services.Notes;
@@ -16,14 +16,14 @@ namespace MyHelper.Api.Controllers
     public class NotesController : BaseController
     {
         private readonly INoteService _noteService;
-        private readonly IRequestClient<IFeedMessage> _requestClient;
+        private readonly ISendEndpointProvider _sendEndpointProvider;
 
         public NotesController(
             INoteService noteService,
-            IRequestClient<IFeedMessage> requestClient)
+            ISendEndpointProvider sendEndpointProvider)
         {
             _noteService = noteService;
-            _requestClient = requestClient;
+            _sendEndpointProvider = sendEndpointProvider;
         }
 
         [HttpGet]
@@ -41,26 +41,33 @@ namespace MyHelper.Api.Controllers
         [HttpPost]
         public async Task<ServerResponse<long>> CreateNoteAsync([FromBody] NoteRequest noteRequest)
         {
-            return await _noteService.CreateNoteAsync(noteRequest).ContinueWith(x =>
-            {
-                var request = _requestClient.Create(_noteService.CreateNoteFeedMessage(noteRequest, x.Result.Result));
+            var serverResponse = await _noteService.CreateNoteAsync(noteRequest);
 
-                request.GetResponse<FeedMessage>();
+            noteRequest.Id = serverResponse.Result;
+            await _sendEndpointProvider.Send(_noteService.CreateFeedMessage(noteRequest, EFeedAction.Create));
 
-                return x.Result;
-            });
+            return serverResponse;
         }
 
         [HttpPut]
         public async Task<ServerResponse<bool>> UpdateNoteAsync([FromBody] NoteRequest noteRequest)
         {
-            return await _noteService.UpdateNoteAsync(noteRequest);
+            var serverResponse = await _noteService.UpdateNoteAsync(noteRequest);
+
+            await _sendEndpointProvider.Send(_noteService.CreateFeedMessage(noteRequest, EFeedAction.Update));
+
+            return serverResponse;
         }
 
         [HttpDelete("{id}")]
         public async Task<ServerResponse<bool>> DeleteNotekAsync(long id)
         {
-            return await _noteService.DeleteNoteAsync(id);
+            var serverResponse = await _noteService.DeleteNoteAsync(id);
+
+            await _sendEndpointProvider.Send(
+                _noteService.CreateFeedMessage(new NoteRequest {Id = id, AppUserId = AccountId}, EFeedAction.Delete));
+
+            return serverResponse;
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Tags
 {
-    public class TagService: BaseService, ITagService
+    public class TagService: BaseService<MyHelperContext>, ITagService
     {
         public TagService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
@@ -21,9 +21,22 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.Tags
+                var query = DbContext.Tags
                     .AsQueryable()
-                    .Select(x => _mapper.Map<Tag, TagResponse>(x));
+                    .Select(x => Mapper.Map<Tag, TagResponse>(x));
+
+                return ServerResponseBuilder.Build(await query.ToListAsync());
+            });
+        }
+
+        public async Task<ServerResponse<List<TagResponse>>> GetTagsByIdsAsync(List<long> tagIds)
+        {
+            return await BaseInvokeAsync(async () =>
+            {
+                var query = DbContext.Tags
+                    .AsQueryable()
+                    .Where(x => tagIds.Contains(x.Id))
+                    .Select(x => Mapper.Map<Tag, TagResponse>(x));
 
                 return ServerResponseBuilder.Build(await query.ToListAsync());
             });
@@ -38,8 +51,8 @@ namespace MyHelper.Api.Services.Tags
                     Name = tagRequest.Name
                 };
 
-                await _myHelperDbContext.Tags.AddAsync(tag);
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.Tags.AddAsync(tag);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             }, tagRequest);
@@ -49,7 +62,7 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.Tags.AsQueryable();
+                var query = DbContext.Tags.AsQueryable();
 
                 query = FilterAdminTags(query, adminTableFilterRequest);
 
@@ -79,7 +92,7 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var tag = await _myHelperDbContext.Tags
+                var tag = await DbContext.Tags
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == tagRequest.Id);
 
@@ -87,9 +100,9 @@ namespace MyHelper.Api.Services.Tags
                     throw new NotFoundException(Constants.Errors.TagNotExists);
 
                 tag.Name = tagRequest.Name;
-                _myHelperDbContext.Tags.Update(tag);
+                DbContext.Tags.Update(tag);
 
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
@@ -99,15 +112,15 @@ namespace MyHelper.Api.Services.Tags
         {
             return await BaseInvokeAsync(async () =>
             {
-                var tag = await _myHelperDbContext.Tags
+                var tag = await DbContext.Tags
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (tag == null)
                     throw new NotFoundException(Constants.Errors.TagNotExists);
 
-                _myHelperDbContext.Tags.Remove(tag);
-                await _myHelperDbContext.SaveChangesAsync();
+                DbContext.Tags.Remove(tag);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });

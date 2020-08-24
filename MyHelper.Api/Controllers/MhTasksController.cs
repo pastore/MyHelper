@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyHelper.Api.Models.Messanging;
+using MyHelper.Api.Core;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Tasks;
 using MyHelper.Api.Services.MHTasks;
@@ -13,18 +13,17 @@ namespace MyHelper.Api.Controllers
     [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{ver:apiVersion}/tasks")]
-    public class MhTasksController : BaseController 
+    public class MhTasksController : BaseController
     {
         private readonly IMhTaskService _mhTaskService;
-        private readonly IRequestClient<IFeedMessage> _requestClient;
+        private readonly ISendEndpointProvider _sendEndpointProvider;
 
         public MhTasksController(
             IMhTaskService mhTaskService,
-            IRequestClient<IFeedMessage> requestClient
-            )
+            ISendEndpointProvider sendEndpointProvider)
         {
             _mhTaskService = mhTaskService;
-            _requestClient = requestClient;
+            _sendEndpointProvider = sendEndpointProvider;
         }
 
         [HttpGet]
@@ -40,23 +39,24 @@ namespace MyHelper.Api.Controllers
         }
 
         [HttpPost]
-
         public async Task<ServerResponse<long>> CreateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
         {
-            return await _mhTaskService.CreateMhTaskAsync(mhTaskRequest).ContinueWith(x =>
-            {
-                var request = _requestClient.Create(_mhTaskService.CreateMhTaskFeedMessage(mhTaskRequest, x.Result.Result));
+            var serverResponse = await _mhTaskService.CreateMhTaskAsync(mhTaskRequest);
 
-                request.GetResponse<FeedMessage>();
+            mhTaskRequest.Id = serverResponse.Result;
+            await _sendEndpointProvider.Send(_mhTaskService.CreateFeedMessage(mhTaskRequest, EFeedAction.Create));
 
-                return x.Result;
-            });
+            return serverResponse;
         }
 
         [HttpPut]
         public async Task<ServerResponse<bool>> UpdateMhTaskAsync([FromBody] MhTaskRequest mhTaskRequest)
         {
-            return await _mhTaskService.UpdateMhTaskAsync(mhTaskRequest);
+            var serverResponse = await _mhTaskService.UpdateMhTaskAsync(mhTaskRequest);
+
+            await _sendEndpointProvider.Send(_mhTaskService.CreateFeedMessage(mhTaskRequest, EFeedAction.Update));
+
+            return serverResponse;
         }
 
         [HttpPatch("{id}")]
@@ -68,7 +68,13 @@ namespace MyHelper.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ServerResponse<bool>> DeleteMhTaskAsync(long id)
         {
-            return await _mhTaskService.DeleteMhTaskAsync(id);
+            var serverResponse = await _mhTaskService.DeleteMhTaskAsync(id);
+
+            await _sendEndpointProvider.Send(
+                _mhTaskService.CreateFeedMessage(new MhTaskRequest {Id = id, AppUserId = AccountId},
+                    EFeedAction.Delete));
+
+            return serverResponse;
         }
     }
 }

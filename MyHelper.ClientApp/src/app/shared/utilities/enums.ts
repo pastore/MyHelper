@@ -76,8 +76,8 @@ export enum MhTaskState {
 }
 
 export enum FeedType {
-  CreateNote = 1,
-  CreateMhTask = 2
+  Note = 1,
+  Task = 2
 }
 
 export enum AdminDialogType {

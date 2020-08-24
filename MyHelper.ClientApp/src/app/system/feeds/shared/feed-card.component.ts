@@ -10,8 +10,8 @@ import { FeedType } from '../../../shared/utilities/enums';
 export class FeedCardComponent {
   @Input() card: ICard<FeedResponse>;
   feedType = FeedType;
-  isExpandCard = false;
-  expandTitle = 'Expand';
+  isExpandCard = true;
+  expandTitle = this.isExpandCard ? 'Collapse' : 'Expand';
 
   constructor() { }
 

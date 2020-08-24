@@ -14,7 +14,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <CodeAnalysisRuleSet>MyHelper.Api.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>  
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\.sonarlint\pastore_myhelper\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>  
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
@@ -24,6 +28,7 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="5.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

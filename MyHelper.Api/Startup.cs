@@ -20,10 +20,12 @@ using MyHelper.Api.Core.Middleware;
 using MyHelper.Api.Core.Scheduler;
 using MyHelper.Api.DAL;
 using MyHelper.Api.DAL.Context;
+using MyHelper.Api.Feeds.Context;
+using MyHelper.Api.Feeds.Entities;
+using MyHelper.Api.Feeds.Services;
 using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Options;
 using MyHelper.Api.Services.Accounts;
-using MyHelper.Api.Services.Feeds;
 using MyHelper.Api.Services.Friends;
 using MyHelper.Api.Services.MHTasks;
 using MyHelper.Api.Services.Notes;
@@ -91,6 +93,19 @@ namespace MyHelper.Api
 
             #endregion
 
+            #region -- Cosmos DB --
+
+            services.AddDbContext<CosmosDbContext>(options =>
+            {
+                options.UseCosmos(
+                    Configuration["CosmosDb:EndPoint"],
+                    Configuration["CosmosDb:AccountKey"],
+                    Configuration["CosmosDb:DatabaseName"]
+                );
+            });
+
+            #endregion
+
             #region -- Services -- 
 
             services.AddScoped<ITokenService, TokenService>();
@@ -100,7 +115,8 @@ namespace MyHelper.Api
             services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<ITagService, TagService>();
-            services.AddScoped<IFeedService, FeedService>();
+            services.AddScoped<ICosmosDbService<Feed>, CosmosDbService>();
+
             #endregion
 
             #region -- Authentication --

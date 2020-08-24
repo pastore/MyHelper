@@ -4,11 +4,8 @@ using MyHelper.Api.Core;
 using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Models.Feeds;
-using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Notes;
 using MyHelper.Api.Models.Response;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Notes
 {
-    public class NoteService: BaseService, INoteService
+    public class NoteService: BaseService<MyHelperContext>, INoteService
     {
         public NoteService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<ServerResponse<List<NoteResponse>>> GetNotesAsync(int accountId, NoteFilterRequest noteFilterRequest)
+        public async Task<ServerResponse<List<NoteResponse>>> GetNotesAsync(long accountId, NoteFilterRequest noteFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.Notes
+                var query = DbContext.Notes
                     .AsQueryable()
                     .Include(x => x.NoteTags)
                     .ThenInclude(e => e.Tag)
@@ -37,22 +34,22 @@ namespace MyHelper.Api.Services.Notes
                 query = FetchItems(query, noteFilterRequest);
 
                 return ServerResponseBuilder.Build(await query.ToAsyncEnumerable()
-                    .Select(x => _mapper.Map<Note, NoteResponse>(x)).ToListAsync());
+                    .Select(x => Mapper.Map<Note, NoteResponse>(x)).ToListAsync());
             });
         }
 
-        public async Task<ServerResponse<NoteResponse>> GetNoteAsync(int accountId, long id)
+        public async Task<ServerResponse<NoteResponse>> GetNoteAsync(long accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = await _myHelperDbContext.Notes
+                var note = await DbContext.Notes
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == id  && x.AppUserId == accountId);
 
                 if (note == null)
                     throw new NotFoundException(Constants.Errors.NoteNotExists);
 
-                return ServerResponseBuilder.Build(_mapper.Map<Note, NoteResponse>(note));
+                return ServerResponseBuilder.Build(Mapper.Map<Note, NoteResponse>(note));
             });
         }
 
@@ -69,22 +66,22 @@ namespace MyHelper.Api.Services.Notes
                     AppUserId = noteRequest.AppUserId
                 };
 
-                await _myHelperDbContext.Notes.AddAsync(note);
+                await DbContext.Notes.AddAsync(note);
 
                 if (noteRequest.TagIds.Any())
                 {
                     var noteTags = noteRequest.TagIds
-                    .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                    .Join(DbContext.Tags, o => o, i => i.Id, (o, i) => i)
                     .Select(x => new NoteTag
                     {
                         Note = note,
                         Tag = x
                     });
 
-                    await _myHelperDbContext.NoteTags.AddRangeAsync(noteTags);
+                    await DbContext.NoteTags.AddRangeAsync(noteTags);
                 }
 
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(note.Id);
             }, noteRequest);
@@ -94,7 +91,7 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                Note note = await _myHelperDbContext.Notes
+                Note note = await DbContext.Notes
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == noteRequest.Id); 
 
@@ -106,21 +103,21 @@ namespace MyHelper.Api.Services.Notes
                 note.VisibleType = noteRequest.VisibleType;
                 note.UpdateDate = DateTime.Now;
 
-                _myHelperDbContext.Notes.Update(note);
+                DbContext.Notes.Update(note);
 
-                var noteTags = await _myHelperDbContext.NoteTags
+                var noteTags = await DbContext.NoteTags
                     .AsQueryable()
                     .Where(x => x.NoteId == note.Id).ToListAsync();
-                _myHelperDbContext.NoteTags
+                DbContext.NoteTags
                     .RemoveRange(noteTags.Where(x => !noteRequest.TagIds.Contains(x.TagId)));
 
-                await _myHelperDbContext.NoteTags.AddRangeAsync(
+                await DbContext.NoteTags.AddRangeAsync(
                     noteRequest.TagIds
-                        .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                        .Join(DbContext.Tags, o => o, i => i.Id, (o, i) => i)
                         .Where(x => !noteTags.Select(y => y.TagId).Contains(x.Id))
                         .Select(x => new NoteTag { Tag = x, Note = note }));
 
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             }, noteRequest);
@@ -130,37 +127,18 @@ namespace MyHelper.Api.Services.Notes
         {
             return await BaseInvokeAsync(async () =>
             {
-                var note = await _myHelperDbContext.Notes
+                var note = await DbContext.Notes
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (note == null)
                     throw new NotFoundException(Constants.Errors.NoteNotExists);
 
-                _myHelperDbContext.Notes.Remove(note);
-                await _myHelperDbContext.SaveChangesAsync();
+                DbContext.Notes.Remove(note);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
-        }
-
-        public FeedMessage CreateNoteFeedMessage(NoteRequest noteRequest, long sourceId)
-        {
-            var noteFeedData = new NoteFeedData
-            {
-                SourceId = sourceId,
-                Name = noteRequest.Name,
-                Description = noteRequest.Description
-            };
-            var noteFeedDataJson = JsonConvert.SerializeObject(noteFeedData);
-
-            return new FeedMessage()
-            {
-                AppUserId = noteRequest.AppUserId,
-                CreateDate = DateTime.Now,
-                FeedType = EFeedType.CreateNote,
-                FeedData = noteFeedDataJson
-            };
         }
 
         #region -- Private methods --

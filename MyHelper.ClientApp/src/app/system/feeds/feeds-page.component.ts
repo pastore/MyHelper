@@ -1,23 +1,26 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, OnDestroy } from '@angular/core';
-import { timer, Subscription } from 'rxjs';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, timer } from 'rxjs';
 import { ILoaderState } from '../../shared/loader/i-loader-state.model';
 import { LoaderService } from '../../shared/loader/loader.service';
+import { FilterItem } from '../../shared/models/base/filter-item.model';
 import { ICard } from '../../shared/models/base/i-card.model';
 import { FeedResponse } from '../../shared/models/feeds/feed-response.model';
 import { FeedService } from '../../shared/services/feed.service';
-import { CardType } from '../../shared/utilities/enums';
-import { BaseCardsComponent } from '../shared/components/base/base-cards.component';
+import { CardType, FilterType } from '../../shared/utilities/enums';
+import { BaseEditCardsComponent } from '../shared/components/base/base-edit-cards.component';
+import { FeedFilterRequest } from '../../shared/models/feeds/feed-filter-request.model';
 
 @Component({
   selector: 'mh-feeds-page',
   templateUrl: './feeds-page.component.html'
 })
 export class FeedsPageComponent
-extends BaseCardsComponent<ICard<FeedResponse>, null>
+extends BaseEditCardsComponent<ICard<FeedResponse>, FeedFilterRequest>
  implements OnInit, OnDestroy {
   screenWidth: number;
   firstLoadDate: Date;
   newCards: ICard<FeedResponse>[];
+  filterItems: FilterItem[];
   timerSubscription: Subscription;
 
   @HostListener('window:resize', ['$event'])
@@ -41,8 +44,8 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
       .subscribe((state: ILoaderState) => {
         this.isLoading = state.isShow;
       });
-    this.timerSubscription = timer(60000).subscribe(() => {
-      this._feedService.getFeeds().subscribe((feeds: FeedResponse[]) => {
+    this.timerSubscription = timer(0, 60000).subscribe(() => {
+      this._feedService.getFeeds(this.cardsFilterModel, false).subscribe((feeds: FeedResponse[]) => {
         const items = feeds
         .filter((x) => {
           return x.createDate > this.firstLoadDate;
@@ -66,8 +69,12 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
     this.firstLoadDate = first.data.createDate;
   }
 
+  setFilterItems() {
+    this.filterItems = [new FilterItem(FilterType.TagsFilter, 'Tags')];
+  }
+
   protected getCards() {
-    this._feedService.getFeeds()
+    this._feedService.getFeeds(this.cardsFilterModel)
     .subscribe((feeds: FeedResponse[]) => {
       this.cards = feeds.map((x, i) => {
         if (i === 0) {
@@ -79,7 +86,21 @@ extends BaseCardsComponent<ICard<FeedResponse>, null>
   }
 
   protected handleScroll() {
-    // TODO
+    const offset = Math.floor(this.cards.length / this.cardsFilterModel.limit);
+    this.cardsFilterModel.offset = offset * this.cardsFilterModel.limit;
+
+    if ((this.cards.length % this.cardsFilterModel.limit) === 0 && this.isScroll) {
+      this._feedService.getFeeds(this.cardsFilterModel, false)
+        .subscribe((notes: FeedResponse[]) => {
+          if (notes.length > 0) {
+            this.cards = this.cards.concat(notes.map((x) => {
+              return { data : x, cardType : CardType.Feed } as ICard<FeedResponse>;
+            }));
+          } else {
+            this.isScroll = false;
+          }
+        });
+    }
   }
 
   protected detectChanges() {

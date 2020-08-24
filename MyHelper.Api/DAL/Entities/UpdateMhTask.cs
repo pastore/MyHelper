@@ -4,7 +4,7 @@ namespace MyHelper.Api.DAL.Entities
 {
     public class UpdateMhTask
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public DateTime UpdateDate { get; set; }
 

@@ -7,10 +7,10 @@ namespace MyHelper.Api.DAL.Entities
     public class Friend
     {
         [Column(Order = 0)]
-        public int RequestedById { get; set; }
+        public long RequestedById { get; set; }
 
         [Column(Order = 1)]
-        public int RequestedToId { get; set; }
+        public long RequestedToId { get; set; }
 
         public virtual AppUser RequestedBy { get; set; }
 

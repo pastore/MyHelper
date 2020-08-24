@@ -5,7 +5,7 @@
      [(ngModel)]="card.data.mhTaskStatus"
      (change)="updateTaskStatus()">
     </mat-checkbox>
-    <div class="card_name">{{ card.data.name }}</div>
+    <div class="card_name mr-auto">{{ card.data.name }}</div>
     <div *ngIf="card.data.mhTaskState == mhTaskStates.ReSchedule" class="card_state">
       <mat-chip class="color-black">schedule</mat-chip>
     </div>

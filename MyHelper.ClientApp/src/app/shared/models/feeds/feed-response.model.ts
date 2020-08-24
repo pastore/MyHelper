@@ -1,7 +1,8 @@
 import { FeedType } from '../../utilities/enums';
+import { Entity } from '../base/entity.model';
+import { TagViewModel } from '../tags/tag-view.model';
 import { AppUserViewModel } from '../user/app-user-view.model';
 import { BaseFeedData } from './base-feed-data.model';
-import { Entity } from '../base/entity.model';
 
 export class FeedResponse
   implements Entity {
@@ -10,5 +11,7 @@ export class FeedResponse
     public feedType: FeedType;
     public feedRank: number;
     public createDate: Date;
+    public lastModifiedDate: Date;
     public appUserViewModel: AppUserViewModel;
+    public tags: TagViewModel[] = [];
 }

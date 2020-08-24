@@ -18,7 +18,7 @@ namespace MyHelper.Api.Models.Notes
         public EVisibleType VisibleType { get; set; }
 
         [Required]
-        public int AppUserId { get; set; }
+        public long AppUserId { get; set; }
 
         [CollectionHasElements(ErrorMessage = "Collection must contain an element.")]
         public ICollection<long> TagIds { get; set; } = new List<long>();

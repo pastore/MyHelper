@@ -7,6 +7,7 @@ using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
 using MyHelper.Api.Models.Friends;
 using MyHelper.Api.Models.Response;
+using MyHelper.Api.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,20 +15,34 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Friends
 {
-    public class FriendService : BaseService, IFriendService
+    public class FriendService : BaseService<MyHelperContext>, IFriendService
     {
         public FriendService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
 
-        public async Task<ServerResponse<List<FriendViewModel>>> GetSearchFriendsAsync(int accountId, FriendFilterRequest friendFilterRequest)
+        public async Task<ServerResponse<List<long>>> GetFriendIds(long appUserId)
+        {
+            return await BaseInvokeWithTryCatchAsync(async () =>
+            {
+                var friendIds = DbContext.Friends
+                    .AsQueryable()
+                    .Where(x => x.FriendRequestFlag == EFriendRequestFlag.Approved 
+                        && (x.RequestedById == appUserId || x.RequestedToId == appUserId))
+                    .Select(x => x.RequestedById == appUserId ? x.RequestedToId : x.RequestedById);
+
+                return ServerResponseBuilder.Build(await friendIds.ToListAsync());
+            });
+        }
+
+        public async Task<ServerResponse<List<FriendViewModel>>> GetSearchFriendsAsync(long accountId, FriendFilterRequest friendFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friends = _myHelperDbContext.Friends
+                var friends = DbContext.Friends
                     .AsQueryable()
                     .Where(x => x.RequestedById == accountId || x.RequestedToId == accountId)
                     .Select(x => x.RequestedById == accountId ? x.RequestedToId : x.RequestedById);
 
-                var searchFriends = _myHelperDbContext.AppUsers
+                var searchFriends = DbContext.AppUsers
                     .AsQueryable()
                     .Where(x => !friends.Contains(x.Id) && x.Id != accountId);
 
@@ -38,16 +53,16 @@ namespace MyHelper.Api.Services.Friends
                 searchFriends = FetchItems(searchFriends, friendFilterRequest);
 
                 return ServerResponseBuilder.Build(await searchFriends.ToAsyncEnumerable()
-                    .Select(x => _mapper.Map<AppUser, FriendViewModel>(x)).ToListAsync());
+                    .Select(x => Mapper.Map<AppUser, FriendViewModel>(x)).ToListAsync());
             });
         }
 
         public async Task<ServerResponse<List<FriendViewModel>>> GetFriendsByRequestFlag(
-            int accountId, EFriendRequestFlag eFriendRequestFlag, FriendFilterRequest friendFilterRequest)
+            long accountId, EFriendRequestFlag eFriendRequestFlag, FriendFilterRequest friendFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friends = _myHelperDbContext.Friends
+                var friends = DbContext.Friends
                     .Include(x => x.RequestedBy)
                     .Include(x => x.RequestedTo)
                     .Where(x =>
@@ -64,19 +79,19 @@ namespace MyHelper.Api.Services.Friends
             });
         }
 
-        public async Task<ServerResponse<bool>> InviteFriendAsync(int accountId, int personId)
+        public async Task<ServerResponse<bool>> InviteFriendAsync(long accountId, long personId)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friend = _myHelperDbContext.Friends.FirstOrDefault(x =>
+                var friend = DbContext.Friends.FirstOrDefault(x =>
                     (x.RequestedById == accountId && x.RequestedToId == personId)
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
                 if (friend != null)
                     throw new ConflictException(Constants.Errors.RequestsAlreadyExists);
                 
-                var appUser = _myHelperDbContext.AppUsers.First(x => x.Id == accountId);
-                var person = _myHelperDbContext.AppUsers.First(x => x.Id == personId);
+                var appUser = DbContext.AppUsers.First(x => x.Id == accountId);
+                var person = DbContext.AppUsers.First(x => x.Id == personId);
 
                 friend = new Friend
                 {
@@ -86,18 +101,18 @@ namespace MyHelper.Api.Services.Friends
                     RequestTime = DateTime.Now
                 };
 
-                await _myHelperDbContext.Friends.AddAsync(friend);
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.Friends.AddAsync(friend);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
         }
 
-        public async Task<ServerResponse<bool>> CancelFriendAsync(int accountId, int personId)
+        public async Task<ServerResponse<bool>> CancelFriendAsync(long accountId, long personId)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friend = _myHelperDbContext.Friends.FirstOrDefault(x =>
+                var friend = DbContext.Friends.FirstOrDefault(x =>
                     (x.RequestedById == accountId && x.RequestedToId == personId)
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
@@ -108,17 +123,17 @@ namespace MyHelper.Api.Services.Friends
                     throw new ConflictException(Constants.Errors.FriendNotApproved);
 
                 friend.FriendRequestFlag = EFriendRequestFlag.None;
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
         }
 
-        public async Task<ServerResponse<bool>> UpdateFriendRequestAsync(int accountId, int personId, EFriendRequestFlag eFriendRequestFlag)
+        public async Task<ServerResponse<bool>> UpdateFriendRequestAsync(long accountId, long personId, EFriendRequestFlag eFriendRequestFlag)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friend = _myHelperDbContext.Friends.FirstOrDefault(x =>
+                var friend = DbContext.Friends.FirstOrDefault(x =>
                     (x.RequestedById == accountId && x.RequestedToId == personId)
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
 
@@ -131,17 +146,17 @@ namespace MyHelper.Api.Services.Friends
                 friend.FriendRequestFlag = eFriendRequestFlag;
                 friend.BecameFriendsTime = eFriendRequestFlag == EFriendRequestFlag.Approved ? (DateTime?)DateTime.Now : null;
 
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
         }
 
-        public async Task<ServerResponse<bool>> DeleteFriendAsync(int accountId, int personId)
+        public async Task<ServerResponse<bool>> DeleteFriendAsync(long accountId, long personId)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var friends = _myHelperDbContext.Friends
+                var friends = DbContext.Friends
                     .AsQueryable()
                     .Where(x => (x.RequestedById == accountId && x.RequestedToId == personId)
                     || (x.RequestedById == personId && x.RequestedToId == accountId));
@@ -149,8 +164,8 @@ namespace MyHelper.Api.Services.Friends
                 if (!friends.Any())
                     throw new NotFoundException(Constants.Errors.FriendNotExists);
 
-                _myHelperDbContext.Friends.RemoveRange(friends);
-                await _myHelperDbContext.SaveChangesAsync();
+                DbContext.Friends.RemoveRange(friends);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
@@ -167,7 +182,7 @@ namespace MyHelper.Api.Services.Friends
             return query;
         }
 
-        public IQueryable<Friend> FilterFriends(IQueryable<Friend> query, int accountId, FriendFilterRequest friendFilterRequest)
+        public IQueryable<Friend> FilterFriends(IQueryable<Friend> query, long accountId, FriendFilterRequest friendFilterRequest)
         {
             if (!string.IsNullOrWhiteSpace(friendFilterRequest.Search))
             {

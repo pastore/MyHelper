@@ -17,7 +17,7 @@ namespace MyHelper.Api.Models.Notes
 
         public DateTime UpdateDate { get; set; }
 
-        public int AppUserId { get; set; }
+        public long AppUserId { get; set; }
 
         public ICollection<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
     }

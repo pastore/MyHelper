@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyHelper.Api.DAL.Entities;
+using MyHelper.Api.Feeds.Entities;
 using MyHelper.Api.Models.Feeds;
 using MyHelper.Api.Models.Friends;
 using MyHelper.Api.Models.Messanging;
@@ -21,19 +22,29 @@ namespace MyHelper.Api.Core.Mappings
 
             CreateMap<FeedMessage, Feed>();
             CreateMap<Feed, FeedResponse>()
-                .ForMember(x => x.AppUserViewModel,x => x.MapFrom(q => JsonConvert.DeserializeObject<AppUserViewModel>(q.AppUserData)))
-                .ForMember(x => x.FeedData, x => x.ResolveUsing<BaseFeedData>(src =>
+                .ForMember(x => x.AppUserViewModel,
+                    x => x.MapFrom(q => JsonConvert.DeserializeObject<AppUserViewModel>(q.SourceAppUserData)))
+                .ForMember(x => x.FeedData, x => x.ResolveUsing(src =>
                 {
-                    switch (src.FeedType)
+                    return src.FeedType switch
                     {
-                        case EFeedType.CreateNote:
-                            return JsonConvert.DeserializeObject<NoteFeedData>(src.FeedData);
-                        case EFeedType.CreateMhTask:
-                            return JsonConvert.DeserializeObject<MhTaskFeedData>(src.FeedData);
-                        default:
-                            return null;
-                    }
+                        EFeedType.Note => (BaseFeedData) JsonConvert.DeserializeObject<NoteFeedData>(src.FeedData),
+                        EFeedType.Task => JsonConvert.DeserializeObject<MhTaskFeedData>(src.FeedData),
+                        _ => null
+                    };
                 }));
+
+            CreateMap<NoteRequest, NoteFeedData>();
+            CreateMap<MhTaskRequest, MhTaskFeedData>();
+
+            CreateMap<NoteRequest, FeedMessage>()
+                .ForMember(x => x.FeedData,
+                    x => x.MapFrom(q => JsonConvert.SerializeObject(Mapper.Map<NoteRequest, NoteFeedData>(q))))
+                .ForMember(x => x.FeedType, x => x.UseValue(EFeedType.Note));
+            CreateMap<MhTaskRequest, FeedMessage>()
+                .ForMember(x => x.FeedData,
+                    x => x.MapFrom(q => JsonConvert.SerializeObject(Mapper.Map<MhTaskRequest, MhTaskFeedData>(q))))
+                .ForMember(x => x.FeedType, x => x.UseValue(EFeedType.Task));
 
             CreateMap<Tag, TagResponse>();
 

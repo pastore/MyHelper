@@ -51,8 +51,15 @@
 
     public enum EFeedType
     {
-        CreateNote = 1,
-        CreateMhTask = 2
+        Note = 1,
+        Task = 2
+    }
+
+    public enum EFeedAction
+    {
+        Create,
+        Update,
+        Delete
     }
 
     public enum SortDirection

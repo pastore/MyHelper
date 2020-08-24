@@ -30,7 +30,7 @@ namespace MyHelper.Api.DAL.Entities
 
         public virtual MhTask Parent { get; set; }
 
-        public int AppUserId { get; set; }
+        public long AppUserId { get; set; }
 
         public AppUser AppUser { get; set; }
 

@@ -4,11 +4,8 @@ using MyHelper.Api.Core;
 using MyHelper.Api.Core.Exceptions;
 using MyHelper.Api.DAL.Context;
 using MyHelper.Api.DAL.Entities;
-using MyHelper.Api.Models.Feeds;
-using MyHelper.Api.Models.Messanging;
 using MyHelper.Api.Models.Response;
 using MyHelper.Api.Models.Tasks;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.MHTasks
 {
-    public class MhTaskService: BaseService, IMhTaskService
+    public class MhTaskService: BaseService<MyHelperContext>, IMhTaskService
     {
         public MhTaskService(MyHelperContext myHelperDbContex, IMapper mapper) : base(myHelperDbContex, mapper) { }
 
-        public async Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(int accountId, MhTaskFilterRequest mhTaskFilterRequest)
+        public async Task<ServerResponse<List<MhTaskResponse>>> GetMhTasksAsync(long accountId, MhTaskFilterRequest mhTaskFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.MhTasks
+                var query = DbContext.MhTasks
                     .AsQueryable()
                     .Include(x => x.ScheduleMhTask)
                     .Include(x => x.MhTaskTags)
@@ -38,22 +35,22 @@ namespace MyHelper.Api.Services.MHTasks
                 query = FetchItems(query, mhTaskFilterRequest);
 
                 return ServerResponseBuilder.Build(await query.ToAsyncEnumerable()
-                    .Select(x => _mapper.Map<MhTask, MhTaskResponse>(x)).ToListAsync());
+                    .Select(x => Mapper.Map<MhTask, MhTaskResponse>(x)).ToListAsync());
             });
         }
 
-        public async Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(int accountId, long id)
+        public async Task<ServerResponse<MhTaskResponse>> GetMhTaskAsync(long accountId, long id)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks
+                var mhTask = await DbContext.MhTasks
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == id && x.AppUserId == accountId);
 
                 if (mhTask == null)
                     throw new NotFoundException(Constants.Errors.TaskNotExists);
 
-                return ServerResponseBuilder.Build(_mapper.Map<MhTask, MhTaskResponse>(mhTask));
+                return ServerResponseBuilder.Build(Mapper.Map<MhTask, MhTaskResponse>(mhTask));
             });
         }
 
@@ -76,7 +73,7 @@ namespace MyHelper.Api.Services.MHTasks
                     mhTask.Parent = parentMhTask;
                 }
 
-                await _myHelperDbContext.MhTasks.AddAsync(mhTask);
+                await DbContext.MhTasks.AddAsync(mhTask);
 
                 if (mhTaskRequest.IsRecurring)
                 {
@@ -87,24 +84,24 @@ namespace MyHelper.Api.Services.MHTasks
                         ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskViewModel.ScheduleMhTaskType
                     };
 
-                    await _myHelperDbContext.ScheduleMhTasks.AddAsync(scheduleMhTask);
+                    await DbContext.ScheduleMhTasks.AddAsync(scheduleMhTask);
                 }
 
                 if (mhTaskRequest.TagIds.Any())
                 {
                     var mhTaskTags = mhTaskRequest.TagIds
-                        .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                        .Join(DbContext.Tags, o => o, i => i.Id, (o, i) => i)
                         .Select(x => new MhTaskTag
                         {
                             MhTask = mhTask,
                             Tag = x
                         });
 
-                    await _myHelperDbContext.MhTaskTags.AddRangeAsync(mhTaskTags);
+                    await DbContext.MhTaskTags.AddRangeAsync(mhTaskTags);
                 }
 
-                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.CreateMhTask);
-                await _myHelperDbContext.SaveChangesAsync();
+                await AddToUpdateMhTask(DbContext, mhTask, Constants.Updates.CreateMhTask);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(mhTask.Id);
             }, mhTaskRequest);   
@@ -118,12 +115,12 @@ namespace MyHelper.Api.Services.MHTasks
 
                 if (mhTaskRequest.IsRecurring)
                 {
-                    mhTask = await _myHelperDbContext.MhTasks.Include(x => x.ScheduleMhTask)
+                    mhTask = await DbContext.MhTasks.Include(x => x.ScheduleMhTask)
                         .FirstOrDefaultAsync(x => x.Id == mhTaskRequest.Id);
                 }
                 else
                 {
-                    mhTask = await _myHelperDbContext.MhTasks
+                    mhTask = await DbContext.MhTasks
                         .AsQueryable()
                         .FirstOrDefaultAsync(x => x.Id == mhTaskRequest.Id);
                 }
@@ -151,21 +148,21 @@ namespace MyHelper.Api.Services.MHTasks
                     mhTask.ScheduleMhTask.ScheduleMhTaskType = mhTaskRequest.ScheduleMhTaskViewModel.ScheduleMhTaskType;
                 }
 
-                _myHelperDbContext.MhTasks.Update(mhTask);
+                DbContext.MhTasks.Update(mhTask);
                 
-                var mhTaskTags = await _myHelperDbContext.MhTaskTags
+                var mhTaskTags = await DbContext.MhTaskTags
                     .AsQueryable()
                     .Where(x => x.MhTaskId == mhTask.Id).ToListAsync();
-                _myHelperDbContext.MhTaskTags.RemoveRange(mhTaskTags.Where(x => !mhTaskRequest.TagIds.Contains(x.TagId)));
+                DbContext.MhTaskTags.RemoveRange(mhTaskTags.Where(x => !mhTaskRequest.TagIds.Contains(x.TagId)));
 
-                await _myHelperDbContext.MhTaskTags.AddRangeAsync(
+                await DbContext.MhTaskTags.AddRangeAsync(
                     mhTaskRequest.TagIds
-                        .Join(_myHelperDbContext.Tags, o => o, i => i.Id, (o, i) => i)
+                        .Join(DbContext.Tags, o => o, i => i.Id, (o, i) => i)
                         .Where(x => !mhTaskTags.Select(y => y.TagId).Contains(x.Id))
                         .Select(x => new MhTaskTag { Tag = x, MhTask = mhTask }));
 
-                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateEntireMhTask);
-                await _myHelperDbContext.SaveChangesAsync();
+                await AddToUpdateMhTask(DbContext, mhTask, Constants.Updates.UpdateEntireMhTask);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             }, mhTaskRequest);
@@ -175,7 +172,7 @@ namespace MyHelper.Api.Services.MHTasks
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks
+                var mhTask = await DbContext.MhTasks
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -185,10 +182,10 @@ namespace MyHelper.Api.Services.MHTasks
                 mhTask.MhTaskStatus = (EMhTaskStatus) status;
                 mhTask.FinishDate = (EMhTaskStatus)status == EMhTaskStatus.Done ? DateTime.Now : (DateTime?) null;
 
-                _myHelperDbContext.MhTasks.Update(mhTask);
-                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.UpdateStatusMhTask);
+                DbContext.MhTasks.Update(mhTask);
+                await AddToUpdateMhTask(DbContext, mhTask, Constants.Updates.UpdateStatusMhTask);
 
-                await _myHelperDbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
                 
                 return ServerResponseBuilder.Build(true);
             });
@@ -198,7 +195,7 @@ namespace MyHelper.Api.Services.MHTasks
         {
             return await BaseInvokeAsync(async () =>
             {
-                var mhTask = await _myHelperDbContext.MhTasks
+                var mhTask = await DbContext.MhTasks
                     .AsQueryable()
                     .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -207,33 +204,14 @@ namespace MyHelper.Api.Services.MHTasks
 
                 mhTask.MhTaskState = EMhTaskState.Delete;
 
-                _myHelperDbContext.MhTasks.Update(mhTask);
-                await AddToUpdateMhTask(_myHelperDbContext, mhTask, Constants.Updates.DeleteMhTask);
-                await _myHelperDbContext.SaveChangesAsync();
+                DbContext.MhTasks.Update(mhTask);
+                await AddToUpdateMhTask(DbContext, mhTask, Constants.Updates.DeleteMhTask);
+                await DbContext.SaveChangesAsync();
 
                 return ServerResponseBuilder.Build(true);
             });
         }
 
-        public FeedMessage CreateMhTaskFeedMessage(MhTaskRequest noteRequest, long sourceId)
-        {
-            var mhTaskFeedData = new MhTaskFeedData
-            {
-                SourceId = sourceId,
-                Name = noteRequest.Name,
-                Description = noteRequest.Description,
-                IsReccuring = noteRequest.IsRecurring
-            };
-            var mhTaskFeedDataJson = JsonConvert.SerializeObject(mhTaskFeedData);
-
-            return new FeedMessage()
-            {
-                AppUserId = noteRequest.AppUserId,
-                CreateDate = DateTime.Now,
-                FeedType = EFeedType.CreateMhTask,
-                FeedData = mhTaskFeedDataJson
-            };
-        }
 
         #region -- Private methods --
 

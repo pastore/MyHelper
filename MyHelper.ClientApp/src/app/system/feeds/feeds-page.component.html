@@ -1,6 +1,10 @@
 <mat-sidenav-container>
   <mat-sidenav class="cards_page_sidenav" #start [opened]="screenWidth >= 780" [mode]="(screenWidth >= 780) ? 'side' : 'over'">
     <div class="cards_page_sidenav_wrapper">
+      <mh-wrapper-filter
+          [filterItems]="filterItems"
+          (updateWrapFilter)="triggerChangeWrapFilter($event, (screenWidth >= 780) ? null : start)">
+        </mh-wrapper-filter>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>

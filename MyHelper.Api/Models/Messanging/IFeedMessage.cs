@@ -1,16 +1,19 @@
 ﻿using MyHelper.Api.Core;
-using System;
 
 namespace MyHelper.Api.Models.Messanging
 {
     public interface IFeedMessage
     {
+        string AppUserId { get; set; }
+
+        public long FeedId { get; set; }
+
         string FeedData { get; set; }
 
         EFeedType FeedType { get; set; }
 
-        DateTime CreateDate { get; set; }
+        public EVisibleType VisibleType { get; set; }
 
-        int AppUserId { get; set; }
+        EFeedAction FeedAction { get; set; }
     }
 }

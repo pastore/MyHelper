@@ -9,15 +9,26 @@ using System.Threading.Tasks;
 
 namespace MyHelper.Api.Services.Users
 {
-    public class AppUserService : BaseService, IAppUserService
+    public class AppUserService : BaseService<MyHelperContext>, IAppUserService
     {
         public AppUserService(MyHelperContext myHelperDbContext, IMapper mapper) : base(myHelperDbContext, mapper) { }
+
+        public async Task<ServerResponse<AppUserViewModel>> GetAppUserAsync(long appUserId)
+        {
+            return await BaseInvokeWithTryCatchAsync(async () =>
+            {
+                var appUser = await DbContext.AppUsers
+                    .FirstOrDefaultAsync(x => x.Id == appUserId);
+
+                return ServerResponseBuilder.Build( Mapper.Map<AppUser, AppUserViewModel>(appUser));
+            });
+        }
 
         public async Task<ServerResponse<PageResult<AppUserViewModel>>> GetAdminUsersByPageAsync(AdminTableFilterRequest adminTableFilterRequest)
         {
             return await BaseInvokeAsync(async () =>
             {
-                var query = _myHelperDbContext.AppUsers.AsQueryable();
+                var query = DbContext.AppUsers.AsQueryable();
 
                 query = FilterAppUsers(query, adminTableFilterRequest);
 

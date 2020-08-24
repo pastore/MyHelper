@@ -7,7 +7,7 @@ namespace MyHelper.Api.Models.Tasks
 {
     public class MhTaskResponse
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
 
@@ -25,9 +25,9 @@ namespace MyHelper.Api.Models.Tasks
 
         public bool IsRecurring { get; set; }
 
-        public int? ParentId { get; set; }
+        public long? ParentId { get; set; }
 
-        public int AppUserId { get; set; }
+        public long AppUserId { get; set; }
 
         public ScheduleMhTaskViewModel ScheduleMhTaskViewModel { get; set; }
 
