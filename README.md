@@ -15,11 +15,12 @@ In future plan to make social network from one.
 2. Angular 9
 3. Angular Material
 4. Postgres 10
-5. Nginx
-6. Linux
-7. Entity Framework Core
-8. RabbitMQ and MassTransit
-9. Docker
+5. Azure Cosmos DB
+6. Nginx
+7. Linux
+8. Entity Framework Core
+9. RabbitMQ and MassTransit
+10. Docker
 
 **Quick start**
 ----------------

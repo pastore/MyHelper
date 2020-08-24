@@ -95,14 +95,14 @@ namespace MyHelper.Api
 
             #region -- Cosmos DB --
 
-            //services.AddDbContext<CosmosDbContext>(options =>
-            //{
-            //    options.UseCosmos(
-            //        Configuration["CosmosDb:EndPoint"],
-            //        Configuration["CosmosDb:AccountKey"],
-            //        Configuration["CosmosDb:DatabaseName"]
-            //    );
-            //});
+            services.AddDbContext<CosmosDbContext>(options =>
+            {
+                options.UseCosmos(
+                    Configuration["CosmosDb:EndPoint"],
+                    Configuration["CosmosDb:AccountKey"],
+                    Configuration["CosmosDb:DatabaseName"]
+                );
+            });
 
             #endregion
 
